@@ -140,12 +140,8 @@
                 </a>
             </div>
 
-            <div class="flex items-center justify-between mb-3 px-1">
-                <h3 class="font-bold text-gray-700 text-lg border-l-4 border-pink-500 pl-2">All Products</h3>
-            </div>
-            
-            <div id="services-list" class="grid grid-cols-3 gap-3 px-1 mb-8">
-                <div class="col-span-3 text-center py-10"><i class="fas fa-spinner fa-spin text-pink-500"></i> Loading Games...</div>
+            <div id="categories-container" class="mb-8">
+                <div class="text-center py-10"><i class="fas fa-spinner fa-spin text-pink-500"></i> Loading Categories...</div>
             </div>
 
             <div class="mt-8 mb-6">
@@ -237,14 +233,10 @@
             <div class="bg-white p-4 rounded-xl shadow-sm mb-4 border border-gray-100">
                 <div class="flex items-center gap-2 mb-3">
                     <span class="bg-pink-600 text-white w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold shadow-md">1</span>
-                    <h3 class="font-bold text-gray-700 text-sm">Player Id</h3>
+                    <h3 class="font-bold text-gray-700 text-sm" id="game-input-label">Player Id</h3>
                 </div>
                 <input type="text" id="game-player-id" placeholder="2535040417" class="w-full bg-gray-50 border border-gray-200 p-3 rounded-lg focus:outline-none focus:border-pink-500 focus:bg-white transition font-bold text-gray-700 tracking-wider text-lg">
                 
-                <div class="mt-3 bg-gradient-to-r from-blue-400 to-teal-400 text-white text-center py-2 rounded-lg font-bold text-sm shadow-md">
-                    Check to Player Name
-                </div>
-
                 <div class="mt-5 border-t border-gray-100 pt-4">
                     <div class="flex justify-between items-center mb-3">
                         <span class="text-sm font-bold text-gray-600">Total Payable</span>
@@ -638,32 +630,60 @@
             }
         });
 
+        // --- NEW CATEGORY SYSTEM ---
         db.collection("services").onSnapshot((snapshot) => {
-            const list = document.getElementById('services-list');
-            list.innerHTML = "";
+            const container = document.getElementById('categories-container');
+            container.innerHTML = "";
             gamesData = {}; 
             
-            if(snapshot.empty) return list.innerHTML = `<div class="col-span-3 text-center text-gray-400">No Games Found</div>`;
+            if(snapshot.empty) return container.innerHTML = `<div class="text-center text-gray-400 py-10">No Products Found</div>`;
             
+            // ডাটাগুলোকে ক্যাটাগরি অনুযায়ী সাজানো
+            const categorizedServices = {};
+
             snapshot.forEach(doc => {
                 const item = doc.data();
                 gamesData[doc.id] = item; 
-
-                list.innerHTML += `
-                     <div onclick="openTopUpPage('${doc.id}', '${item.name}', '${item.image}')" 
-                          class="bg-white rounded-lg shadow-sm overflow-hidden cursor-pointer transform hover:-translate-y-1 transition-all duration-300 border border-gray-100 group">
-                        
-                        <div class="w-full aspect-square bg-gray-50 overflow-hidden relative">
-                            <img src="${item.image}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
-                            onerror="this.src='https://placehold.co/200'">
-                        </div>
-
-                        <div class="p-2 text-center bg-white border-t border-gray-50">
-                            <p class="text-[10px] font-bold text-gray-700 truncate">${item.name}</p>
-                        </div>
-                    </div>
-                `;
+                
+                // যদি এডমিন ক্যাটাগরি না দিয়ে থাকে, তবে এটি All Products এ যাবে
+                const cat = item.category || "All Products"; 
+                
+                if (!categorizedServices[cat]) {
+                    categorizedServices[cat] = [];
+                }
+                categorizedServices[cat].push({ id: doc.id, ...item });
             });
+
+            // ক্যাটাগরিগুলো HTML এ দেখানো
+            for (const [categoryName, items] of Object.entries(categorizedServices)) {
+                
+                let categoryHTML = `
+                    <div class="flex items-center justify-between mb-3 px-1 mt-6">
+                        <h3 class="font-bold text-gray-700 text-lg border-l-4 border-pink-500 pl-2 uppercase tracking-wide">${categoryName}</h3>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3 px-1 mb-4">
+                `;
+
+                items.forEach(item => {
+                    categoryHTML += `
+                         <div onclick="openTopUpPage('${item.id}', '${item.name}', '${item.image}')" 
+                              class="bg-white rounded-lg shadow-sm overflow-hidden cursor-pointer transform hover:-translate-y-1 transition-all duration-300 border border-gray-100 group">
+                            
+                            <div class="w-full aspect-square bg-gray-50 overflow-hidden relative">
+                                <img src="${item.image}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+                                onerror="this.src='https://placehold.co/200'">
+                            </div>
+
+                            <div class="p-2 text-center bg-white border-t border-gray-50">
+                                <p class="text-[10px] font-bold text-gray-700 truncate">${item.name}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                categoryHTML += `</div>`;
+                container.innerHTML += categoryHTML;
+            }
 
             // Initial URL Routing based on loaded games
             const urlParams = new URLSearchParams(window.location.search);
@@ -708,10 +728,20 @@
         document.getElementById('total-price').innerText = "0";
         document.getElementById('game-player-id').value = "";
 
+        // UI Updates for Title and Image
         document.getElementById('topup-game-title').innerText = gameName;
         document.getElementById('topup-sub-title').innerText = gameName + " ";
         document.getElementById('topup-game-img').src = gameImg;
 
+        // --- NEW: DYNAMIC INPUT LABEL & PLACEHOLDER ---
+        // ফায়ারবেস থেকে inputLabel এবং inputPlaceholder খুঁজবে, না পেলে ডিফল্ট লেখা দেখাবে
+        const inputLabel = gamesData[gameId].inputLabel || "Player Id";
+        const inputPlaceholder = gamesData[gameId].inputPlaceholder || "2535040417";
+        
+        document.getElementById('game-input-label').innerText = inputLabel;
+        document.getElementById('game-player-id').placeholder = inputPlaceholder;
+
+        // Handle Rules
         const rulesBox = document.getElementById('game-rules-box');
         const rulesText = document.getElementById('game-rules-text');
         
@@ -761,15 +791,16 @@
     }
 
     function processOrder() {
-        const playerId = document.getElementById('game-player-id').value.trim();
+        const inputValue = document.getElementById('game-player-id').value.trim();
+        const currentInputLabel = document.getElementById('game-input-label').innerText;
         
-        if(!playerId) return Swal.fire({ icon: 'warning', title: 'Missing ID', text: 'Please enter Player ID!' });
+        if(!inputValue) return Swal.fire({ icon: 'warning', title: 'Missing Info', text: `Please enter ${currentInputLabel}!` });
         if(!selectedProduct) return Swal.fire({ icon: 'warning', title: 'Select Pack', text: 'Please select a recharge package!' });
         if(userBalance < selectedProduct.price) return Swal.fire({ icon: 'error', title: 'Low Balance', text: 'Please Add Money first.' });
 
         Swal.fire({
             title: 'Confirm Purchase?',
-            html: `UID: <b>${playerId}</b><br>Package: ${selectedProduct.name}<br>Price: ৳${selectedProduct.price}`,
+            html: `${currentInputLabel}: <b>${inputValue}</b><br>Package: ${selectedProduct.name}<br>Price: ৳${selectedProduct.price}`,
             icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#ec4899',
@@ -786,7 +817,8 @@
                         userName: currentUser.email,
                         gameName: selectedGameName,
                         gameId: selectedGameId,
-                        playerId: playerId,
+                        playerId: inputValue,       // Admin will see this value
+                        inputType: currentInputLabel, // Admin will know what type of input it was (Email, UID, etc)
                         productName: selectedProduct.name,
                         price: selectedProduct.price,
                         status: 'pending',
@@ -895,6 +927,9 @@
                     dateStr = dateObj.toLocaleString('en-US', options);
                 }
 
+                // Dynamic Input Label in History
+                let inputDisplayLabel = d.inputType || "UID";
+
                 list.innerHTML += `
                     <div class="bg-white rounded-xl shadow-sm border border-gray-100 mb-4 overflow-hidden relative">
                         <div class="absolute left-0 top-0 bottom-0 w-1.5 ${statusColor.split(' ')[2]}"></div>
@@ -915,7 +950,7 @@
                                 <div>
                                     <p class="text-xs font-bold text-gray-700">${d.productName}</p>
                                     <div class="mt-1 inline-block bg-gray-50 border border-gray-200 rounded px-2 py-0.5">
-                                        <p class="text-[10px] text-gray-500 font-mono">UID: <span class="text-gray-700 font-bold select-all">${d.playerId}</span></p>
+                                        <p class="text-[10px] text-gray-500 font-mono">${inputDisplayLabel}: <span class="text-gray-700 font-bold select-all">${d.playerId}</span></p>
                                     </div>
                                 </div>
                                 <div class="text-right">
