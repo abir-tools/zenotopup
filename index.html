@@ -2,12 +2,13 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Zeno Bazar</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script>
 
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
@@ -17,7 +18,7 @@
     <style>
         body { font-family: 'Poppins', sans-serif; background-color: #f8fafc; }
         .nav-gradient { background: white; color: #1e293b; }
-        .active-tab { color: #ec4899 !important; }
+        .active-tab { color: #9333ea !important; } /* Purple Tab */
         .hidden { display: none !important; }
         
         /* Notice Scrolling Animation */
@@ -27,11 +28,8 @@
         /* Method Card */
         .method-card { transition: all 0.2s; border: 2px solid transparent; }
         .method-card:active { transform: scale(0.95); }
+        .method-card:hover { border-color: #d8b4fe; box-shadow: 0 4px 10px rgba(147, 51, 234, 0.1); transform: translateY(-3px);}
         
-        /* Support Float */
-        .support-float { animation: float 3s ease-in-out infinite; }
-        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
-
         /* Animations */
         @keyframes fadeInUp { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         .animate-fade-in { animation: fadeInUp 0.4s ease-out forwards; }
@@ -48,19 +46,55 @@
             cursor: pointer;
             transition: all 0.2s ease;
         }
-        .product-card:hover { border-color: #f9a8d4; }
+        .product-card:hover { border-color: #d8b4fe; } /* Purple hover */
         .product-card.selected {
-            border: 1.5px solid #ec4899; /* Pink Border */
+            border: 1.5px solid #9333ea; /* Purple Border */
             background-color: #fff; 
         }
         .product-bullet {
             height: 8px; width: 8px; background-color: #cbd5e1; border-radius: 50%; margin-right: 8px;
         }
-        .product-card.selected .product-bullet { background-color: #ec4899; }
+        .product-card.selected .product-bullet { background-color: #9333ea; }
+
+        /* --- NEW PAYMENT UI SPECIFIC STYLES --- */
+        .brand-hr { border: none; height: 1px; margin: 0; }
+        .bkash-hr { background-color: #BF1861; }
+        .nagad-hr { background-color: #AF0007; }
+        .text-yellow-highlight { color: #FFD700; font-weight: 600; }
+        .copy-btn { background: rgba(0,0,0,0.25); color: white; border: none; padding: 3px 10px; font-size: 12px; border-radius: 4px; cursor: pointer; margin-left: 8px; transition: background 0.2s;}
+        .copy-btn:hover { background: rgba(0,0,0,0.4); }
+
+        /* --- Custom Payment Method Selection Style --- */
+        .pay-type-card {
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s;
+        }
+        .pay-type-card.selected {
+            border-color: #9333ea;
+        }
+        .pay-type-ribbon {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #dc2626; 
+            color: white;
+            padding: 2px 8px;
+            border-bottom-right-radius: 8px;
+            font-size: 12px;
+            z-index: 10;
+        }
+
+        /* FAB Support Custom Animation */
+        .fab-item { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
     </style>
 </head>
 <body class="select-none bg-slate-50">
 
+<!-- AUTH SECTION -->
 <section id="auth-sec" class="min-h-screen flex flex-col items-center justify-center p-6 bg-white z-50 fixed inset-0">
     <div class="w-full max-w-sm">
         <div class="text-center mb-8">
@@ -69,38 +103,61 @@
         </div>
 
         <div class="flex bg-gray-100 p-1 rounded-lg mb-6">
-            <button onclick="toggleAuth('login')" id="btn-login-view" class="w-1/2 py-2 rounded-md font-bold text-sm bg-white shadow text-pink-600 transition">Login</button>
+            <button onclick="toggleAuth('login')" id="btn-login-view" class="w-1/2 py-2 rounded-md font-bold text-sm bg-white shadow text-purple-600 transition">Login</button>
             <button onclick="toggleAuth('register')" id="btn-reg-view" class="w-1/2 py-2 rounded-md font-bold text-sm text-gray-500 transition">Register</button>
         </div>
 
         <div id="login-form">
-            <input type="email" id="login-email" placeholder="Email Address" class="w-full bg-gray-50 border border-gray-300 p-3 rounded-lg focus:outline-none focus:border-pink-500 mb-3">
-            <input type="password" id="login-pass" placeholder="Password" class="w-full bg-gray-50 border border-gray-300 p-3 rounded-lg focus:outline-none focus:border-pink-500 mb-4">
-            <button onclick="handleLogin()" class="w-full bg-pink-600 text-white py-3 rounded-lg font-bold shadow-lg hover:bg-pink-700 transition">LOG IN</button>
+            <input type="email" id="login-email" placeholder="Email Address" class="w-full bg-gray-50 border border-gray-300 p-3 rounded-lg focus:outline-none focus:border-purple-500 mb-3">
+            <input type="password" id="login-pass" placeholder="Password" class="w-full bg-gray-50 border border-gray-300 p-3 rounded-lg focus:outline-none focus:border-purple-500 mb-4">
+            <button onclick="handleLogin()" class="w-full bg-purple-600 text-white py-3 rounded-lg font-bold shadow-lg hover:bg-purple-700 transition">LOG IN</button>
         </div>
 
         <div id="register-form" class="hidden">
-            <input type="text" id="reg-name" placeholder="Full Name" class="w-full bg-gray-50 border border-gray-300 p-3 rounded-lg focus:outline-none focus:border-pink-500 mb-3">
-            <input type="email" id="reg-email" placeholder="Email Address" class="w-full bg-gray-50 border border-gray-300 p-3 rounded-lg focus:outline-none focus:border-pink-500 mb-3">
-            <input type="number" id="reg-phone" placeholder="Phone Number" class="w-full bg-gray-50 border border-gray-300 p-3 rounded-lg focus:outline-none focus:border-pink-500 mb-3">
-            <input type="password" id="reg-pass" placeholder="Password (6+ chars)" class="w-full bg-gray-50 border border-gray-300 p-3 rounded-lg focus:outline-none focus:border-pink-500 mb-4">
+            <input type="text" id="reg-name" placeholder="Full Name" class="w-full bg-gray-50 border border-gray-300 p-3 rounded-lg focus:outline-none focus:border-purple-500 mb-3">
+            <input type="email" id="reg-email" placeholder="Email Address" class="w-full bg-gray-50 border border-gray-300 p-3 rounded-lg focus:outline-none focus:border-purple-500 mb-3">
+            <input type="number" id="reg-phone" placeholder="Phone Number" class="w-full bg-gray-50 border border-gray-300 p-3 rounded-lg focus:outline-none focus:border-purple-500 mb-3">
+            <input type="password" id="reg-pass" placeholder="Password (6+ chars)" class="w-full bg-gray-50 border border-gray-300 p-3 rounded-lg focus:outline-none focus:border-purple-500 mb-4">
             <button onclick="handleRegister()" class="w-full bg-gray-800 text-white py-3 rounded-lg font-bold shadow-lg hover:bg-gray-900 transition">CREATE ACCOUNT</button>
         </div>
     </div>
 </section>
 
-<div id="app-content" class="hidden relative max-w-md mx-auto bg-slate-50 min-h-screen shadow-2xl">
+<!-- MAIN APP -->
+<div id="app-content" class="hidden relative max-w-md mx-auto bg-slate-50 min-h-screen shadow-2xl overflow-x-hidden">
+    
+    <!-- PROMO MODAL -->
+    <div id="promo-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-5 bg-black/60 backdrop-blur-sm animate-fade-in">
+        <div class="bg-white w-full max-w-[340px] rounded-lg shadow-2xl relative flex flex-col pb-6 mb-8">
+            <div class="w-full bg-gray-100 rounded-t-lg overflow-hidden">
+                <img id="promo-img" src="https://i.postimg.cc/y8B65f2x/default-promo.jpg" class="w-full h-auto object-contain" onerror="this.src='https://placehold.co/400x200?text=Promo+Image'">
+            </div>
+            <div class="p-5 text-left">
+                <p id="promo-text" class="text-gray-900 text-[15px] font-medium mb-4 leading-snug">
+                    সকল প্রকার অফার সম্পর্কে জানতে নিচে ক্লিক করে আমাদের Telegram channel এ জয়েন করুন।
+                </p>
+                <a id="promo-link" href="#" target="_blank" class="inline-block bg-[#3b82f6] hover:bg-[#2563eb] text-white font-semibold py-2 px-4 rounded shadow-sm text-[15px] transition-colors">
+                    <span id="promo-btn-text">ক্লিক করুন</span>
+                </a>
+            </div>
+            <button onclick="closePromoModal()" class="absolute -bottom-5 left-1/2 transform -translate-x-1/2 bg-[#8b5cf6] hover:bg-[#7c3aed] text-white px-7 py-2.5 rounded-full font-bold shadow-lg flex items-center gap-1.5 whitespace-nowrap transition-colors text-[14px] tracking-wide">
+                <span class="text-[14px] font-black italic">✘</span> CLOSE
+            </button>
+        </div>
+    </div>
+
+    <!-- HEADER -->
     <header class="bg-white p-4 sticky top-0 z-40 flex justify-between items-center shadow-sm">
         <div class="flex items-center gap-2">
             <img id="header-logo-img" src="https://i.postimg.cc/NfFY97zx/20260217-180611.png" class="h-10 object-contain">
         </div>
         <div class="bg-gray-100 px-3 py-1 rounded-full text-xs font-bold text-gray-600 border border-gray-200">
-            <i class="fas fa-wallet mr-1 text-pink-500"></i> ৳ <span id="header-balance">0</span>
+            <i class="fas fa-wallet mr-1 text-purple-500"></i> ৳ <span id="header-balance">0</span>
         </div>
     </header>
 
-    <div class="bg-pink-600 text-white py-2 overflow-hidden shadow-inner flex items-center">
-        <div class="px-3 bg-pink-800 h-full flex items-center z-10 font-bold text-xs uppercase tracking-wider">Notice</div>
+    <div class="bg-purple-600 text-white py-2 overflow-hidden shadow-inner flex items-center">
+        <div class="px-3 bg-purple-800 h-full flex items-center z-10 font-bold text-xs uppercase tracking-wider">Notice</div>
         <div class="flex-1 overflow-hidden relative">
             <div id="notice-text" class="notice-scroll text-sm font-medium pl-4">স্বাগতম আমাদের অ্যাপে...</div>
         </div>
@@ -108,12 +165,18 @@
 
     <main class="p-3 relative">
         
-        <section id="home-sec" class="animate-fade-in">
-            <div id="banner-container" class="mb-6 rounded-xl overflow-hidden shadow-md h-44 bg-gray-200 relative group">
-                <div id="slider-wrapper" class="flex h-full w-full transition-transform duration-500 ease-out">
-                    <img src="https://i.postimg.cc/NfFY97zx/20260217-180611.png" class="w-full h-full object-contain bg-white flex-shrink-0">
+        <!-- HOME SECTION -->
+        <section id="home-sec" class="animate-fade-in pb-10">
+            
+            <!-- BANNER & NEW DOTS DESIGN -->
+            <div class="mb-6">
+                <div id="banner-container" class="rounded-xl overflow-hidden shadow-md h-44 bg-gray-200 relative group mb-3">
+                    <div id="slider-wrapper" class="flex h-full w-full transition-transform duration-500 ease-out">
+                        <img src="https://i.postimg.cc/NfFY97zx/20260217-180611.png" class="w-full h-full object-contain bg-white flex-shrink-0">
+                    </div>
                 </div>
-                <div id="slider-dots" class="absolute bottom-3 left-0 right-0 flex justify-center gap-2 z-10"></div>
+                <!-- Pills/Dots container below banner -->
+                <div id="slider-dots" class="flex justify-center items-center gap-2"></div>
             </div>
 
             <div class="grid grid-cols-3 gap-3 mb-5 px-2">
@@ -141,10 +204,10 @@
             </div>
 
             <div id="categories-container" class="mb-8">
-                <div class="text-center py-10"><i class="fas fa-spinner fa-spin text-pink-500"></i> Loading Categories...</div>
+                <div class="text-center py-10"><i class="fas fa-spinner fa-spin text-purple-500"></i> Loading Categories...</div>
             </div>
 
-            <div class="mt-8 mb-6">
+            <div class="mt-12 mb-6">
                 <h3 class="text-center font-bold text-slate-700 text-xl mb-5 font-serif">Latest 5 Orders</h3>
                 <div id="latest-orders-list" class="space-y-3 px-1">
                     <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between animate-pulse">
@@ -159,64 +222,12 @@
                     </div>
                 </div>
             </div>
-
-            <div class="mt-10 -mx-3 bg-[#880E4F] text-white pt-8 px-5 rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.2)] pb-20">  
-                <div class="mb-6">
-                    <h3 class="font-serif text-xl font-medium tracking-wide mb-3">STAY CONNECTED</h3>
-                    <p class="text-xs text-pink-100 font-light leading-relaxed mb-4 opacity-90">
-                        কোন সমস্যায় পড়লে হোয়াটসঅ্যাপ এ যোগাযোগ করবেন। তাহলে দ্রুত সমাধান পেয়ে যাবেন।
-                    </p>
-                    <div class="flex gap-4">
-                        <a id="ft-fb" href="#" class="w-10 h-10 border border-pink-300/30 rounded-lg flex items-center justify-center hover:bg-white hover:text-[#880E4F] transition"><i class="fab fa-facebook-f"></i></a>
-                        <a id="ft-insta" href="#" class="w-10 h-10 border border-pink-300/30 rounded-lg flex items-center justify-center hover:bg-white hover:text-[#880E4F] transition"><i class="fab fa-instagram"></i></a>
-                        <a id="ft-yt" href="#" class="w-10 h-10 border border-pink-300/30 rounded-lg flex items-center justify-center hover:bg-white hover:text-[#880E4F] transition"><i class="fab fa-youtube"></i></a>
-                        <a href="mailto:{email}" class="w-10 h-10 border border-pink-300/30 rounded-lg flex items-center justify-center hover:bg-white hover:text-[#880E4F] transition"><i class="far fa-envelope"></i></a>
-                    </div>
-                </div>
-
-                <div class="mb-6">
-                    <h3 class="font-serif text-xl font-medium tracking-wide mb-3">OUR MOBILE APP</h3>
-                    <a id="ft-app-link" href="#" target="_blank" class="inline-block border border-white/40 rounded-lg overflow-hidden w-36 hover:opacity-80 transition">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" class="w-full h-auto">
-                    </a>
-                </div>
-
-                <div class="mb-8">
-                    <h3 class="font-serif text-xl font-medium tracking-wide mb-3">SUPPORT CENTER</h3>
-                    <a id="ft-whatsapp" href="#" class="block mb-3 group">
-                        <div class="border border-pink-300/30 rounded-lg p-2.5 flex items-center gap-3 group-hover:bg-white/10 transition">
-                            <div class="w-10 h-10 flex items-center justify-center"><i class="fab fa-whatsapp text-3xl"></i></div>
-                            <div class="border-l border-pink-300/30 pl-3 h-full flex flex-col justify-center">
-                                <span class="text-[9px] text-pink-200 uppercase tracking-wider">Help line [9AM - 10PM]</span>
-                                <span id="ft-wa-num" class="font-bold text-lg font-mono leading-none mt-0.5">+8801xxxxxxxxx</span>
-                            </div>
-                        </div>
-                    </a>
-                    <a id="ft-telegram" href="#" class="block group">
-                        <div class="border border-pink-300/30 rounded-lg p-2.5 flex items-center gap-3 group-hover:bg-white/10 transition">
-                            <div class="w-10 h-10 flex items-center justify-center"><i class="fab fa-telegram-plane text-3xl"></i></div>
-                            <div class="border-l border-pink-300/30 pl-3 h-full flex flex-col justify-center">
-                                <span class="text-[9px] text-pink-200 uppercase tracking-wider">Help line [9AM - 10PM]</span>
-                                <span class="font-bold text-lg leading-none mt-0.5">Telegram Support</span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="text-center border-t border-pink-900/50 pt-4">
-                    <p class="text-[10px] text-pink-200 opacity-70 mb-1">
-                        © Copyright 2026 <span id="footer-site-name" class="font-bold">Zeno Bazar</span>. All Rights Reserved.
-                    </p>
-                    <p class="text-xs font-medium text-pink-100 mb-0">
-                        Developed by <a href="#" class="text-yellow-400 font-bold hover:underline">👑 ABIR AHMED 👑</a>
-                    </p>
-                </div>
-            </div>
         </section>
 
+        <!-- TOPUP SECTION -->
         <section id="topup-sec" class="hidden animate-fade-in pb-10">
             <div class="flex items-center gap-3 mb-4 p-1">
-                <button onclick="showSec('home')" class="text-gray-600 hover:text-pink-500 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200">
+                <button onclick="showSec('home')" class="text-gray-600 hover:text-purple-500 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200">
                     <i class="fas fa-arrow-left text-lg"></i>
                 </button>
                 <h2 class="text-lg font-bold text-gray-800" id="topup-game-title">Game Name</h2>
@@ -230,36 +241,71 @@
                 </div>
             </div>
 
-            <div class="bg-white p-4 rounded-xl shadow-sm mb-4 border border-gray-100">
-                <div class="flex items-center gap-2 mb-3">
-                    <span class="bg-pink-600 text-white w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold shadow-md">1</span>
-                    <h3 class="font-bold text-gray-700 text-sm" id="game-input-label">Player Id</h3>
-                </div>
-                <input type="text" id="game-player-id" placeholder="2535040417" class="w-full bg-gray-50 border border-gray-200 p-3 rounded-lg focus:outline-none focus:border-pink-500 focus:bg-white transition font-bold text-gray-700 tracking-wider text-lg">
-                
-                <div class="mt-5 border-t border-gray-100 pt-4">
-                    <div class="flex justify-between items-center mb-3">
-                        <span class="text-sm font-bold text-gray-600">Total Payable</span>
-                        <span class="text-xl font-bold text-pink-600">৳ <span id="total-price">0</span></span>
-                    </div>
-                    <button onclick="processOrder()" class="w-full bg-pink-600 text-white py-3 rounded-lg font-bold shadow-lg hover:bg-pink-700 transition flex justify-center items-center gap-2 active:scale-95">
-                         BUY NOW
-                    </button>
-                </div>
-            </div>
-
+            <!-- Step 1: Select Recharge -->
             <div class="bg-white p-4 rounded-xl shadow-sm mb-4 border border-gray-100">
                 <div class="flex items-center gap-2 mb-4">
-                    <span class="bg-pink-600 text-white w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold shadow-md">2</span>
+                    <span class="bg-purple-600 text-white w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold shadow-md">1</span>
                     <h3 class="font-bold text-gray-700 text-sm">Select Recharge</h3>
                 </div>
 
                 <div id="product-loader" class="text-center py-10 hidden">
-                    <i class="fas fa-spinner fa-spin text-pink-500 text-2xl"></i>
+                    <i class="fas fa-spinner fa-spin text-purple-500 text-2xl"></i>
                 </div>
 
                 <div id="products-grid" class="grid grid-cols-2 gap-3">
+                    <!-- Products will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Step 2: Account Info -->
+            <div class="bg-white p-4 rounded-xl shadow-sm mb-4 border border-gray-100">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="bg-purple-600 text-white w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold shadow-md">2</span>
+                    <h3 class="font-bold text-gray-700 text-sm" id="game-input-label">Account Info</h3>
+                </div>
+                <input type="text" id="game-player-id" placeholder="আপনার Uid দিন" class="w-full bg-gray-50 border border-gray-200 p-3 rounded-lg focus:outline-none focus:border-purple-500 focus:bg-white transition font-bold text-gray-700 tracking-wider text-lg">
+                <button onclick="checkPlayerName()" class="w-full bg-purple-600 text-white py-3 rounded-lg font-bold shadow-lg hover:bg-purple-700 transition active:scale-95 mt-3 text-sm">
+                    আপনার গেম আইডির নাম চেক করুন
+                </button>
+            </div>
+
+            <!-- Step 3: Payment Method Selection -->
+            <div class="bg-white p-4 rounded-xl shadow-sm mb-4 border border-gray-100">
+                <div class="flex items-center gap-2 mb-4">
+                    <span class="bg-purple-600 text-white w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold shadow-md">3</span>
+                    <h3 class="font-bold text-gray-700 text-sm">Select one option</h3>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                    <div id="paytype-wallet" onclick="selectPaymentType('wallet')" class="pay-type-card selected bg-white">
+                        <div class="pay-type-ribbon"><i class="fas fa-check"></i></div>
+                        <img src="https://admin.jineshop.com/notices/1758382526_walletlogo.jpg" class="w-full h-20 object-cover">
+                        <div class="bg-gray-200 text-center py-1.5 text-xs font-bold text-gray-700 uppercase tracking-wide">Wallet Pay</div>
                     </div>
+                    <div id="paytype-instant" onclick="selectPaymentType('instant')" class="pay-type-card bg-white">
+                        <div class="pay-type-ribbon hidden"><i class="fas fa-check"></i></div>
+                        <img src="https://admin.jineshop.com/notices/1754413851_autopay.png" class="w-full h-20 object-contain p-2">
+                        <div class="bg-gray-200 text-center py-1.5 text-xs font-bold text-gray-700 uppercase tracking-wide">Instant Pay</div>
+                    </div>
+                </div>
+
+                <!-- Text Info -->
+                <div class="space-y-2 mb-5">
+                    <div class="flex items-center gap-2 text-xs text-gray-500">
+                        <i class="fas fa-info-circle"></i> 
+                        <span>আপনার অ্যাকাউন্ট ব্যালেন্স <span class="text-purple-600 font-bold">৳ <span id="current-wallet-bal">0</span></span></span>
+                    </div>
+                    <div class="flex items-center gap-2 text-xs text-gray-500">
+                        <i class="fas fa-info-circle"></i> 
+                        <span>প্রোডাক্ট কিনতে আপনার প্রয়োজন <span class="text-purple-600 font-bold">৳ <span id="needed-for-product">0</span></span></span>
+                    </div>
+                </div>
+                
+                <div class="border-t border-gray-100 pt-4">
+                    <button onclick="processOrder()" class="w-full bg-purple-600 text-white py-3 rounded-lg font-bold shadow-lg hover:bg-purple-700 transition flex justify-center items-center gap-2 active:scale-95">
+                         Buy Now
+                    </button>
+                </div>
             </div>
 
             <div id="game-rules-box" class="bg-yellow-50 border border-yellow-200 p-4 rounded-xl shadow-sm mb-6 hidden">
@@ -272,62 +318,74 @@
             </div>
         </section>
 
-        <section id="addmoney-sec" class="hidden animate-fade-in">
-            <h2 class="font-bold text-xl text-gray-800 mb-4 px-2">Add Money</h2>
-            
-            <div id="payment-methods-grid" class="grid grid-cols-3 gap-3 mb-6">
-                <div onclick="showPaymentForm('bKash', 'https://i.ibb.co.com/9kCCTNsx/1656227518bkash-logo-png.png', '#e2136e')" 
-                     class="bg-white p-3 rounded-xl shadow-sm flex flex-col items-center justify-center cursor-pointer method-card h-28">
-                    <img src="https://i.ibb.co.com/9kCCTNsx/1656227518bkash-logo-png.png" class="w-12 h-12 object-contain mb-2">
-                    <span class="text-xs font-bold text-gray-600">bKash</span>
-                </div>
-                <div onclick="showPaymentForm('Nagad', 'https://i.ibb.co.com/VcqJTvpn/Nagad-Logo-horizontally-og.png', '#f7941d')" 
-                     class="bg-white p-3 rounded-xl shadow-sm flex flex-col items-center justify-center cursor-pointer method-card h-28">
-                    <img src="https://i.ibb.co.com/VcqJTvpn/Nagad-Logo-horizontally-og.png" class="w-16 h-12 object-contain mb-2">
-                    <span class="text-xs font-bold text-gray-600">Nagad</span>
-                </div>
-                <div onclick="showPaymentForm('Rocket', 'https://i.ibb.co.com/wFZkNM48/rocket-color-logo-mobile-banking-icon-free-png.png', '#8c3494')" 
-                     class="bg-white p-3 rounded-xl shadow-sm flex flex-col items-center justify-center cursor-pointer method-card h-28">
-                    <img src="https://i.ibb.co.com/wFZkNM48/rocket-color-logo-mobile-banking-icon-free-png.png" class="w-10 h-12 object-contain mb-2">
-                    <span class="text-xs font-bold text-gray-600">Rocket</span>
+        <!-- ADD MONEY & DIRECT PAYMENT SECTION -->
+        <section id="addmoney-sec" class="hidden animate-fade-in pb-24">
+            <!-- Step 1: Amount Entry -->
+            <div id="pg-view-amount" class="block">
+                <h2 class="font-bold text-xl text-gray-800 mb-4 px-2">Add Money</h2>
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+                    <p class="text-gray-500 text-sm mb-4">Enter the amount you want to add to your balance.</p>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-bold mb-2">Amount (৳)</label>
+                        <input type="number" id="pg-amount-input" placeholder="e.g., 50" min="20" class="w-full bg-gray-50 border border-gray-200 p-3 rounded-lg font-bold text-lg focus:outline-none focus:border-purple-500">
+                        <p class="text-[12px] text-gray-400 mt-2 font-medium">সর্বনিম্ন ডিপোজিট পরিমাণ ৳20।</p>
+                    </div>
+                    <button onclick="pgGotoMethods()" class="w-full bg-purple-600 text-white py-3 rounded-lg font-bold shadow-lg hover:bg-purple-700 transition">Continue</button>
                 </div>
             </div>
 
-            <div id="payment-form-container" class="hidden bg-white p-5 rounded-2xl shadow-lg border border-gray-100">
-                <div class="flex justify-between items-center mb-4">
-                    <div class="flex items-center gap-2">
-                        <img id="form-logo" src="" class="w-8 h-8 object-contain">
-                        <h3 id="form-method-name" class="font-bold text-lg text-gray-800">Method</h3>
-                    </div>
-                    <button onclick="resetAddMoney()" class="text-gray-400 hover:text-red-500"><i class="fas fa-times"></i></button>
+            <!-- Step 2: Method Selection -->
+            <div id="pg-view-methods" class="hidden">
+                <div class="flex items-center gap-3 mb-4 p-1">
+                    <button onclick="pgBackFromMethods()" class="text-gray-600 hover:text-purple-500 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200">
+                        <i class="fas fa-arrow-left text-lg"></i>
+                    </button>
+                    <h2 class="text-lg font-bold text-gray-800">পেমেন্ট মেথড নির্বাচন করুন</h2>
                 </div>
                 
-                <div class="bg-gray-50 p-3 rounded-lg border border-gray-200 mb-4 flex justify-between items-center">
-                    <div>
-                        <p class="text-[10px] text-gray-500">Send Money (Personal)</p>
-                        <p id="admin-number" class="font-mono font-bold text-lg tracking-wider text-gray-700">Loading...</p>
+                <div class="grid grid-cols-2 gap-3 px-1">
+                    <div onclick="pgSelectMethod('bKash')" class="bg-white p-4 rounded-xl shadow-sm flex flex-col items-center justify-center cursor-pointer method-card border border-blue-50">
+                        <img src="https://pay.bmsmmpanel.xyz/assets/template/images/bkash.png" class="h-10 object-contain mb-2">
                     </div>
-                    <button onclick="copyNumber()" class="bg-white p-2 rounded shadow-sm text-pink-600"><i class="far fa-copy"></i></button>
+                    <div onclick="pgSelectMethod('Nagad')" class="bg-white p-4 rounded-xl shadow-sm flex flex-col items-center justify-center cursor-pointer method-card border border-blue-50">
+                        <img src="https://pay.bmsmmpanel.xyz/assets/template/images/nagad.png" class="h-10 object-contain mb-2">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Instruction & Verification -->
+            <div id="pg-view-verify" class="hidden">
+                <div class="flex items-center gap-3 mb-4 p-1">
+                    <button onclick="pgShowView('pg-view-methods')" class="text-gray-600 hover:text-purple-500 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200">
+                        <i class="fas fa-arrow-left text-lg"></i>
+                    </button>
+                    <h2 class="text-lg font-bold text-gray-800">পেমেন্ট নির্দেশনা</h2>
                 </div>
 
-                <div class="space-y-4">
-                    <input type="number" id="dep-amount" placeholder="Amount" class="w-full bg-gray-50 border border-gray-200 p-3 rounded-lg font-bold focus:outline-none focus:border-pink-500">
-                    <input type="text" id="dep-trx" placeholder="Transaction ID" class="w-full bg-gray-50 border border-gray-200 p-3 rounded-lg font-bold uppercase focus:outline-none focus:border-pink-500">
-                    <button onclick="submitDeposit()" class="w-full bg-pink-600 text-white py-3 rounded-lg font-bold shadow-lg hover:bg-pink-700 transition">Verify & Add Money</button>
+                <div id="pg-instruction-content" class="px-1">
+                    <!-- JS will generate content here -->
                 </div>
             </div>
         </section>
 
-        <section id="tutorial-sec" class="hidden animate-fade-in pb-20">
-            <div class="px-5 pt-6 mb-4">
-                <h2 class="text-2xl font-bold text-gray-800">Tutorials</h2>
+        <!-- MY CODES SECTION -->
+        <section id="mycodes-sec" class="hidden animate-fade-in pb-24">
+            <div class="px-4 pt-6 mb-4 flex justify-between items-center relative">
+                <h2 class="text-2xl font-bold text-gray-800">My Codes</h2>
+                <button onclick="openRedeemModal()" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition active:scale-95">
+                    Redeem Code
+                </button>
             </div>
-            <div id="tutorial-list-container" class="space-y-6"></div>
+
+            <div id="mycodes-list" class="px-4 space-y-3">
+                <!-- User's delivered codes will load here -->
+            </div>
         </section>
 
-        <section id="account-sec" class="hidden animate-fade-in">
-            <div class="bg-white p-6 rounded-xl shadow-sm mb-4 text-center border border-gray-100">
-                <div class="w-20 h-20 bg-pink-50 rounded-full mx-auto flex items-center justify-center text-pink-500 text-3xl mb-3 shadow-inner">
+        <!-- ACCOUNT SECTION -->
+        <section id="account-sec" class="hidden animate-fade-in pb-20">
+            <div class="bg-white p-6 rounded-xl shadow-sm mb-4 text-center border border-gray-100 mt-4">
+                <div class="w-20 h-20 bg-purple-50 rounded-full mx-auto flex items-center justify-center text-purple-500 text-3xl mb-3 shadow-inner">
                     <i class="fas fa-user-circle text-5xl"></i>
                 </div>
                 
@@ -335,12 +393,12 @@
                 <p id="profile-email" class="text-xs text-gray-500 mb-6 font-mono">user@email.com</p>
 
                 <div class="grid grid-cols-3 gap-3">
-                    <div class="bg-pink-50 p-3 rounded-2xl border border-pink-100 flex flex-col items-center justify-center">
-                        <div class="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 mb-1">
+                    <div class="bg-purple-50 p-3 rounded-2xl border border-purple-100 flex flex-col items-center justify-center">
+                        <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 mb-1">
                             <i class="fas fa-wallet text-sm"></i>
                         </div>
                         <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Balance</p>
-                        <p class="text-sm font-extrabold text-pink-600">৳ <span id="profile-balance">0</span></p>
+                        <p class="text-sm font-extrabold text-purple-600">৳ <span id="profile-balance">0</span></p>
                     </div>
 
                     <div class="bg-blue-50 p-3 rounded-2xl border border-blue-100 flex flex-col items-center justify-center">
@@ -351,12 +409,12 @@
                         <p class="text-sm font-extrabold text-blue-600" id="profile-total-orders">0</p>
                     </div>
 
-                    <div class="bg-purple-50 p-3 rounded-2xl border border-purple-100 flex flex-col items-center justify-center">
-                        <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 mb-1">
+                    <div class="bg-green-50 p-3 rounded-2xl border border-green-100 flex flex-col items-center justify-center">
+                        <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 mb-1">
                             <i class="fas fa-coins text-sm"></i>
                         </div>
                         <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Spent</p>
-                        <p class="text-sm font-extrabold text-purple-600">৳ <span id="profile-total-spent">0</span></p>
+                        <p class="text-sm font-extrabold text-green-600">৳ <span id="profile-total-spent">0</span></p>
                     </div>
                 </div>
             </div>
@@ -365,15 +423,23 @@
                 <button onclick="showSec('history')" class="w-full flex items-center justify-between p-4 border-b border-gray-100 hover:bg-gray-50 transition">
                     <div class="flex items-center gap-3">
                         <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-500"><i class="fas fa-history"></i></div>
-                        <span class="text-sm font-semibold text-gray-700">Order History</span>
+                        <span class="text-sm font-semibold text-gray-700">My Orders</span>
                     </div>
                     <i class="fas fa-chevron-right text-gray-300 text-xs"></i>
                 </button>
                 
-                <button onclick="showSec('addmoney')" class="w-full flex items-center justify-between p-4 border-b border-gray-100 hover:bg-gray-50 transition">
+                <button onclick="showSec('mycodes')" class="w-full flex items-center justify-between p-4 border-b border-gray-100 hover:bg-gray-50 transition">
                     <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center text-green-500"><i class="fas fa-plus-circle"></i></div>
-                        <span class="text-sm font-semibold text-gray-700">Add Money</span>
+                        <div class="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center text-purple-500"><i class="fas fa-list-alt"></i></div>
+                        <span class="text-sm font-semibold text-gray-700">My Codes</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-300 text-xs"></i>
+                </button>
+
+                <button onclick="showSec('transactions')" class="w-full flex items-center justify-between p-4 border-b border-gray-100 hover:bg-gray-50 transition">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center text-green-500"><i class="fas fa-exchange-alt"></i></div>
+                        <span class="text-sm font-semibold text-gray-700">My Transactions</span>
                     </div>
                     <i class="fas fa-chevron-right text-gray-300 text-xs"></i>
                 </button>
@@ -387,51 +453,127 @@
             </div>
         </section>
 
+        <!-- HISTORY (MY ORDERS) SECTION -->
         <section id="history-sec" class="hidden animate-fade-in pb-24">
-            <div class="px-4 pt-4 mb-2">
-                <h2 class="text-xl font-bold text-gray-800 border-l-4 border-pink-500 pl-2">Order History</h2>
+            <div id="history-list" class="px-2 mt-4 space-y-4">
+                <!-- Orders will load here -->
             </div>
-            <div id="history-list" class="px-4">
-                </div>
         </section>
+
+        <!-- TRANSACTIONS (DEPOSITS) SECTION -->
+        <section id="transactions-sec" class="hidden animate-fade-in pb-24">
+            <div class="px-4 pt-6 mb-4 flex items-center gap-3">
+                <button onclick="showSec('account')" class="text-gray-600 hover:text-purple-500 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 transition">
+                    <i class="fas fa-arrow-left text-lg"></i>
+                </button>
+                <h2 class="text-xl font-bold text-gray-800">My Transactions</h2>
+            </div>
+            <div id="transactions-list" class="px-4 mt-2">
+                <!-- Transactions will load here -->
+            </div>
+        </section>
+
+        <!-- GLOBAL FOOTER -->
+        <div id="global-footer" class="mt-10 -mx-3 bg-[#4c1d95] text-white pt-8 px-5 rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.2)] pb-20">  
+            <div class="mb-6">
+                <h3 class="font-serif text-xl font-medium tracking-wide mb-3">STAY CONNECTED</h3>
+                <p class="text-xs text-purple-100 font-light leading-relaxed mb-4 opacity-90">
+                    কোন সমস্যায় পড়লে হোয়াটসঅ্যাপ এ যোগাযোগ করবেন। তাহলে দ্রুত সমাধান পেয়ে যাবেন।
+                </p>
+                <div class="flex gap-4">
+                    <a id="ft-fb" href="#" class="w-10 h-10 border border-purple-300/30 rounded-lg flex items-center justify-center hover:bg-white hover:text-[#4c1d95] transition"><i class="fab fa-facebook-f"></i></a>
+                    <a id="ft-insta" href="#" class="w-10 h-10 border border-purple-300/30 rounded-lg flex items-center justify-center hover:bg-white hover:text-[#4c1d95] transition"><i class="fab fa-instagram"></i></a>
+                    <a id="ft-yt" href="#" class="w-10 h-10 border border-purple-300/30 rounded-lg flex items-center justify-center hover:bg-white hover:text-[#4c1d95] transition"><i class="fab fa-youtube"></i></a>
+                    <a href="mailto:{email}" class="w-10 h-10 border border-purple-300/30 rounded-lg flex items-center justify-center hover:bg-white hover:text-[#4c1d95] transition"><i class="far fa-envelope"></i></a>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="font-serif text-xl font-medium tracking-wide mb-3">OUR MOBILE APP</h3>
+                <a id="ft-app-link" href="#" target="_blank" class="inline-block border border-white/40 rounded-lg overflow-hidden w-36 hover:opacity-80 transition">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" class="w-full h-auto">
+                </a>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="font-serif text-xl font-medium tracking-wide mb-3">SUPPORT CENTER</h3>
+                <a id="ft-whatsapp" href="#" class="block mb-3 group">
+                    <div class="border border-purple-300/30 rounded-lg p-2.5 flex items-center gap-3 group-hover:bg-white/10 transition">
+                        <div class="w-10 h-10 flex items-center justify-center"><i class="fab fa-whatsapp text-3xl"></i></div>
+                        <div class="border-l border-purple-300/30 pl-3 h-full flex flex-col justify-center">
+                            <span class="text-[9px] text-purple-200 uppercase tracking-wider">Help line [9AM - 10PM]</span>
+                            <span id="ft-wa-num" class="font-bold text-lg font-mono leading-none mt-0.5">+8801xxxxxxxxx</span>
+                        </div>
+                    </div>
+                </a>
+                <a id="ft-telegram" href="#" class="block group">
+                    <div class="border border-purple-300/30 rounded-lg p-2.5 flex items-center gap-3 group-hover:bg-white/10 transition">
+                        <div class="w-10 h-10 flex items-center justify-center"><i class="fab fa-telegram-plane text-3xl"></i></div>
+                        <div class="border-l border-purple-300/30 pl-3 h-full flex flex-col justify-center">
+                            <span class="text-[9px] text-purple-200 uppercase tracking-wider">Help line [9AM - 10PM]</span>
+                            <span class="font-bold text-lg leading-none mt-0.5">Telegram Support</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="text-center border-t border-purple-900/50 pt-4">
+                <p class="text-[10px] text-purple-200 opacity-70 mb-1">
+                    © Copyright 2026 <span id="footer-site-name" class="font-bold">Zeno Bazar</span>. All Rights Reserved.
+                </p>
+                <p class="text-xs font-medium text-purple-100 mb-0">
+                    Developed by <a href="#" class="text-yellow-400 font-bold hover:underline">👑 ABIR AHMED 👑</a>
+                </p>
+            </div>
+        </div>
 
     </main>
 
-    <div class="fixed bottom-20 right-4 z-40 support-float">
-        <img onclick="toggleSupportModal()" src="https://i.ibb.co.com/RG5qbS8t/20260120-195807.png" class="w-[150px] h-auto cursor-pointer filter drop-shadow-xl hover:scale-105 transition-transform duration-200">
-    </div>
-
-    <div id="support-modal" class="hidden fixed inset-0 z-[60] flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm">
-        <div class="bg-white p-6 rounded-2xl shadow-2xl w-72 relative animate-popup">
-            <button onclick="toggleSupportModal()" class="absolute top-2 right-3 text-gray-400 hover:text-red-500 text-xl"><i class="fas fa-times"></i></button>
-            <h3 class="font-bold text-center text-gray-800 text-lg mb-4">Contact Us</h3>
-            <div class="flex flex-col gap-3">
-                <a id="link-telegram" href="#" target="_blank" class="flex items-center justify-center gap-3 bg-[#0088cc] text-white py-3 rounded-xl shadow-md">
-                    <i class="fab fa-telegram-plane text-2xl"></i> <span class="font-bold">Telegram</span>
-                </a>
-                <a id="link-whatsapp" href="#" target="_blank" class="flex items-center justify-center gap-3 bg-[#25D366] text-white py-3 rounded-xl shadow-md">
-                    <i class="fab fa-whatsapp text-2xl"></i> <span class="font-bold">WhatsApp</span>
-                </a>
+    <!-- NEW SUPPORT FLOATING ACTION BUTTON (FAB) -->
+    <div class="fixed bottom-20 right-4 z-50 flex flex-col items-end gap-3">
+        <!-- Floating icons -->
+        <div class="flex gap-2 mr-1">
+            <a href="#" id="fab-telegram" target="_blank" class="w-12 h-12 bg-[#0088cc] text-white rounded-full flex items-center justify-center shadow-lg transform transition-all duration-300 scale-0 opacity-0 translate-y-10 origin-bottom fab-item hover:scale-110">
+                <i class="fab fa-telegram-plane text-2xl"></i>
+            </a>
+            <a href="#" id="fab-fb" target="_blank" class="w-12 h-12 bg-[#006AFF] text-white rounded-full flex items-center justify-center shadow-lg transform transition-all duration-300 scale-0 opacity-0 translate-y-10 origin-bottom fab-item hover:scale-110" style="transition-delay: 50ms;">
+                <i class="fab fa-facebook-messenger text-2xl"></i>
+            </a>
+            <a href="#" id="fab-whatsapp" target="_blank" class="w-12 h-12 bg-[#25D366] text-white rounded-full flex items-center justify-center shadow-lg transform transition-all duration-300 scale-0 opacity-0 translate-y-10 origin-bottom fab-item hover:scale-110" style="transition-delay: 100ms;">
+                <i class="fab fa-whatsapp text-2xl"></i>
+            </a>
+        </div>
+        
+        <!-- Main FAB with Text -->
+        <div class="flex items-center gap-2">
+            <div id="fab-text" onclick="toggleFab()" class="bg-[#ea4335] text-white px-3 py-1.5 rounded text-sm shadow-md cursor-pointer whitespace-nowrap hover:bg-red-600 transition-all duration-300 transform origin-right">
+                সাহায্য লাগবে ?
             </div>
+            <button onclick="toggleFab()" id="fab-main" class="w-14 h-14 bg-[#ea4335] text-white rounded-full flex items-center justify-center shadow-xl hover:bg-red-600 transition-colors z-50 relative">
+                <i id="fab-icon" class="fas fa-phone-alt text-2xl transition-transform duration-300"></i>
+            </button>
         </div>
     </div>
 
+    <!-- BOTTOM NAVIGATION -->
     <nav class="fixed bottom-0 w-full bg-white border-t border-gray-100 py-2 px-6 shadow-[0_-5px_20px_rgba(0,0,0,0.05)] z-40 max-w-md mx-auto left-0 right-0">
         <div class="flex justify-between items-center">
             <button onclick="showSec('home')" class="nav-item flex flex-col items-center text-gray-400 active-tab" id="nav-home">
                 <i class="fas fa-home text-xl"></i><span class="text-[10px] mt-1 font-medium">Home</span>
             </button>
-            <button onclick="showSec('tutorial')" class="nav-item flex flex-col items-center text-gray-400" id="nav-tutorial">
-                <i class="fab fa-youtube text-xl"></i><span class="text-[10px] mt-1 font-medium">Tutorial</span>
+            
+            <button onclick="showSec('mycodes')" class="nav-item flex flex-col items-center text-gray-400" id="nav-mycodes">
+                <i class="fas fa-th-large text-xl"></i><span class="text-[10px] mt-1 font-medium">My Codes</span>
             </button>
             
-            <button onclick="showSec('addmoney')" class="add-money-btn bg-pink-600 -mt-8 h-14 w-14 rounded-full flex items-center justify-center text-white border-4 border-gray-50 transform active:scale-90 transition shadow-lg">
+            <button onclick="showSec('addmoney')" class="add-money-btn bg-purple-600 -mt-8 h-14 w-14 rounded-full flex items-center justify-center text-white border-4 border-gray-50 transform active:scale-90 transition shadow-lg">
                 <i class="fas fa-plus text-2xl"></i>
             </button>
             
             <button onclick="showSec('history')" class="nav-item flex flex-col items-center text-gray-400" id="nav-history">
-                <i class="fas fa-history text-xl"></i><span class="text-[10px] mt-1 font-medium">History</span>
+                <i class="fas fa-history text-xl"></i><span class="text-[10px] mt-1 font-medium">My Orders</span>
             </button>
+            
             <button onclick="showSec('account')" class="nav-item flex flex-col items-center text-gray-400" id="nav-account">
                 <i class="fas fa-user text-xl"></i><span class="text-[10px] mt-1 font-medium">Account</span>
             </button>
@@ -458,16 +600,80 @@
     const analytics = firebase.analytics();
 
     let currentUser = null;
+    let currentUserDataObj = null; 
     let userBalance = 0;
+    let isPromoEnabled = true; 
+    
+    // Topup State
     let selectedProduct = null;
     let selectedGameId = null;
     let selectedGameName = "";
     let gamesData = {};
+    let activePaymentType = 'wallet'; 
+    
+    // PG State
+    let pgDepositAmount = 0;
+    let pgSelectedMethodName = "";
+    let pgAdminNumber = "";
+    let pgFlowType = 'add_money'; 
+    let directOrderDetails = null;
 
-    // --- NEW: SESSION ID GENERATOR ---
     const uniqueSessionId = Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
 
-    // --- LOAD GLOBAL SETTINGS ---
+    new ClipboardJS('.copy-btn');
+
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            Swal.fire({toast:true, title:'Code Copied!', icon:'success', position:'top-end', showConfirmButton:false, timer:1500});
+        });
+    }
+
+    // --- PROMO MODAL LOGIC ---
+    function closePromoModal() {
+        document.getElementById('promo-modal').classList.add('hidden');
+        sessionStorage.setItem('promoShown', 'true');
+    }
+
+    function showPromoModal() {
+        if (isPromoEnabled && !sessionStorage.getItem('promoShown')) {
+            document.getElementById('promo-modal').classList.remove('hidden');
+        }
+    }
+
+    // --- FAB (SUPPORT) LOGIC WITH TEXT TOGGLE ---
+    let fabOpen = false;
+    function toggleFab() {
+        fabOpen = !fabOpen;
+        const items = document.querySelectorAll('.fab-item');
+        const icon = document.getElementById('fab-icon');
+        const fabText = document.getElementById('fab-text');
+        
+        if (fabOpen) {
+            items.forEach(item => {
+                item.classList.remove('scale-0', 'opacity-0', 'translate-y-10');
+                item.classList.add('scale-100', 'opacity-100', 'translate-y-0');
+            });
+            icon.classList.remove('fa-phone-alt');
+            icon.classList.add('fa-times', 'rotate-90');
+            if(fabText) {
+                fabText.classList.add('scale-x-0', 'opacity-0');
+                setTimeout(() => fabText.classList.add('hidden'), 200);
+            }
+        } else {
+            items.forEach(item => {
+                item.classList.add('scale-0', 'opacity-0', 'translate-y-10');
+                item.classList.remove('scale-100', 'opacity-100', 'translate-y-0');
+            });
+            icon.classList.remove('fa-times', 'rotate-90');
+            icon.classList.add('fa-phone-alt');
+            if(fabText) {
+                fabText.classList.remove('hidden');
+                setTimeout(() => fabText.classList.remove('scale-x-0', 'opacity-0'), 10);
+            }
+        }
+    }
+
+    // --- LOAD SETTINGS FROM FIREBASE ---
     function loadGlobalSettings() {
         db.collection("settings").doc("general").onSnapshot((doc) => {
             let logoUrl = "https://i.postimg.cc/NfFY97zx/20260217-180611.png";
@@ -477,6 +683,18 @@
                 const data = doc.data();
                 if(data.logoUrl) logoUrl = data.logoUrl;
                 if(data.siteName) siteName = data.siteName;
+                
+                isPromoEnabled = data.promoEnabled !== false; 
+                
+                const promoImgEl = document.getElementById('promo-img');
+                const promoTextEl = document.getElementById('promo-text');
+                const promoLinkEl = document.getElementById('promo-link');
+                const promoBtnTextEl = document.getElementById('promo-btn-text');
+
+                if(promoImgEl) promoImgEl.src = data.promoImg || "https://i.postimg.cc/y8B65f2x/default-promo.jpg";
+                if(promoTextEl) promoTextEl.innerText = data.promoText || "সকল প্রকার অফার সম্পর্কে জানতে নিচে ক্লিক করে আমাদের Telegram channel এ জয়েন করুন।";
+                if(promoBtnTextEl) promoBtnTextEl.innerText = data.promoBtnText || "ক্লিক করুন";
+                if(promoLinkEl) promoLinkEl.href = data.promoLink || data.telegram || "#";
             }
 
             const authLogo = document.getElementById('auth-logo-img');
@@ -498,13 +716,13 @@
         if(view === 'login') {
             document.getElementById('login-form').classList.remove('hidden');
             document.getElementById('register-form').classList.add('hidden');
-            document.getElementById('btn-login-view').classList.add('bg-white', 'shadow', 'text-pink-600');
-            document.getElementById('btn-reg-view').classList.remove('bg-white', 'shadow', 'text-pink-600');
+            document.getElementById('btn-login-view').classList.add('bg-white', 'shadow', 'text-purple-600');
+            document.getElementById('btn-reg-view').classList.remove('bg-white', 'shadow', 'text-purple-600');
         } else {
             document.getElementById('login-form').classList.add('hidden');
             document.getElementById('register-form').classList.remove('hidden');
-            document.getElementById('btn-reg-view').classList.add('bg-white', 'shadow', 'text-pink-600');
-            document.getElementById('btn-login-view').classList.remove('bg-white', 'shadow', 'text-pink-600');
+            document.getElementById('btn-reg-view').classList.add('bg-white', 'shadow', 'text-purple-600');
+            document.getElementById('btn-login-view').classList.remove('bg-white', 'shadow', 'text-purple-600');
         }
     }
 
@@ -541,6 +759,9 @@
             loadUserData(user.uid);
             calculateUserStats(user.uid); 
             loadAppContent();
+            
+            setTimeout(showPromoModal, 1000);
+            
         } else {
             document.getElementById('auth-sec').classList.remove('hidden');
             document.getElementById('app-content').classList.add('hidden');
@@ -551,8 +772,10 @@
         db.collection('users').doc(uid).onSnapshot((doc) => {
             if (doc.exists) {
                 const data = doc.data();
+                currentUserDataObj = data; 
                 userBalance = data.balance || 0;
                 document.getElementById('header-balance').innerText = userBalance;
+                document.getElementById('current-wallet-bal').innerText = userBalance;
                 document.getElementById('profile-name').innerText = data.name || "User";
                 document.getElementById('profile-email').innerText = data.email;
                 document.getElementById('profile-balance').innerText = userBalance;
@@ -571,7 +794,6 @@
             snapshot.forEach((doc) => {
                 const data = doc.data();
                 totalOrders++; 
-                
                 const status = data.status ? data.status.toLowerCase() : '';
                 if (status === 'success' || status === 'complete' || status === 'completed') {
                     totalSpent += parseInt(data.price || 0);
@@ -581,7 +803,6 @@
             document.getElementById('profile-total-orders').innerText = totalOrders;
             document.getElementById('profile-total-spent').innerText = totalSpent;
         }).catch(err => {
-            console.error("Stats Error:", err);
             document.getElementById('profile-total-orders').innerText = "0";
             document.getElementById('profile-total-spent').innerText = "0";
         });
@@ -599,26 +820,19 @@
                 const tgLink = data.telegram || "#";
                 const appLink = data.appLink || "#";
 
+                // Setup links for standard sections
                 document.getElementById('home-whatsapp').href = "https://wa.me/" + waNum;
                 document.getElementById('home-telegram').href = tgLink;
                 
                 const homeAppBtn = document.getElementById('home-app-dl');
                 homeAppBtn.href = appLink;
                 homeAppBtn.onclick = function(e) {
-                    if(appLink === "#") {
-                        e.preventDefault();
-                        Swal.fire('Notice', 'App coming soon!', 'info');
-                    }
+                    if(appLink === "#") { e.preventDefault(); Swal.fire('Notice', 'App coming soon!', 'info'); }
                 };
 
                 const ftAppBtn = document.getElementById('ft-app-link');
                 ftAppBtn.href = appLink;
-                if(appLink !== "#") {
-                    ftAppBtn.onclick = function(e) {
-                        e.preventDefault();
-                        window.open(appLink, '_blank');
-                    };
-                }
+                if(appLink !== "#") { ftAppBtn.onclick = function(e) { e.preventDefault(); window.open(appLink, '_blank'); }; }
 
                 document.getElementById('ft-whatsapp').href = "https://wa.me/" + waNum;
                 document.getElementById('ft-wa-num').innerText = waNum;
@@ -627,10 +841,19 @@
                 if(data.facebook) document.getElementById('ft-fb').href = data.facebook;
                 if(data.instagram) document.getElementById('ft-insta').href = data.instagram;
                 if(data.youtube) document.getElementById('ft-yt').href = data.youtube;
+
+                // Setup links for new FAB Buttons
+                const waFab = document.getElementById('fab-whatsapp');
+                if(waFab) waFab.href = "https://wa.me/" + waNum;
+
+                const tgFab = document.getElementById('fab-telegram');
+                if(tgFab) tgFab.href = tgLink;
+                
+                const fbFab = document.getElementById('fab-fb');
+                if(fbFab) fbFab.href = data.facebook || "#";
             }
         });
 
-        // --- NEW CATEGORY SYSTEM ---
         db.collection("services").onSnapshot((snapshot) => {
             const container = document.getElementById('categories-container');
             container.innerHTML = "";
@@ -638,54 +861,40 @@
             
             if(snapshot.empty) return container.innerHTML = `<div class="text-center text-gray-400 py-10">No Products Found</div>`;
             
-            // ডাটাগুলোকে ক্যাটাগরি অনুযায়ী সাজানো
             const categorizedServices = {};
-
             snapshot.forEach(doc => {
                 const item = doc.data();
                 gamesData[doc.id] = item; 
-                
-                // যদি এডমিন ক্যাটাগরি না দিয়ে থাকে, তবে এটি All Products এ যাবে
                 const cat = item.category || "All Products"; 
-                
-                if (!categorizedServices[cat]) {
-                    categorizedServices[cat] = [];
-                }
+                if (!categorizedServices[cat]) { categorizedServices[cat] = []; }
                 categorizedServices[cat].push({ id: doc.id, ...item });
             });
 
-            // ক্যাটাগরিগুলো HTML এ দেখানো
             for (const [categoryName, items] of Object.entries(categorizedServices)) {
-                
+                // CATEGORY HEADING: Changed text color to black (text-gray-900)
                 let categoryHTML = `
-                    <div class="flex items-center justify-between mb-3 px-1 mt-6">
-                        <h3 class="font-bold text-gray-700 text-lg border-l-4 border-pink-500 pl-2 uppercase tracking-wide">${categoryName}</h3>
+                    <div class="mb-4 mt-8 text-center">
+                        <h3 class="font-bold text-gray-900 text-[22px] tracking-wide relative inline-block">${categoryName}</h3>
                     </div>
                     <div class="grid grid-cols-3 gap-3 px-1 mb-4">
                 `;
-
                 items.forEach(item => {
                     categoryHTML += `
                          <div onclick="openTopUpPage('${item.id}', '${item.name}', '${item.image}')" 
                               class="bg-white rounded-lg shadow-sm overflow-hidden cursor-pointer transform hover:-translate-y-1 transition-all duration-300 border border-gray-100 group">
-                            
                             <div class="w-full aspect-square bg-gray-50 overflow-hidden relative">
-                                <img src="${item.image}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
-                                onerror="this.src='https://placehold.co/200'">
+                                <img src="${item.image}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/200'">
                             </div>
-
                             <div class="p-2 text-center bg-white border-t border-gray-50">
                                 <p class="text-[10px] font-bold text-gray-700 truncate">${item.name}</p>
                             </div>
                         </div>
                     `;
                 });
-
                 categoryHTML += `</div>`;
                 container.innerHTML += categoryHTML;
             }
 
-            // Initial URL Routing based on loaded games
             const urlParams = new URLSearchParams(window.location.search);
             const initialSection = urlParams.get('sec') || 'home';
             const gameParam = urlParams.get('game');
@@ -700,22 +909,6 @@
             }
         });
 
-        db.collection("tutorials").onSnapshot((snapshot) => {
-            const container = document.getElementById('tutorial-list-container');
-            container.innerHTML = "";
-            snapshot.forEach(doc => {
-                const data = doc.data();
-                container.innerHTML += `
-                    <div class="mx-5 bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 mb-6">
-                        <div class="relative w-full h-48 bg-gray-200 group cursor-pointer" onclick="window.open('${data.link}', '_blank')">
-                            <img src="${data.thumbnail}" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center"><i class="fas fa-play text-white text-4xl"></i></div>
-                        </div>
-                        <div class="p-4 text-center"><h3 class="font-bold text-gray-800">${data.title}</h3></div>
-                    </div>`;
-            });
-        });
-
         loadBanners();
         loadRecentOrdersGlobal(); 
     }
@@ -725,23 +918,21 @@
         selectedGameId = gameId;
         selectedGameName = gameName;
         selectedProduct = null;
-        document.getElementById('total-price').innerText = "0";
+        document.getElementById('needed-for-product').innerText = "0"; 
         document.getElementById('game-player-id').value = "";
+        
+        selectPaymentType('wallet');
 
-        // UI Updates for Title and Image
         document.getElementById('topup-game-title').innerText = gameName;
         document.getElementById('topup-sub-title').innerText = gameName + " ";
         document.getElementById('topup-game-img').src = gameImg;
 
-        // --- NEW: DYNAMIC INPUT LABEL & PLACEHOLDER ---
-        // ফায়ারবেস থেকে inputLabel এবং inputPlaceholder খুঁজবে, না পেলে ডিফল্ট লেখা দেখাবে
-        const inputLabel = gamesData[gameId].inputLabel || "Player Id";
-        const inputPlaceholder = gamesData[gameId].inputPlaceholder || "2535040417";
+        const inputLabel = gamesData[gameId].inputLabel || "Account Info";
+        const inputPlaceholder = gamesData[gameId].inputPlaceholder || "আপনার Uid দিন";
         
         document.getElementById('game-input-label').innerText = inputLabel;
         document.getElementById('game-player-id').placeholder = inputPlaceholder;
 
-        // Handle Rules
         const rulesBox = document.getElementById('game-rules-box');
         const rulesText = document.getElementById('game-rules-text');
         
@@ -776,7 +967,7 @@
                             <div class="product-bullet"></div>
                             <span class="text-xs font-bold text-gray-600">${prod.name}</span>
                         </div>
-                        <span class="text-pink-600 font-bold text-sm">৳${prod.price}</span>
+                        <span class="text-purple-600 font-bold text-sm">৳${prod.price}</span>
                     `;
                     grid.appendChild(card);
                 });
@@ -787,51 +978,116 @@
         document.querySelectorAll('.product-card').forEach(el => el.classList.remove('selected'));
         element.classList.add('selected');
         selectedProduct = { id: id, name: name, price: parseInt(price) };
-        document.getElementById('total-price').innerText = selectedProduct.price;
+        document.getElementById('needed-for-product').innerText = selectedProduct.price; 
+    }
+
+    function selectPaymentType(type) {
+        activePaymentType = type;
+        
+        const walletCard = document.getElementById('paytype-wallet');
+        const instantCard = document.getElementById('paytype-instant');
+        
+        walletCard.classList.remove('selected');
+        walletCard.querySelector('.pay-type-ribbon').classList.add('hidden');
+        
+        instantCard.classList.remove('selected');
+        instantCard.querySelector('.pay-type-ribbon').classList.add('hidden');
+        
+        const selectedEl = document.getElementById('paytype-' + type);
+        selectedEl.classList.add('selected');
+        selectedEl.querySelector('.pay-type-ribbon').classList.remove('hidden');
+    }
+    
+    function checkPlayerName() {
+        const playerId = document.getElementById('game-player-id').value.trim();
+        if (!playerId) {
+            Swal.fire('Input Required', 'Please enter your Game ID first.', 'warning');
+            return;
+        }
+        Swal.fire({
+            title: 'Checking...',
+            text: `Checking name for ID: ${playerId}`,
+            timer: 1500,
+            showConfirmButton: false,
+            didOpen: () => { Swal.showLoading(); }
+        }).then(() => {
+            Swal.fire('Feature Coming Soon!', 'This feature is under development.', 'info');
+        });
     }
 
     function processOrder() {
         const inputValue = document.getElementById('game-player-id').value.trim();
         const currentInputLabel = document.getElementById('game-input-label').innerText;
         
+        if(!selectedProduct) return Swal.fire({ icon: 'warning', title: 'Select Pack', text: 'Please select a recharge package first!' });
         if(!inputValue) return Swal.fire({ icon: 'warning', title: 'Missing Info', text: `Please enter ${currentInputLabel}!` });
-        if(!selectedProduct) return Swal.fire({ icon: 'warning', title: 'Select Pack', text: 'Please select a recharge package!' });
-        if(userBalance < selectedProduct.price) return Swal.fire({ icon: 'error', title: 'Low Balance', text: 'Please Add Money first.' });
 
-        Swal.fire({
-            title: 'Confirm Purchase?',
-            html: `${currentInputLabel}: <b>${inputValue}</b><br>Package: ${selectedProduct.name}<br>Price: ৳${selectedProduct.price}`,
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#ec4899',
-            confirmButtonText: 'Yes, Buy Now'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.showLoading();
-                const newBalance = userBalance - selectedProduct.price;
+        if (activePaymentType === 'wallet') {
+            if(userBalance < selectedProduct.price) return Swal.fire({ icon: 'error', title: 'Low Balance', text: 'Please Add Money first or select Instant Pay.' });
 
-                db.collection('users').doc(currentUser.uid).update({ balance: newBalance })
-                .then(() => {
-                    return db.collection('orders').add({
-                        userId: currentUser.uid,
-                        userName: currentUser.email,
+            Swal.fire({
+                title: 'Confirm Purchase?',
+                html: `Payment: <b>Wallet Pay</b><br><br>${currentInputLabel}: <b>${inputValue}</b><br>Package: ${selectedProduct.name}<br>Price: ৳${selectedProduct.price}`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#9333ea',
+                confirmButtonText: 'Yes, Buy Now'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.showLoading();
+                    const newBalance = userBalance - selectedProduct.price;
+
+                    db.collection('users').doc(currentUser.uid).update({ balance: newBalance })
+                    .then(() => {
+                        return db.collection('orders').add({
+                            userId: currentUser.uid,
+                            userName: currentUser.email,
+                            gameName: selectedGameName,
+                            gameId: selectedGameId,
+                            playerId: inputValue,      
+                            inputType: currentInputLabel, 
+                            productName: selectedProduct.name,
+                            price: selectedProduct.price,
+                            paymentMethod: 'Wallet Balance',
+                            status: 'pending',
+                            date: new Date()
+                        });
+                    })
+                    .then(() => {
+                        Swal.fire('Success', 'Order Placed Successfully!', 'success');
+                        showSec('history');
+                    })
+                    .catch(err => Swal.fire('Error', err.message, 'error'));
+                }
+            });
+        } 
+        else if (activePaymentType === 'instant') {
+            Swal.fire({
+                title: 'Proceed to Payment?',
+                html: `You will be redirected to pay <b>৳${selectedProduct.price}</b> directly for this order.`,
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#9333ea',
+                confirmButtonText: 'Proceed'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    directOrderDetails = {
                         gameName: selectedGameName,
                         gameId: selectedGameId,
-                        playerId: inputValue,       // Admin will see this value
-                        inputType: currentInputLabel, // Admin will know what type of input it was (Email, UID, etc)
+                        playerId: inputValue,      
+                        inputType: currentInputLabel, 
                         productName: selectedProduct.name,
-                        price: selectedProduct.price,
-                        status: 'pending',
-                        date: new Date()
-                    });
-                })
-                .then(() => {
-                    Swal.fire('Success', 'Order Placed Successfully!', 'success');
-                    showSec('home');
-                })
-                .catch(err => Swal.fire('Error', err.message, 'error'));
-            }
-        });
+                        price: selectedProduct.price
+                    };
+                    
+                    pgFlowType = 'direct_order';
+                    pgDepositAmount = selectedProduct.price;
+                    
+                    showSec('addmoney');
+                    pgShowView('pg-view-methods');
+                }
+            });
+        }
     }
 
     // --- NAVIGATION & URL UPDATE ---
@@ -845,29 +1101,42 @@
         const navBtn = document.getElementById('nav-' + secId);
         if(navBtn) navBtn.classList.add('active-tab');
         
-        if(secId === 'addmoney') resetAddMoney();
-        if(secId === 'history') loadHistory();
+        // Handle Global Footer visibility
+        const globalFooter = document.getElementById('global-footer');
+        if(globalFooter) {
+            if(secId === 'home' || secId === 'topup') {
+                globalFooter.classList.remove('hidden');
+            } else {
+                globalFooter.classList.add('hidden');
+            }
+        }
+        
+        if(secId === 'addmoney') {
+            if(pgFlowType !== 'direct_order') {
+                pgFlowType = 'add_money';
+                pgShowView('pg-view-amount');
+                document.getElementById('pg-amount-input').value = "";
+            }
+        } else {
+            pgFlowType = 'add_money'; 
+        }
 
-        // Push state to browser history
+        if(secId === 'history') loadHistory();
+        if(secId === 'mycodes') loadMyCodes(); 
+        if(secId === 'transactions') loadTransactions();
+
         if(pushHistory) {
             let newUrl = window.location.pathname + "?session=" + uniqueSessionId + "&sec=" + secId;
-            if (extraParam) {
-                newUrl += "&" + extraParam;
-            }
+            if (extraParam) { newUrl += "&" + extraParam; }
             window.history.pushState({sec: secId, extra: extraParam}, '', newUrl);
         }
     }
 
-    // Handle Back/Forward buttons in browser
     window.addEventListener('popstate', function(event) {
         if (event.state && event.state.sec) {
             if (event.state.sec === 'topup' && event.state.extra) {
                 const gameId = event.state.extra.split('=')[1];
-                if(gamesData[gameId]) {
-                    openTopUpPage(gameId, gamesData[gameId].name, gamesData[gameId].image, false);
-                } else {
-                    showSec('home', false);
-                }
+                if(gamesData[gameId]) { openTopUpPage(gameId, gamesData[gameId].name, gamesData[gameId].image, false); } else { showSec('home', false); }
             } else {
                 showSec(event.state.sec, false);
             }
@@ -876,12 +1145,161 @@
         }
     });
 
-    // --- HISTORY FUNCTION ---
+    // --- MY CODES FUNCTION ---
+    function loadMyCodes() {
+        const list = document.getElementById('mycodes-list');
+        if(!currentUser) return;
+        
+        list.innerHTML = '<div class="text-center py-4"><i class="fas fa-spinner fa-spin text-purple-500"></i> Loading Codes...</div>';
+
+        db.collection('orders')
+          .where('userId', '==', currentUser.uid)
+          .get()
+          .then(snapshot => {
+            list.innerHTML = "";
+            let codes =[];
+            
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                if(data.deliveredCode && data.deliveredCode.trim() !== '') {
+                    codes.push(data);
+                }
+            });
+            
+            codes.sort((a, b) => {
+                let dateA = a.date && a.date.toDate ? a.date.toDate() : new Date(a.date);
+                let dateB = b.date && b.date.toDate ? b.date.toDate() : new Date(b.date);
+                return dateB - dateA; 
+            });
+
+            if(codes.length === 0) { 
+                list.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-10 text-gray-400">
+                        <i class="fas fa-box-open text-4xl mb-3 opacity-30"></i>
+                        <p class="text-sm font-bold text-gray-500">No purchased codes found.</p>
+                        <p class="text-[10px] mt-1 text-center px-4">If you ordered a pin or voucher, it will appear here once delivered by the admin.</p>
+                    </div>`; 
+                return; 
+            }
+
+            codes.forEach(d => {
+                let dateStr = "N/A";
+                if (d.date) {
+                    const dateObj = d.date.toDate ? d.date.toDate() : new Date(d.date);
+                    dateStr = dateObj.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                }
+
+                list.innerHTML += `
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                        <div class="flex justify-between items-center mb-3">
+                            <h4 class="font-bold text-gray-800 text-sm flex items-center gap-2">
+                                <i class="fas fa-ticket-alt text-purple-500"></i> ${d.productName}
+                            </h4>
+                            <span class="text-[10px] font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">${dateStr}</span>
+                        </div>
+                        <div class="bg-purple-50 border border-purple-100 rounded-lg p-3 flex justify-between items-center">
+                            <span class="font-mono font-bold text-purple-700 tracking-wider text-sm select-all">${d.deliveredCode}</span>
+                            <button onclick="copyToClipboard('${d.deliveredCode}')" class="text-white bg-purple-500 hover:bg-purple-600 w-8 h-8 rounded-md flex items-center justify-center transition shadow-sm active:scale-95">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        })
+        .catch(error => {
+            list.innerHTML = `<div class="text-center text-red-500 py-4 text-xs font-mono">Error: ${error.message}</div>`;
+        });
+    }
+
+    // --- REDEEM CODE: DIRECT TO GARENA ---
+    function openRedeemModal() {
+        window.open('https://shop.garena.my/', '_blank');
+    }
+
+    // --- MY TRANSACTIONS FUNCTION ---
+    function loadTransactions() {
+        const list = document.getElementById('transactions-list');
+        if(!currentUser) return;
+
+        list.innerHTML = '<div class="text-center py-4"><i class="fas fa-spinner fa-spin text-purple-500"></i> Loading Transactions...</div>';
+
+        db.collection('deposits')
+          .where('userId', '==', currentUser.uid)
+          .get()
+          .then(snapshot => {
+            list.innerHTML = "";
+            if(snapshot.empty) {
+                list.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-10 text-gray-400">
+                        <i class="fas fa-receipt text-4xl mb-3 opacity-30"></i>
+                        <p class="text-sm font-bold text-gray-500">No transactions found.</p>
+                    </div>`;
+                return;
+            }
+
+            let trans = [];
+            snapshot.forEach(doc => trans.push(doc.data()));
+            
+            trans.sort((a,b) => {
+                let dateA = a.date && a.date.toDate ? a.date.toDate() : new Date(a.date);
+                let dateB = b.date && b.date.toDate ? b.date.toDate() : new Date(b.date);
+                return dateB - dateA;
+            });
+
+            trans.forEach(d => {
+                let statusColor = "text-yellow-600";
+                let statusText = "Pending";
+
+                if (d.status === 'approved' || d.status === 'success') {
+                    statusColor = "text-green-600";
+                    statusText = "Approved";
+                } else if (d.status === 'rejected' || d.status === 'cancel') {
+                    statusColor = "text-red-600";
+                    statusText = "Rejected";
+                }
+
+                let formattedDate = "N/A";
+                if (d.date) {
+                    const dateObj = d.date.toDate ? d.date.toDate() : new Date(d.date);
+                    let day = String(dateObj.getDate()).padStart(2, '0');
+                    let month = String(dateObj.getMonth() + 1).padStart(2, '0');
+                    let year = dateObj.getFullYear();
+                    let timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+                    let timeStr = dateObj.toLocaleTimeString('en-US', timeOptions);
+                    formattedDate = `${day}-${month}-${year}, ${timeStr}`;
+                }
+
+                let shortId = d.trxId ? d.trxId.toUpperCase() : "N/A";
+
+                list.innerHTML += `
+                    <div class="bg-white border border-gray-200 rounded-lg shadow-sm mb-4">
+                        <div class="p-3 border-b border-gray-200 flex items-center gap-2">
+                            <i class="fas fa-list-alt text-gray-800 text-lg"></i>
+                            <span class="font-bold text-gray-800 text-base">My Transactions</span>
+                        </div>
+                        <div class="p-4 space-y-2.5 text-[15px] text-gray-800">
+                            <p><span class="font-bold">Trx ID:</span> ${shortId}</p>
+                            <p><span class="font-bold">Date:</span> ${formattedDate}</p>
+                            <p><span class="font-bold">Method:</span> ${d.method || 'Bkash/Nagad'}</p>
+                            <p><span class="font-bold">Amount:</span> ৳ ${d.amount}.00</p>
+                            <p><span class="font-bold">Status:</span> <span class="${statusColor} font-bold lowercase">${statusText}</span>( ${formattedDate} )</p>
+                        </div>
+                    </div>
+                `;
+            });
+          })
+          .catch(err => {
+            list.innerHTML = `<div class="text-center text-red-500 py-4 text-xs font-mono">Error: ${err.message}</div>`;
+          });
+    }
+
+    // --- RE-DESIGNED HISTORY FUNCTION (LIKE SCREENSHOT) ---
     function loadHistory() {
         const list = document.getElementById('history-list');
         if(!currentUser) return;
         
-        list.innerHTML = '<div class="text-center py-4"><i class="fas fa-spinner fa-spin text-pink-500"></i> Loading History...</div>';
+        list.innerHTML = '<div class="text-center py-4"><i class="fas fa-spinner fa-spin text-purple-500"></i> Loading Orders...</div>';
 
         db.collection('orders')
           .where('userId', '==', currentUser.uid)
@@ -899,8 +1317,8 @@
                 return; 
             }
 
-            let orders = [];
-            snapshot.forEach(doc => orders.push(doc.data()));
+            let orders =[];
+            snapshot.forEach(doc => orders.push({ id: doc.id, ...doc.data() }));
             
             orders.sort((a, b) => {
                 let dateA = a.date && a.date.toDate ? a.date.toDate() : new Date(a.date);
@@ -909,62 +1327,52 @@
             });
 
             orders.forEach(d => {
-                let statusColor = "bg-yellow-100 text-yellow-700 border-yellow-500";
-                let icon = "fa-clock";
+                let statusColor = "text-yellow-600";
+                let statusText = d.status || "pending";
                 
-                if (d.status === 'success' || d.status === 'complete') {
-                    statusColor = "bg-green-100 text-green-700 border-green-500";
-                    icon = "fa-check-circle";
-                } else if (d.status === 'cancel' || d.status === 'rejected') {
-                    statusColor = "bg-red-100 text-red-700 border-red-500";
-                    icon = "fa-times-circle";
+                if (statusText === 'success' || statusText === 'complete') {
+                    statusColor = "text-green-600";
+                    statusText = "complete";
+                } else if (statusText === 'cancel' || statusText === 'rejected' || statusText === 'refunded') {
+                    statusColor = "text-red-600";
+                    statusText = "canceled";
                 }
 
-                let dateStr = "N/A";
+                // Format Date like: 13-04-2026, 05:42:11 PM
+                let formattedDate = "N/A";
                 if (d.date) {
                     const dateObj = d.date.toDate ? d.date.toDate() : new Date(d.date);
-                    const options = { month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true };
-                    dateStr = dateObj.toLocaleString('en-US', options);
+                    let day = String(dateObj.getDate()).padStart(2, '0');
+                    let month = String(dateObj.getMonth() + 1).padStart(2, '0');
+                    let year = dateObj.getFullYear();
+                    let timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+                    let timeStr = dateObj.toLocaleTimeString('en-US', timeOptions);
+                    formattedDate = `${day}-${month}-${year}, ${timeStr}`;
                 }
 
-                // Dynamic Input Label in History
-                let inputDisplayLabel = d.inputType || "UID";
+                // Create a 6-digit number style Serial NO from doc ID
+                let shortId = d.id ? d.id.replace(/\D/g, '').substring(0, 6) : "102030";
+                if(shortId.length < 6) shortId = d.id.substring(0, 6).toUpperCase();
 
                 list.innerHTML += `
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 mb-4 overflow-hidden relative">
-                        <div class="absolute left-0 top-0 bottom-0 w-1.5 ${statusColor.split(' ')[2]}"></div>
-                        <div class="p-3 pl-4">
-                            <div class="flex justify-between items-start mb-2">
-                                <div>
-                                    <h4 class="font-bold text-gray-800 text-sm flex items-center gap-1">
-                                        <i class="fas fa-gamepad text-pink-500 text-xs"></i> ${d.gameName}
-                                    </h4>
-                                    <p class="text-[10px] text-gray-400 mt-0.5"><i class="far fa-calendar-alt"></i> ${dateStr}</p>
-                                </div>
-                                <span class="${statusColor.split(' border')[0]} text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wide flex items-center gap-1">
-                                    <i class="fas ${icon}"></i> ${d.status}
-                                </span>
-                            </div>
-                            <div class="h-px bg-gray-100 w-full my-2"></div>
-                            <div class="flex justify-between items-center">
-                                <div>
-                                    <p class="text-xs font-bold text-gray-700">${d.productName}</p>
-                                    <div class="mt-1 inline-block bg-gray-50 border border-gray-200 rounded px-2 py-0.5">
-                                        <p class="text-[10px] text-gray-500 font-mono">${inputDisplayLabel}: <span class="text-gray-700 font-bold select-all">${d.playerId}</span></p>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <p class="text-[10px] text-gray-400 mb-0.5">Price</p>
-                                    <p class="text-lg font-bold text-pink-600">৳${d.price}</p>
-                                </div>
-                            </div>
+                    <div class="bg-white border border-gray-200 rounded-lg shadow-sm mb-4">
+                        <div class="p-3 border-b border-gray-200 flex items-center gap-2">
+                            <i class="fas fa-list-alt text-gray-800 text-lg"></i>
+                            <span class="font-bold text-gray-800 text-base">My Orders</span>
+                        </div>
+                        <div class="p-4 space-y-2.5 text-[15px] text-gray-800">
+                            <p><span class="font-bold">Serial NO:</span> ${shortId}</p>
+                            <p><span class="font-bold">Date:</span> ${formattedDate}</p>
+                            <p><span class="font-bold">Package:</span> ${d.productName}</p>
+                            <p><span class="font-bold">Player ID:</span> ${d.playerId}</p>
+                            <p><span class="font-bold">Price:</span> ৳ ${d.price}.00</p>
+                            <p><span class="font-bold">Status:</span> <span class="${statusColor} font-bold lowercase">${statusText}</span>( ${formattedDate} )</p>
                         </div>
                     </div>
                 `;
             });
         })
         .catch(error => {
-            console.error(error);
             list.innerHTML = `<div class="text-center text-red-500 py-4 text-xs font-mono">Error: ${error.message}</div>`;
         });
     }
@@ -977,39 +1385,30 @@
           .orderBy('date', 'desc')
           .limit(5)
           .onSnapshot((snapshot) => {
-              if (snapshot.empty) {
-                  container.innerHTML = '<div class="text-center text-gray-400 text-xs py-2">No recent orders</div>';
-                  return;
-              }
-
+              if (snapshot.empty) { container.innerHTML = '<div class="text-center text-gray-400 text-xs py-2">No recent orders</div>'; return; }
               container.innerHTML = ""; 
 
               snapshot.forEach(doc => {
                   const data = doc.data();
-                  
                   let displayName = "Customer";
-                  if(data.userName) {
-                      displayName = data.userName.includes('@') ? data.userName.split('@')[0] : data.userName;
-                  }
+                  if(data.userName) { displayName = data.userName.includes('@') ? data.userName.split('@')[0] : data.userName; }
                   const firstChar = displayName.charAt(0).toUpperCase();
 
                   let statusBadge = '';
                   let statusText = data.status || 'pending';
                   
                   if (statusText === 'success' || statusText === 'complete' || statusText === 'completed') {
-                      statusBadge = 'bg-[#198754] text-white'; 
-                      statusText = 'completed';
+                      statusBadge = 'bg-[#198754] text-white'; statusText = 'completed';
                   } else if (statusText === 'pending' || statusText === 'processing') {
-                      statusBadge = 'bg-[#ffc107] text-gray-800'; 
-                      statusText = 'processing';
+                      statusBadge = 'bg-[#ffc107] text-gray-800'; statusText = 'processing';
                   } else {
                       statusBadge = 'bg-red-500 text-white'; 
                   }
 
-                  const itemHTML = `
+                  container.innerHTML += `
                     <div class="bg-white p-3 rounded-xl shadow-[0_2px_10px_rgba(0,0,0,0.03)] border border-gray-100 flex items-center justify-between">
                         <div class="flex items-center gap-3 overflow-hidden">
-                            <div class="w-11 h-11 min-w-[44px] bg-[#0d6efd] rounded-full flex items-center justify-center text-white text-lg font-sans font-medium shadow-sm">
+                            <div class="w-11 h-11 min-w-[44px] bg-purple-500 rounded-full flex items-center justify-center text-white text-lg font-sans font-medium shadow-sm">
                                 ${firstChar}
                             </div>
                             <div class="flex flex-col truncate">
@@ -1024,67 +1423,227 @@
                         </div>
                     </div>
                   `;
-                  container.innerHTML += itemHTML;
               });
           });
     }
 
-    function toggleSupportModal() { document.getElementById('support-modal').classList.toggle('hidden'); }
-    
-    // Slider Logic
+    // --- BANNER SLIDER LOGIC ---
     function loadBanners() {
         db.collection("banners").onSnapshot((snapshot) => {
             const wrapper = document.getElementById('slider-wrapper');
+            const dotsContainer = document.getElementById('slider-dots');
+            
             let slidesHTML = "";
+            let dotsHTML = "";
+            let i = 0;
+            
             snapshot.forEach((doc) => {
-                if(doc.data().image) slidesHTML += `<img src="${doc.data().image}" class="w-full h-full object-cover flex-shrink-0">`;
+                if(doc.data().image) {
+                    slidesHTML += `<img src="${doc.data().image}" class="w-full h-full object-cover flex-shrink-0">`;
+                    
+                    // PILL SHAPED DOTS
+                    dotsHTML += `<div class="slider-dot h-1.5 rounded-full transition-all duration-300 ${i === 0 ? 'bg-gray-800 w-5' : 'bg-gray-400 w-2.5'}"></div>`;
+                    i++;
+                }
             });
-            if(slidesHTML) { wrapper.innerHTML = slidesHTML; startSlider(); }
+            
+            if(slidesHTML) { 
+                wrapper.innerHTML = slidesHTML; 
+                if(dotsContainer) dotsContainer.innerHTML = dotsHTML;
+                startSlider(); 
+            }
         });
     }
     
+    let sliderInterval;
     function startSlider() {
+        if(sliderInterval) clearInterval(sliderInterval);
+        
         let idx = 0;
         const wrapper = document.getElementById('slider-wrapper');
+        const dots = document.querySelectorAll('.slider-dot');
         const count = wrapper.children.length;
-        setInterval(() => {
+        
+        if(count <= 1) {
+            if(dots.length) {
+                dots[0].classList.remove('bg-gray-400', 'w-2.5');
+                dots[0].classList.add('bg-gray-800', 'w-5');
+            }
+            return;
+        }
+        
+        sliderInterval = setInterval(() => {
             idx = (idx + 1) % count;
             wrapper.style.transform = `translateX(-${idx * 100}%)`;
+            
+            dots.forEach((dot, i) => {
+                if(i === idx) {
+                    dot.classList.remove('bg-gray-400', 'w-2.5');
+                    dot.classList.add('bg-gray-800', 'w-5');
+                } else {
+                    dot.classList.remove('bg-gray-800', 'w-5');
+                    dot.classList.add('bg-gray-400', 'w-2.5');
+                }
+            });
         }, 3000);
     }
 
-    // Add Money Logic
-    function showPaymentForm(methodName, logoUrl, color) {
-        document.getElementById('payment-methods-grid').classList.add('hidden');
-        document.getElementById('payment-form-container').classList.remove('hidden');
-        document.getElementById('form-logo').src = logoUrl;
-        document.getElementById('form-method-name').innerText = methodName;
-        db.collection("admin").doc("payment").get().then(doc => {
-            if(doc.exists) document.getElementById('admin-number').innerText = doc.data()[methodName.toLowerCase()] || "01xxxxxxxxx";
-        });
-    }
-    function resetAddMoney() {
-        document.getElementById('payment-methods-grid').classList.remove('hidden');
-        document.getElementById('payment-form-container').classList.add('hidden');
-    }
-    function submitDeposit() {
-        const amt = document.getElementById('dep-amount').value;
-        const trx = document.getElementById('dep-trx').value;
-        if(!amt || !trx) return Swal.fire('Error', 'Fill all fields', 'warning');
-        
-        db.collection('deposits').add({
-            userId: currentUser.uid, amount: parseInt(amt), trxId: trx, 
-            status: 'pending', date: new Date(), userEmail: currentUser.email
-        }).then(() => {
-            Swal.fire('Submitted', 'Wait for approval', 'success');
-            resetAddMoney();
-        });
-    }
-    function copyNumber() {
-        navigator.clipboard.writeText(document.getElementById('admin-number').innerText);
-        Swal.fire({toast:true, title:'Copied', icon:'success', position:'top-end', showConfirmButton:false, timer:1000});
+    // --- 5. PAYMENT GATEWAY LOGIC ---
+    function pgShowView(viewId) {
+        document.getElementById('pg-view-amount').classList.add('hidden');
+        document.getElementById('pg-view-methods').classList.add('hidden');
+        document.getElementById('pg-view-verify').classList.add('hidden');
+        document.getElementById(viewId).classList.remove('hidden');
     }
 
+    function pgBackFromMethods() {
+        if (pgFlowType === 'direct_order') {
+            showSec('topup', false, "game=" + selectedGameId);
+            pgFlowType = 'add_money'; 
+        } else {
+            pgShowView('pg-view-amount');
+        }
+    }
+
+    function pgGotoMethods() {
+        const amt = parseFloat(document.getElementById('pg-amount-input').value);
+        if(isNaN(amt) || amt < 20) {
+            Swal.fire({ icon: 'error', title: 'অবৈধ পরিমাণ', text: 'সর্বনিম্ন ডিপোজিট ৳20।', confirmButtonText: 'ঠিক আছে' });
+            return;
+        }
+        pgDepositAmount = amt;
+        pgShowView('pg-view-methods');
+    }
+
+    function pgSelectMethod(methodName) {
+        pgSelectedMethodName = methodName;
+        Swal.showLoading();
+        
+        db.collection("admin").doc("payment").get().then(doc => {
+            Swal.close();
+            if(doc.exists && doc.data()[methodName.toLowerCase()]) {
+                pgAdminNumber = doc.data()[methodName.toLowerCase()];
+                pgPopulateInstructionUI();
+                pgShowView('pg-view-verify');
+            } else {
+                Swal.fire('Error', 'এই মেথডটি বর্তমানে বন্ধ আছে।', 'error');
+            }
+        }).catch(err => {
+            Swal.close();
+            Swal.fire('Error', 'নেটওয়ার্ক সমস্যা।', 'error');
+        });
+    }
+
+    function pgPopulateInstructionUI() {
+        const container = document.getElementById('pg-instruction-content');
+        let themeColor = '', brandLogo = '', instructionsList = '';
+
+        if (pgSelectedMethodName === 'bKash') {
+            themeColor = 'bg-[#CF2771]'; 
+            brandLogo = 'https://pay.bmsmmpanel.xyz/assets/template/images/bkash.png';
+            instructionsList = `
+                <li><span class="icon inline-block w-1.5 h-1.5 bg-white rounded-full mt-1.5 flex-shrink-0"></span> *247# ডায়াল করুন অথবা bKash অ্যাপে যান।</li><hr class="brand-hr bkash-hr">
+                <li><span class="icon inline-block w-1.5 h-1.5 bg-white rounded-full mt-1.5 flex-shrink-0"></span> <span class="text-yellow-highlight">"Send Money"</span> নির্বাচন করুন।</li><hr class="brand-hr bkash-hr">
+                <li class="flex flex-wrap items-center gap-2"><span class="icon inline-block w-1.5 h-1.5 bg-white rounded-full flex-shrink-0"></span> প্রাপক নম্বর: <span class="text-yellow-highlight">${pgAdminNumber}</span> <button type="button" class="copy-btn" onclick="copyToClipboard('${pgAdminNumber}')"><i class="fas fa-copy"></i>Copy</button></li><hr class="brand-hr bkash-hr">
+                <li><span class="icon inline-block w-1.5 h-1.5 bg-white rounded-full mt-1.5 flex-shrink-0"></span> টাকার পরিমাণ: <span class="text-yellow-highlight">৳${pgDepositAmount}</span></li><hr class="brand-hr bkash-hr">
+                <li><span class="icon inline-block w-1.5 h-1.5 bg-white rounded-full mt-1.5 flex-shrink-0"></span> আপনার bKash পিন দিয়ে নিশ্চিত করুন।</li><hr class="brand-hr bkash-hr">
+                <li><span class="icon inline-block w-1.5 h-1.5 bg-white rounded-full mt-1.5 flex-shrink-0"></span> পেমেন্টের <span class="text-yellow-highlight">Transaction ID</span> টি নিচের বক্সে লিখুন এবং <span class="text-yellow-highlight">VERIFY</span> বাটনে ক্লিক করুন।</li>`;
+        } else if (pgSelectedMethodName === 'Nagad') {
+            themeColor = 'bg-[#C90008]'; 
+            brandLogo = 'https://pay.bmsmmpanel.xyz/assets/template/images/nagad.png';
+            instructionsList = `
+                <li><span class="icon inline-block w-1.5 h-1.5 bg-white rounded-full mt-1.5 flex-shrink-0"></span> *167# ডায়াল করুন অথবা Nagad অ্যাপে যান।</li><hr class="brand-hr nagad-hr">
+                <li><span class="icon inline-block w-1.5 h-1.5 bg-white rounded-full mt-1.5 flex-shrink-0"></span> <span class="text-yellow-highlight">"Send Money"</span> নির্বাচন করুন।</li><hr class="brand-hr nagad-hr">
+                <li class="flex flex-wrap items-center gap-2"><span class="icon inline-block w-1.5 h-1.5 bg-white rounded-full flex-shrink-0"></span> প্রাপক নম্বর: <span class="text-yellow-highlight">${pgAdminNumber}</span> <button type="button" class="copy-btn" onclick="copyToClipboard('${pgAdminNumber}')"><i class="fas fa-copy"></i>Copy</button></li><hr class="brand-hr nagad-hr">
+                <li><span class="icon inline-block w-1.5 h-1.5 bg-white rounded-full mt-1.5 flex-shrink-0"></span> টাকার পরিমাণ: <span class="text-yellow-highlight">৳${pgDepositAmount}</span></li><hr class="brand-hr nagad-hr">
+                <li><span class="icon inline-block w-1.5 h-1.5 bg-white rounded-full mt-1.5 flex-shrink-0"></span> আপনার Nagad পিন দিয়ে নিশ্চিত করুন।</li><hr class="brand-hr nagad-hr">
+                <li><span class="icon inline-block w-1.5 h-1.5 bg-white rounded-full mt-1.5 flex-shrink-0"></span> পেমেন্টের <span class="text-yellow-highlight">Transaction ID</span> টি নিচের বক্সে লিখুন এবং <span class="text-yellow-highlight">VERIFY</span> বাটনে ক্লিক করুন।</li>`;
+        }
+
+        const username = currentUserDataObj ? currentUserDataObj.name : "User";
+        const uidShort = currentUser ? currentUser.uid.substring(0, 10) : "";
+        
+        let reasonLabel = pgFlowType === 'direct_order' ? "অর্ডার বিল পে" : "অ্যাড মানি";
+
+        container.innerHTML = `
+            <div class="flex flex-col items-center gap-3">
+                <img src="${brandLogo}" class="h-12 mb-2 object-contain">
+                <div class="flex flex-col w-full gap-3">
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center gap-3">
+                        <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-600"><i class="fas fa-user"></i></div>
+                        <div>
+                            <h4 class="font-bold text-gray-700">${username}</h4>
+                            <p class="text-[10px] text-gray-500 font-bold bg-gray-100 px-2 py-0.5 rounded mt-1">${reasonLabel}</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 border-dashed text-center">
+                        <h3 class="text-2xl font-bold text-gray-700">৳ ${pgDepositAmount}</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="${themeColor} rounded-xl p-5 text-white mt-5 shadow-md">
+                <label class="block font-bold mb-2">ট্রানজেকশন আইডি দিন</label>
+                <input type="text" id="pg-trx-id" class="w-full p-3 rounded bg-white text-gray-800 font-bold focus:outline-none placeholder-gray-400 uppercase" placeholder="এখানে লিখুন">
+                
+                <ul class="text-sm mt-4 space-y-3 font-medium leading-relaxed">
+                    ${instructionsList}
+                </ul>
+            </div>
+
+            <button onclick="pgSubmitDeposit()" class="${themeColor} w-full py-4 rounded-xl font-bold text-white text-lg mt-4 shadow-lg hover:brightness-110 transition">VERIFY PAYMENT</button>
+        `;
+    }
+
+    function pgSubmitDeposit() {
+        const trxId = document.getElementById('pg-trx-id').value.trim();
+        if (!trxId) {
+            Swal.fire('Input Required', 'Please enter the Transaction ID.', 'warning');
+            return;
+        }
+
+        Swal.showLoading();
+
+        if (pgFlowType === 'add_money') {
+            db.collection('deposits').add({
+                userId: currentUser.uid,
+                userEmail: currentUser.email,
+                amount: parseInt(pgDepositAmount),
+                trxId: trxId,
+                method: pgSelectedMethodName,
+                status: 'pending',
+                date: new Date()
+            }).then(() => {
+                Swal.fire('Request Submitted', 'Your fund request is sent. Please wait for admin approval.', 'success');
+                showSec('home'); 
+            }).catch(err => {
+                Swal.fire('Error', err.message, 'error');
+            });
+        } 
+        else if (pgFlowType === 'direct_order') {
+            db.collection('orders').add({
+                userId: currentUser.uid,
+                userName: currentUser.email,
+                ...directOrderDetails, 
+                status: 'pending',
+                date: new Date(),
+                paymentMethod: pgSelectedMethodName + ' (Direct)',
+                trxId: trxId, 
+                isDirectPayment: true
+            }).then(() => {
+                Swal.fire({
+                    title: 'Order Submitted!', 
+                    text: 'Payment info sent. Wait for admin approval.', 
+                    icon: 'success'
+                });
+                directOrderDetails = null;
+                pgFlowType = 'add_money'; 
+                showSec('history'); 
+            }).catch(err => {
+                Swal.fire('Error', err.message, 'error');
+            });
+        }
+    }
 </script>
 </body>
 </html>
