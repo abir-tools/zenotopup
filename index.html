@@ -423,7 +423,12 @@
             <!-- ACCOUNT SECTION -->
             <section id="account-sec" class="hidden animate-fade-in pb-20">
                 <div class="bg-white p-6 rounded-xl shadow-sm mb-4 text-center border border-gray-100 mt-4">
-                    <div class="w-20 h-20 bg-purple-50 rounded-full mx-auto flex items-center justify-center text-purple-500 text-3xl mb-3 shadow-inner"><i class="fas fa-user-circle text-5xl"></i></div>
+                    <div class="w-20 h-20 bg-purple-50 rounded-full mx-auto flex items-center justify-center text-purple-500 text-3xl mb-3 shadow-inner overflow-hidden">
+                        <!-- সাধারণ লগইনের জন্য আইকন -->
+                        <i id="profile-icon" class="fas fa-user-circle text-5xl"></i>
+                        <!-- গুগল লগইনের জন্য ছবি -->
+                        <img id="profile-image" src="" class="w-full h-full object-cover hidden">
+                    </div>
                     <h2 id="profile-name" class="font-bold text-xl text-gray-800">User Name</h2>
                     <p id="profile-email" class="text-xs text-gray-500 mb-6 font-mono">user@email.com</p>
                     <div class="grid grid-cols-3 gap-3">
@@ -698,7 +703,20 @@
         auth.signInWithPopup(provider).then(result => {
             const user = result.user;
             return db.collection('users').doc(user.uid).get().then(doc => {
-                if(!doc.exists) { return db.collection('users').doc(user.uid).set({ name: user.displayName || 'User', email: user.email, phone: '', balance: 0, createdAt: new Date() }); }
+                if(!doc.exists) { 
+                    return db.collection('users').doc(user.uid).set({ 
+                        name: user.displayName || 'User', 
+                        email: user.email, 
+                        phone: '', 
+                        photoURL: user.photoURL || '',
+                        balance: 0, 
+                        createdAt: new Date() 
+                    }); 
+                } else {
+                    if(user.photoURL) {
+                        db.collection('users').doc(user.uid).update({ photoURL: user.photoURL });
+                    }
+                }
             });
         }).catch(err => { showModernAlert('Login Failed', err.message, 'error'); });
     }
@@ -746,6 +764,19 @@
                 const data = doc.data(); currentUserDataObj = data; userBalance = data.balance || 0;
                 document.getElementById('header-balance').innerText = userBalance; document.getElementById('current-wallet-bal').innerText = userBalance;
                 document.getElementById('profile-name').innerText = data.name || "User"; document.getElementById('profile-email').innerText = data.email; document.getElementById('profile-balance').innerText = userBalance;
+                
+                const profileImage = document.getElementById('profile-image');
+                const profileIcon = document.getElementById('profile-icon');
+                let photoUrl = data.photoURL || (currentUser ? currentUser.photoURL : null);
+
+                if (photoUrl && profileImage && profileIcon) {
+                    profileImage.src = photoUrl;
+                    profileImage.classList.remove('hidden');
+                    profileIcon.classList.add('hidden');
+                } else if (profileImage && profileIcon) {
+                    profileImage.classList.add('hidden');
+                    profileIcon.classList.remove('hidden');
+                }
             }
         });
     }
