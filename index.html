@@ -129,7 +129,7 @@
 </head>
 <body class="select-none bg-slate-50 overflow-x-hidden">
 
-<!-- INITIAL GLOBAL LOADER (লগইন স্ক্রিন ফ্লাশিং বন্ধ করার জন্য) -->
+<!-- INITIAL GLOBAL LOADER -->
 <div id="initial-loader" class="fixed inset-0 bg-slate-50 z-[9999] flex flex-col items-center justify-center transition-opacity duration-300">
     <div class="relative w-20 h-20 mb-4 flex items-center justify-center">
         <div class="absolute inset-0 border-4 border-purple-200 rounded-full"></div>
@@ -158,8 +158,8 @@
     </div>
 </div>
 
-<!-- UNIFIED MOBILE WRAPPER (ORIGINAL MAX-W-MD DESIGN) -->
-<div class="max-w-md mx-auto bg-slate-50 min-h-screen shadow-2xl relative flex flex-col w-full">
+<!-- UNIFIED WRAPPER (ডেস্কটপে পুরো স্ক্রিন জুড়ে শো করার জন্য xl:max-w-screen-lg ব্যবহার করা হয়েছে) -->
+<div class="w-full xl:max-w-screen-lg mx-auto bg-slate-50 min-h-screen shadow-2xl relative flex flex-col">
 
     <!-- TOP HEADER -->
     <div id="app-top-nav" class="hidden w-full flex-col">
@@ -180,7 +180,7 @@
     </div>
 
     <!-- AUTH SECTION -->
-    <div id="auth-sec" class="flex-grow flex flex-col items-center justify-center p-4 bg-white pt-12 pb-12 w-full hidden">
+    <div id="auth-sec" class="hidden flex-grow flex flex-col items-center justify-center p-4 bg-white pt-12 pb-12 w-full">
         <div class="w-full max-w-sm flex items-center justify-center mb-6">
             <img id="auth-logo-img" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjHzGkVp1DWBuwnmPN0WUR_IJgPd9KBUuH9rEzYzLDUm-YMVHmDy44FwC-tAXA8teCPZF471-iBSjJCwl9d9G014QHmmWVB8fHsCuGArflFNsFPElpaamshtejBt_KYyKY49xW61_PffvceWu5RRNlKqijZNeFVxiIkqFNj_eEyI4hVCdTxLEn16B78DJE/s320/20260421_011113.png" class="h-14 object-contain max-w-[250px] drop-shadow-sm">
         </div>
@@ -268,18 +268,19 @@
                     <div id="slider-dots" class="flex justify-center items-center gap-2"></div>
                 </div>
 
-                <div class="grid grid-cols-3 gap-3 mb-5 px-2">
-                    <a id="home-whatsapp" href="#" class="bg-white py-2 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center gap-1.5 active:scale-95 transition h-24 no-underline">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center bg-green-50"><i class="fab fa-whatsapp text-3xl text-[#25D366]"></i></div>
-                        <span class="text-[11px] font-bold text-gray-700">WhatsApp</span>
+                <!-- Desktop Responsive Grid -->
+                <div class="grid grid-cols-3 md:grid-cols-3 gap-3 md:gap-6 mb-5 px-2 md:px-4">
+                    <a id="home-whatsapp" href="#" class="bg-white py-2 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center gap-1.5 active:scale-95 transition h-24 md:h-28 no-underline">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center bg-green-50"><i class="fab fa-whatsapp text-3xl md:text-4xl text-[#25D366]"></i></div>
+                        <span class="text-[11px] md:text-[13px] font-bold text-gray-700">WhatsApp</span>
                     </a>
-                    <a id="home-telegram" href="#" class="bg-white py-2 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center gap-1.5 active:scale-95 transition h-24 no-underline">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center bg-blue-50"><i class="fab fa-telegram-plane text-3xl text-[#0088cc]"></i></div>
-                        <span class="text-[11px] font-bold text-gray-700">Telegram</span>
+                    <a id="home-telegram" href="#" class="bg-white py-2 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center gap-1.5 active:scale-95 transition h-24 md:h-28 no-underline">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center bg-blue-50"><i class="fab fa-telegram-plane text-3xl md:text-4xl text-[#0088cc]"></i></div>
+                        <span class="text-[11px] md:text-[13px] font-bold text-gray-700">Telegram</span>
                     </a>
-                    <a id="home-app-dl" href="#" target="_blank" class="bg-white py-2 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center gap-1.5 active:scale-95 transition h-24 no-underline">
+                    <a id="home-app-dl" href="#" target="_blank" class="bg-white py-2 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center gap-1.5 active:scale-95 transition h-24 md:h-28 no-underline">
                         <div class="w-10 h-10 rounded-full overflow-hidden shadow-sm"><img src="https://i.ibb.co.com/WvrTGr5Y/google-play-store-logo-1273375-804.jpg" class="w-full h-full object-cover"></div>
-                        <span class="text-[11px] font-bold text-gray-700 text-center leading-tight">App<br>Download</span>
+                        <span class="text-[11px] md:text-[13px] font-bold text-gray-700 text-center leading-tight">App<br>Download</span>
                     </a>
                 </div>
 
@@ -292,7 +293,7 @@
                         <h3 class="font-bold text-gray-900 text-[22px] mb-1">Latest Orders</h3>
                         <p class="text-[13px] text-gray-500 font-medium">সর্বশেষ আপডেট <span id="latest-orders-time" class="text-purple-600 font-bold">এই মাত্র</span></p>
                     </div>
-                    <div id="latest-orders-list" class="space-y-3">
+                    <div id="latest-orders-list" class="space-y-3 md:space-y-4 max-w-4xl mx-auto">
                         <div class="text-center py-4"><i class="fas fa-spinner fa-spin text-purple-500"></i> Loading...</div>
                     </div>
                 </div>
@@ -301,7 +302,7 @@
             <!-- TOPUP SECTION -->
             <section id="topup-sec" class="hidden animate-fade-in pb-10">
                 <div class="flex items-center gap-3 mb-4 p-1">
-                    <button onclick="showSec('home')" class="text-gray-600 hover:text-purple-500 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200"><i class="fas fa-arrow-left text-lg"></i></button>
+                    <button onclick="window.history.back()" class="text-gray-600 hover:text-purple-500 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200"><i class="fas fa-arrow-left text-lg"></i></button>
                     <h2 class="text-lg font-bold text-gray-800" id="topup-game-title">Game Name</h2>
                 </div>
 
@@ -319,7 +320,8 @@
                         <h3 class="font-bold text-gray-700 text-sm">Select Recharge</h3>
                     </div>
                     <div id="product-loader" class="text-center py-10 hidden"><i class="fas fa-spinner fa-spin text-purple-500 text-2xl"></i></div>
-                    <div id="products-grid" class="grid grid-cols-2 gap-3"></div>
+                    <!-- Responsive Grid -->
+                    <div id="products-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3"></div>
                 </div>
 
                 <div id="quantity-container" class="bg-white p-4 rounded-xl shadow-sm mb-4 border border-gray-100 hidden">
@@ -350,7 +352,8 @@
                         <h3 class="font-bold text-gray-700 text-sm">Select Option</h3>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-3 mb-4">
+                    <!-- Responsive Grid -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
                         <div id="paytype-wallet" onclick="selectPaymentType('wallet')" class="pay-type-card selected bg-white">
                             <div class="pay-type-ribbon"><i class="fas fa-check"></i></div>
                             <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEibpgTQmbBNjCIfCnF-WvhFZwHwsvEXaQM1ikhanABxQ_doGSBtzYpHRWABVH5wlHIiMxtHM3QhE8j0gTnBkYcIduhlyLjnQDKSY4cV6lxvYt0NSa8AMt9kk1GMmxS3YD9jYFuG03r5-7Ygc71_ZF64rpZcnaGoSe6iUBu0eP1YiH9VTEyft14SN_X9sMU/s320/20260419_154922.png" class="w-full h-20 object-cover">
@@ -402,10 +405,11 @@
 
                 <div id="pg-view-methods" class="hidden">
                     <div class="flex items-center gap-3 mb-4 p-1">
-                        <button onclick="pgBackFromMethods()" class="text-gray-600 hover:text-purple-500 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200"><i class="fas fa-arrow-left text-lg"></i></button>
+                        <!-- URL System Back Button -->
+                        <button onclick="window.history.back()" class="text-gray-600 hover:text-purple-500 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200"><i class="fas fa-arrow-left text-lg"></i></button>
                         <h2 class="text-lg font-bold text-gray-800">পেমেন্ট মেথড নির্বাচন করুন</h2>
                     </div>
-                    <div class="grid grid-cols-2 gap-3 px-1">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 px-1">
                         <div onclick="pgSelectMethod('bKash')" class="bg-white p-4 rounded-xl shadow-sm flex flex-col items-center justify-center cursor-pointer method-card border border-blue-50"><img src="https://pay.bmsmmpanel.xyz/assets/template/images/bkash.png" class="h-10 object-contain mb-2"></div>
                         <div onclick="pgSelectMethod('Nagad')" class="bg-white p-4 rounded-xl shadow-sm flex flex-col items-center justify-center cursor-pointer method-card border border-blue-50"><img src="https://pay.bmsmmpanel.xyz/assets/template/images/nagad.png" class="h-10 object-contain mb-2"></div>
                     </div>
@@ -413,10 +417,11 @@
 
                 <div id="pg-view-verify" class="hidden">
                     <div class="flex items-center gap-3 mb-4 p-1">
-                        <button onclick="pgShowView('pg-view-methods')" class="text-gray-600 hover:text-purple-500 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200"><i class="fas fa-arrow-left text-lg"></i></button>
+                        <!-- URL System Back Button -->
+                        <button onclick="window.history.back()" class="text-gray-600 hover:text-purple-500 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200"><i class="fas fa-arrow-left text-lg"></i></button>
                         <h2 class="text-lg font-bold text-gray-800">পেমেন্ট নির্দেশনা</h2>
                     </div>
-                    <div id="pg-instruction-content" class="px-1"></div>
+                    <div id="pg-instruction-content" class="px-1 max-w-2xl mx-auto"></div>
                 </div>
             </section>
 
@@ -432,7 +437,7 @@
             </section>
 
             <!-- ACCOUNT SECTION -->
-            <section id="account-sec" class="hidden animate-fade-in pb-20">
+            <section id="account-sec" class="hidden animate-fade-in pb-20 max-w-2xl mx-auto">
                 <div class="bg-white p-6 rounded-xl shadow-sm mb-4 text-center border border-gray-100 mt-4">
                     <div class="w-20 h-20 bg-purple-50 rounded-full mx-auto flex items-center justify-center text-purple-500 text-3xl mb-3 shadow-inner overflow-hidden">
                         <i id="profile-icon" class="fas fa-user-circle text-5xl"></i>
@@ -440,7 +445,7 @@
                     </div>
                     <h2 id="profile-name" class="font-bold text-xl text-gray-800">User Name</h2>
                     <p id="profile-email" class="text-xs text-gray-500 mb-6 font-mono">user@email.com</p>
-                    <div class="grid grid-cols-3 gap-3">
+                    <div class="grid grid-cols-3 gap-3 md:gap-6">
                         <div class="bg-purple-50 p-3 rounded-2xl border border-purple-100 flex flex-col items-center justify-center"><div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 mb-1"><i class="fas fa-wallet text-sm"></i></div><p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Balance</p><p class="text-sm font-extrabold text-purple-600">৳ <span id="profile-balance">0</span></p></div>
                         <div class="bg-blue-50 p-3 rounded-2xl border border-blue-100 flex flex-col items-center justify-center"><div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mb-1"><i class="fas fa-shopping-bag text-sm"></i></div><p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Orders</p><p class="text-sm font-extrabold text-blue-600" id="profile-total-orders">0</p></div>
                         <div class="bg-green-50 p-3 rounded-2xl border border-green-100 flex flex-col items-center justify-center"><div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 mb-1"><i class="fas fa-coins text-sm"></i></div><p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Spent</p><p class="text-sm font-extrabold text-green-600">৳ <span id="profile-total-spent">0</span></p></div>
@@ -456,8 +461,8 @@
             </section>
 
             <!-- SETTINGS SECTION -->
-            <section id="settings-sec" class="hidden animate-fade-in pb-24">
-                <div class="px-2 pt-6 mb-4 flex items-center gap-3"><button onclick="showSec('account')" class="text-gray-600 hover:text-purple-500 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 transition"><i class="fas fa-arrow-left text-lg"></i></button><h2 class="text-xl font-bold text-gray-800">Account Settings</h2></div>
+            <section id="settings-sec" class="hidden animate-fade-in pb-24 max-w-2xl mx-auto">
+                <div class="px-2 pt-6 mb-4 flex items-center gap-3"><button onclick="window.history.back()" class="text-gray-600 hover:text-purple-500 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 transition"><i class="fas fa-arrow-left text-lg"></i></button><h2 class="text-xl font-bold text-gray-800">Account Settings</h2></div>
                 <div class="px-2">
                     <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 space-y-4">
                         <div><label class="block text-[13px] font-bold text-gray-900 mb-1.5">Full Name</label><input type="text" id="set-name" class="w-full bg-gray-50 border border-gray-300 px-4 py-2.5 rounded-lg text-sm text-gray-800 focus:outline-none focus:border-purple-500"></div>
@@ -469,10 +474,11 @@
                 </div>
             </section>
 
-            <section id="history-sec" class="hidden animate-fade-in pb-24"><div id="history-list" class="px-2 mt-4 space-y-4"></div></section>
+            <!-- Responsive Grid applied to history and transaction items via CSS classes below -->
+            <section id="history-sec" class="hidden animate-fade-in pb-24"><div id="history-list" class="px-2 mt-4 space-y-4 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-4 md:space-y-0"></div></section>
             <section id="transactions-sec" class="hidden animate-fade-in pb-24">
-                <div class="px-4 pt-6 mb-4 flex items-center gap-3"><button onclick="showSec('account')" class="text-gray-600 hover:text-purple-500 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 transition"><i class="fas fa-arrow-left text-lg"></i></button><h2 class="text-xl font-bold text-gray-800">My Transactions</h2></div>
-                <div id="transactions-list" class="px-4 mt-2"></div>
+                <div class="px-4 pt-6 mb-4 flex items-center gap-3"><button onclick="window.history.back()" class="text-gray-600 hover:text-purple-500 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 transition"><i class="fas fa-arrow-left text-lg"></i></button><h2 class="text-xl font-bold text-gray-800">My Transactions</h2></div>
+                <div id="transactions-list" class="px-4 mt-2 space-y-4 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-4 md:space-y-0"></div>
             </section>
         </main>
     </div>
@@ -480,28 +486,30 @@
     <!-- SHARED GLOBAL FOOTER -->
     <div id="shared-footer" class="w-full mt-auto relative z-0">
         <div id="footer-inner" class="bg-[#4c1d95] text-white pt-10 px-5 pb-10 shadow-[0_-10px_40px_rgba(0,0,0,0.2)] w-full">  
-            <div class="mb-6">
-                <h3 class="font-serif text-xl font-medium tracking-wide mb-3">STAY CONNECTED</h3>
-                <p class="text-xs text-purple-100 font-light leading-relaxed mb-4 opacity-90">কোন সমস্যায় পড়লে হোয়াটসঅ্যাপ এ যোগাযোগ করবেন। তাহলে দ্রুত সমাধান পেয়ে যাবেন।</p>
-                <div class="flex gap-4">
-                    <a id="ft-fb" href="#" class="w-10 h-10 border border-purple-300/30 rounded-lg flex items-center justify-center hover:bg-white hover:text-[#4c1d95] transition"><i class="fab fa-facebook-f"></i></a>
-                    <a id="ft-insta" href="#" class="w-10 h-10 border border-purple-300/30 rounded-lg flex items-center justify-center hover:bg-white hover:text-[#4c1d95] transition"><i class="fab fa-instagram"></i></a>
-                    <a id="ft-yt" href="#" class="w-10 h-10 border border-purple-300/30 rounded-lg flex items-center justify-center hover:bg-white hover:text-[#4c1d95] transition"><i class="fab fa-youtube"></i></a>
-                    <a href="mailto:{email}" class="w-10 h-10 border border-purple-300/30 rounded-lg flex items-center justify-center hover:bg-white hover:text-[#4c1d95] transition"><i class="far fa-envelope"></i></a>
+            <div class="md:grid md:grid-cols-3 md:gap-8 max-w-5xl mx-auto">
+                <div class="mb-6 md:mb-0">
+                    <h3 class="font-serif text-xl font-medium tracking-wide mb-3">STAY CONNECTED</h3>
+                    <p class="text-xs text-purple-100 font-light leading-relaxed mb-4 opacity-90">কোন সমস্যায় পড়লে হোয়াটসঅ্যাপ এ যোগাযোগ করবেন। তাহলে দ্রুত সমাধান পেয়ে যাবেন।</p>
+                    <div class="flex gap-4">
+                        <a id="ft-fb" href="#" class="w-10 h-10 border border-purple-300/30 rounded-lg flex items-center justify-center hover:bg-white hover:text-[#4c1d95] transition"><i class="fab fa-facebook-f"></i></a>
+                        <a id="ft-insta" href="#" class="w-10 h-10 border border-purple-300/30 rounded-lg flex items-center justify-center hover:bg-white hover:text-[#4c1d95] transition"><i class="fab fa-instagram"></i></a>
+                        <a id="ft-yt" href="#" class="w-10 h-10 border border-purple-300/30 rounded-lg flex items-center justify-center hover:bg-white hover:text-[#4c1d95] transition"><i class="fab fa-youtube"></i></a>
+                        <a href="mailto:{email}" class="w-10 h-10 border border-purple-300/30 rounded-lg flex items-center justify-center hover:bg-white hover:text-[#4c1d95] transition"><i class="far fa-envelope"></i></a>
+                    </div>
+                </div>
+                <div class="mb-6 md:mb-0"><h3 class="font-serif text-xl font-medium tracking-wide mb-3">OUR MOBILE APP</h3><a id="ft-app-link" href="#" target="_blank" class="inline-block border border-white/40 rounded-lg overflow-hidden w-36 hover:opacity-80 transition"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="App" class="w-full h-auto"></a></div>
+                <div class="mb-8 md:mb-0">
+                    <h3 class="font-serif text-xl font-medium tracking-wide mb-3">SUPPORT CENTER</h3>
+                    <a id="ft-whatsapp" href="#" class="block mb-3 group"><div class="border border-purple-300/30 rounded-lg p-2.5 flex items-center gap-3 group-hover:bg-white/10 transition"><div class="w-10 h-10 flex items-center justify-center"><i class="fab fa-whatsapp text-3xl"></i></div><div class="border-l border-purple-300/30 pl-3 h-full flex flex-col justify-center"><span class="text-[9px] text-purple-200 uppercase tracking-wider">Help line [9AM - 10PM]</span><span id="ft-wa-num" class="font-bold text-lg font-mono leading-none mt-0.5">+8801xxxxxxxxx</span></div></div></a>
+                    <a id="ft-telegram" href="#" class="block group"><div class="border border-purple-300/30 rounded-lg p-2.5 flex items-center gap-3 group-hover:bg-white/10 transition"><div class="w-10 h-10 flex items-center justify-center"><i class="fab fa-telegram-plane text-3xl"></i></div><div class="border-l border-purple-300/30 pl-3 h-full flex flex-col justify-center"><span class="text-[9px] text-purple-200 uppercase tracking-wider">Help line[9AM - 10PM]</span><span class="font-bold text-lg leading-none mt-0.5">Telegram Support</span></div></div></a>
                 </div>
             </div>
-            <div class="mb-6"><h3 class="font-serif text-xl font-medium tracking-wide mb-3">OUR MOBILE APP</h3><a id="ft-app-link" href="#" target="_blank" class="inline-block border border-white/40 rounded-lg overflow-hidden w-36 hover:opacity-80 transition"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="App" class="w-full h-auto"></a></div>
-            <div class="mb-8">
-                <h3 class="font-serif text-xl font-medium tracking-wide mb-3">SUPPORT CENTER</h3>
-                <a id="ft-whatsapp" href="#" class="block mb-3 group"><div class="border border-purple-300/30 rounded-lg p-2.5 flex items-center gap-3 group-hover:bg-white/10 transition"><div class="w-10 h-10 flex items-center justify-center"><i class="fab fa-whatsapp text-3xl"></i></div><div class="border-l border-purple-300/30 pl-3 h-full flex flex-col justify-center"><span class="text-[9px] text-purple-200 uppercase tracking-wider">Help line [9AM - 10PM]</span><span id="ft-wa-num" class="font-bold text-lg font-mono leading-none mt-0.5">+8801xxxxxxxxx</span></div></div></a>
-                <a id="ft-telegram" href="#" class="block group"><div class="border border-purple-300/30 rounded-lg p-2.5 flex items-center gap-3 group-hover:bg-white/10 transition"><div class="w-10 h-10 flex items-center justify-center"><i class="fab fa-telegram-plane text-3xl"></i></div><div class="border-l border-purple-300/30 pl-3 h-full flex flex-col justify-center"><span class="text-[9px] text-purple-200 uppercase tracking-wider">Help line[9AM - 10PM]</span><span class="font-bold text-lg leading-none mt-0.5">Telegram Support</span></div></div></a>
-            </div>
-            <div class="text-center border-t border-purple-900/50 pt-4"><p class="text-[10px] text-purple-200 opacity-70 mb-1">© Copyright 2026 <span id="footer-site-name" class="font-bold">Zeno Bazar</span>. All Rights Reserved.</p><p class="text-xs font-medium text-purple-100 mb-0">Developed by <a id="dev-link-wa" href="#" target="_blank" class="text-yellow-400 font-bold hover:underline">👑 ABIR AHMED 👑</a></p></div>
+            <div class="text-center border-t border-purple-900/50 pt-4 mt-4 md:mt-8"><p class="text-[10px] text-purple-200 opacity-70 mb-1">© Copyright 2026 <span id="footer-site-name" class="font-bold">Zeno Bazar</span>. All Rights Reserved.</p><p class="text-xs font-medium text-purple-100 mb-0">Developed by <a id="dev-link-wa" href="#" target="_blank" class="text-yellow-400 font-bold hover:underline">👑 ABIR AHMED 👑</a></p></div>
         </div>
     </div>
 
     <!-- NEW FAB -->
-    <div id="fab-container" class="hidden fixed bottom-20 right-4 z-50 flex items-end justify-end transition-opacity duration-300 max-w-md mx-auto">
+    <div id="fab-container" class="hidden fixed bottom-20 right-4 z-50 flex items-end justify-end transition-opacity duration-300 mx-auto">
         <div class="flex items-center gap-2 relative">
             <div id="fab-text" onclick="toggleFab()" class="bg-[#ea4335] text-white px-3 py-1.5 rounded text-sm shadow-md cursor-pointer whitespace-nowrap hover:bg-red-600 transition-all duration-300 transform origin-right">সাহায্য লাগবে ?</div>
             <button onclick="toggleFab()" id="fab-main" class="w-14 h-14 bg-[#ea4335] text-white rounded-full flex items-center justify-center shadow-xl hover:bg-red-600 transition-colors z-50 relative"><i id="fab-icon" class="fas fa-phone-alt text-2xl transition-transform duration-300"></i></button>
@@ -512,9 +520,9 @@
         </div>
     </div>
 
-    <!-- BOTTOM NAVIGATION -->
-    <nav id="bottom-nav" class="hidden fixed bottom-0 w-full bg-white border-t border-gray-100 py-2 px-6 shadow-[0_-5px_20px_rgba(0,0,0,0.05)] z-40 max-w-md mx-auto left-0 right-0">
-        <div class="flex justify-between items-center">
+    <!-- BOTTOM NAVIGATION (Centered securely on desktop) -->
+    <nav id="bottom-nav" class="hidden fixed bottom-0 w-full bg-white border-t border-gray-100 py-2 shadow-[0_-5px_20px_rgba(0,0,0,0.05)] z-40 left-0 right-0">
+        <div class="flex justify-between items-center max-w-md md:max-w-2xl mx-auto px-6 w-full">
             <button onclick="showSec('home')" class="nav-item flex flex-col items-center text-gray-400 active-tab" id="nav-home"><i class="fas fa-home text-xl"></i><span class="text-[10px] mt-1 font-medium">Home</span></button>
             <button onclick="showSec('mycodes')" class="nav-item flex flex-col items-center text-gray-400" id="nav-mycodes"><i class="fas fa-th-large text-xl"></i><span class="text-[10px] mt-1 font-medium">My Codes</span></button>
             <button onclick="showSec('addmoney')" class="add-money-btn bg-purple-600 -mt-8 h-14 w-14 rounded-full flex items-center justify-center text-white border-4 border-gray-50 transform active:scale-90 transition shadow-lg"><i class="fas fa-plus text-2xl"></i></button>
@@ -557,7 +565,7 @@
         if (currentUser) {
             let sec = params.get('sec');
             if (params.has('auth') && !sec) {
-                showSec('home'); return;
+                showSec('home', false); return;
             }
             if(!sec) sec = 'home';
             
@@ -567,6 +575,24 @@
                     const g = gamesData[gameId];
                     openTopUpPage(gameId, g.name, g.image, false);
                 } else { showSec('home', false); }
+            } else if (sec === 'addmoney') {
+                showSec('addmoney', false);
+                const step = params.get('step');
+                if (step === 'methods') {
+                    if(pgDepositAmount < 20 && pgFlowType !== 'direct_order') {
+                        pgShowView('pg-view-amount', false);
+                    } else {
+                        pgShowView('pg-view-methods', false);
+                    }
+                } else if (step === 'verify') {
+                    if(!pgSelectedMethodName) {
+                        pgShowView('pg-view-amount', false);
+                    } else {
+                        pgShowView('pg-view-verify', false);
+                    }
+                } else {
+                    pgShowView('pg-view-amount', false);
+                }
             } else if (document.getElementById(sec + '-sec')) {
                 showSec(sec, false);
             } else { showSec('home', false); }
@@ -876,7 +902,7 @@
             const sortedCategories = Object.keys(categorizedServices).sort((a, b) => categoryEarliestTime[a] - categoryEarliestTime[b]);
             for (const categoryName of sortedCategories) {
                 const items = categorizedServices[categoryName]; items.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
-                let categoryHTML = `<div class="mb-4 mt-8 text-center"><h3 class="font-bold text-gray-900 text-[22px] tracking-wide relative inline-block uppercase">${categoryName}</h3></div><div class="grid grid-cols-3 gap-3 px-1 mb-4">`;
+                let categoryHTML = `<div class="mb-4 mt-8 text-center"><h3 class="font-bold text-gray-900 text-[22px] tracking-wide relative inline-block uppercase">${categoryName}</h3></div><div class="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-3 md:gap-4 px-1 md:px-4 mb-4">`;
                 items.forEach(item => {
                     categoryHTML += `
                          <div onclick="openTopUpPage('${item.id}', '${item.name}', '${item.image}')" class="bg-white rounded-lg shadow-sm overflow-hidden cursor-pointer transform hover:-translate-y-1 transition-all duration-300 border border-gray-100 group flex flex-col">
@@ -918,7 +944,7 @@
         db.collection('services').doc(gameId).collection('products').orderBy('price', 'asc').get()
             .then((snapshot) => {
                 loader.classList.add('hidden');
-                if(snapshot.empty) { grid.innerHTML = `<div class="col-span-2 text-center text-gray-400 py-4">No packages available</div>`; return; }
+                if(snapshot.empty) { grid.innerHTML = `<div class="col-span-2 md:col-span-4 text-center text-gray-400 py-4">No packages available</div>`; return; }
                 snapshot.forEach(doc => {
                     const prod = doc.data(); let isOutOfStock = prod.outOfStock === true;
                     const card = document.createElement('div'); card.className = "product-card " + (isOutOfStock ? "opacity-60 bg-gray-50 border-gray-200 cursor-not-allowed" : "");
@@ -1051,7 +1077,8 @@
                         quantity: selectedQuantity, unitPrice: selectedProduct.price
                     };
                     pgFlowType = 'direct_order'; pgDepositAmount = totalPrice;
-                    showSec('addmoney'); pgShowView('pg-view-methods');
+                    showSec('addmoney', false); 
+                    pgShowView('pg-view-methods', true);
                 }
             });
         }
@@ -1069,7 +1096,15 @@
 
         const fabContainer = document.getElementById('fab-container'); if (fabContainer) fabContainer.classList.remove('hidden');
         
-        if(secId === 'addmoney') { if(pgFlowType !== 'direct_order') { pgFlowType = 'add_money'; pgShowView('pg-view-amount'); document.getElementById('pg-amount-input').value = ""; } } 
+        if(secId === 'addmoney') { 
+            if(pgFlowType !== 'direct_order') { 
+                pgFlowType = 'add_money'; 
+                if(pushHistory) {
+                    pgShowView('pg-view-amount', false); 
+                    document.getElementById('pg-amount-input').value = ""; 
+                }
+            } 
+        } 
         else { pgFlowType = 'add_money'; }
 
         if(secId === 'history') loadHistory(); if(secId === 'mycodes') loadMyCodes(); if(secId === 'transactions') loadTransactions(); if(secId === 'settings') loadSettingsData();
@@ -1246,27 +1281,45 @@
         sliderInterval = setInterval(() => { idx = (idx + 1) % count; wrapper.style.transform = `translateX(-${idx * 100}%)`; dots.forEach((dot, i) => { if(i === idx) { dot.classList.remove('bg-gray-400', 'w-2.5'); dot.classList.add('bg-gray-800', 'w-5'); } else { dot.classList.remove('bg-gray-800', 'w-5'); dot.classList.add('bg-gray-400', 'w-2.5'); } }); }, 3000);
     }
 
-    function pgShowView(viewId) {
-        document.getElementById('pg-view-amount').classList.add('hidden'); document.getElementById('pg-view-methods').classList.add('hidden'); document.getElementById('pg-view-verify').classList.add('hidden'); document.getElementById(viewId).classList.remove('hidden');
+    function pgShowView(viewId, pushHistory = false) {
+        document.getElementById('pg-view-amount').classList.add('hidden'); 
+        document.getElementById('pg-view-methods').classList.add('hidden'); 
+        document.getElementById('pg-view-verify').classList.add('hidden'); 
+        document.getElementById(viewId).classList.remove('hidden');
+        
         const fabContainer = document.getElementById('fab-container');
-        if (fabContainer) { if (viewId === 'pg-view-methods' || viewId === 'pg-view-verify') { fabContainer.classList.add('hidden'); } else { fabContainer.classList.remove('hidden'); } }
-    }
+        if (fabContainer) { 
+            if (viewId === 'pg-view-methods' || viewId === 'pg-view-verify') { 
+                fabContainer.classList.add('hidden'); 
+            } else { 
+                fabContainer.classList.remove('hidden'); 
+            } 
+        }
 
-    function pgBackFromMethods() {
-        if (pgFlowType === 'direct_order') { showSec('topup', false, "game=" + selectedGameId); pgFlowType = 'add_money'; } else { pgShowView('pg-view-amount'); }
+        if(pushHistory) {
+            let step = '';
+            if(viewId === 'pg-view-methods') step = '&step=methods';
+            else if(viewId === 'pg-view-verify') step = '&step=verify';
+            window.history.pushState({sec: 'addmoney', step: viewId}, '', "?sec=addmoney" + step);
+        }
     }
 
     function pgGotoMethods() {
         const amt = parseFloat(document.getElementById('pg-amount-input').value);
         if(isNaN(amt) || amt < 20) { showModernAlert('অবৈধ পরিমাণ', 'সর্বনিম্ন ডিপোজিট ৳20।', 'warning'); return; }
-        pgDepositAmount = amt; pgShowView('pg-view-methods');
+        pgDepositAmount = amt; 
+        pgShowView('pg-view-methods', true);
     }
 
     function pgSelectMethod(methodName) {
         pgSelectedMethodName = methodName; showModernLoading();
         db.collection("admin").doc("payment").get().then(doc => {
             Swal.close();
-            if(doc.exists && doc.data()[methodName.toLowerCase()]) { pgAdminNumber = doc.data()[methodName.toLowerCase()]; pgPopulateInstructionUI(); pgShowView('pg-view-verify'); } 
+            if(doc.exists && doc.data()[methodName.toLowerCase()]) { 
+                pgAdminNumber = doc.data()[methodName.toLowerCase()]; 
+                pgPopulateInstructionUI(); 
+                pgShowView('pg-view-verify', true); 
+            } 
             else { showModernAlert('Error', 'এই মেথডটি বর্তমানে বন্ধ আছে।', 'error'); }
         }).catch(err => { Swal.close(); showModernAlert('Error', 'নেটওয়ার্ক সমস্যা।', 'error'); });
     }
