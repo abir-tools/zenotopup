@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Zeno Bazar</title>
+    
+    <!-- PWA MANIFEST & THEME COLOR (যোগ করা হয়েছে) -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#7c3aed">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -55,73 +60,23 @@
         .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         
-        /* ========================================================
-           MODERN SWEETALERT OVERRIDES (DYNAMIC UI/UX) 
-           ======================================================== */
+        /* MODERN SWEETALERT OVERRIDES */
         div:where(.swal2-container) div:where(.swal2-popup) {
-            border-radius: 20px !important;
-            padding: 24px 20px !important;
-            width: 90% !important;
-            max-width: 360px !important;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
-            border: 1px solid rgba(0,0,0,0.05) !important;
-            font-family: 'Poppins', sans-serif !important;
+            border-radius: 20px !important; padding: 24px 20px !important; width: 90% !important; max-width: 360px !important;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important; border: 1px solid rgba(0,0,0,0.05) !important; font-family: 'Poppins', sans-serif !important;
         }
-        div:where(.swal2-container) h2:where(.swal2-title) {
-            font-size: 1.25rem !important;
-            font-weight: 700 !important;
-            color: #1e293b !important;
-            padding: 0 !important;
-            margin-bottom: 8px !important;
-        }
-        div:where(.swal2-container) div:where(.swal2-html-container) {
-            font-size: 0.9rem !important;
-            color: #475569 !important;
-            margin: 0 !important;
-            line-height: 1.5 !important;
-        }
-        div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm {
-            background-color: #9333ea !important;
-            border-radius: 12px !important;
-            font-weight: 600 !important;
-            padding: 12px 24px !important;
-            box-shadow: 0 4px 10px rgba(147, 51, 234, 0.2) !important;
-            flex: 1 !important;
-        }
-        div:where(.swal2-container) button:where(.swal2-styled).swal2-cancel {
-            background-color: #f1f5f9 !important;
-            color: #475569 !important;
-            border-radius: 12px !important;
-            font-weight: 600 !important;
-            padding: 12px 24px !important;
-            flex: 1 !important;
-        }
-        div:where(.swal2-container) .swal2-actions {
-            gap: 12px !important;
-            width: 100% !important;
-            margin-top: 24px !important;
-            display: flex !important;
-        }
-        /* Custom Modern Icon overrides */
+        div:where(.swal2-container) h2:where(.swal2-title) { font-size: 1.25rem !important; font-weight: 700 !important; color: #1e293b !important; padding: 0 !important; margin-bottom: 8px !important; }
+        div:where(.swal2-container) div:where(.swal2-html-container) { font-size: 0.9rem !important; color: #475569 !important; margin: 0 !important; line-height: 1.5 !important; }
+        div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm { background-color: #9333ea !important; border-radius: 12px !important; font-weight: 600 !important; padding: 12px 24px !important; box-shadow: 0 4px 10px rgba(147, 51, 234, 0.2) !important; flex: 1 !important; }
+        div:where(.swal2-container) button:where(.swal2-styled).swal2-cancel { background-color: #f1f5f9 !important; color: #475569 !important; border-radius: 12px !important; font-weight: 600 !important; padding: 12px 24px !important; flex: 1 !important; }
+        div:where(.swal2-container) .swal2-actions { gap: 12px !important; width: 100% !important; margin-top: 24px !important; display: flex !important; }
         div:where(.swal2-container) .swal2-icon { border: none !important; margin: 0 auto 16px auto !important; }
         .custom-swal-icon { width: 70px; height: 70px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 30px; margin: 0 auto 15px auto; }
-        .icon-success { background: #dcfce7; color: #22c55e; }
-        .icon-warning { background: #fef3c7; color: #f59e0b; }
-        .icon-error { background: #fee2e2; color: #ef4444; }
-        .icon-info { background: #f3e8ff; color: #9333ea; }
+        .icon-success { background: #dcfce7; color: #22c55e; } .icon-warning { background: #fef3c7; color: #f59e0b; } .icon-error { background: #fee2e2; color: #ef4444; } .icon-info { background: #f3e8ff; color: #9333ea; }
 
         /* Custom Dynamic Toast UX/UI */
-        #toast-container {
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-            z-index: 999999; display: flex; flex-direction: column; gap: 10px;
-            pointer-events: none; width: 90%; max-width: 380px;
-        }
-        .custom-toast {
-            background: white; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-            padding: 14px 18px; display: flex; align-items: center; gap: 12px;
-            transform: translateY(-100%) scale(0.9); opacity: 0;
-            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); overflow: hidden; position: relative;
-        }
+        #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 999999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; width: 90%; max-width: 380px; }
+        .custom-toast { background: white; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.12); padding: 14px 18px; display: flex; align-items: center; gap: 12px; transform: translateY(-100%) scale(0.9); opacity: 0; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); overflow: hidden; position: relative; }
         .custom-toast.show { transform: translateY(0) scale(1); opacity: 1; }
         .custom-toast .progress-bar { position: absolute; bottom: 0; left: 0; height: 4px; width: 100%; animation: toast-progress 3s linear forwards; }
         @keyframes toast-progress { to { width: 0%; } }
@@ -158,7 +113,6 @@
     </div>
 </div>
 
-<!-- UNIFIED WRAPPER (ডেস্কটপে পুরো স্ক্রিন জুড়ে শো করার জন্য xl:max-w-screen-lg ব্যবহার করা হয়েছে) -->
 <div class="w-full xl:max-w-screen-lg mx-auto bg-slate-50 min-h-screen shadow-2xl relative flex flex-col">
 
     <!-- TOP HEADER -->
@@ -181,10 +135,10 @@
 
     <!-- AUTH SECTION -->
     <div id="auth-sec" class="hidden flex-grow flex flex-col items-center justify-center p-4 bg-white pt-12 pb-12 w-full">
+        <!-- Auth Content As Before -->
         <div class="w-full max-w-sm flex items-center justify-center mb-6">
             <img id="auth-logo-img" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjHzGkVp1DWBuwnmPN0WUR_IJgPd9KBUuH9rEzYzLDUm-YMVHmDy44FwC-tAXA8teCPZF471-iBSjJCwl9d9G014QHmmWVB8fHsCuGArflFNsFPElpaamshtejBt_KYyKY49xW61_PffvceWu5RRNlKqijZNeFVxiIkqFNj_eEyI4hVCdTxLEn16B78DJE/s320/20260421_011113.png" class="h-14 object-contain max-w-[250px] drop-shadow-sm">
         </div>
-
         <div class="w-full max-w-sm bg-white border border-gray-100 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] px-6 py-8 relative overflow-hidden">
             <!-- LOGIN FORM -->
             <div id="login-form" class="animate-fade-in">
@@ -192,64 +146,31 @@
                 <button onclick="googleLogin()" class="w-full flex items-center justify-center gap-3 border border-gray-300 rounded-lg py-2.5 font-bold text-sm text-gray-700 hover:bg-gray-50 mb-5 transition active:scale-95">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" class="w-4 h-4"> Login with Google
                 </button>
-                <div class="flex items-center w-full mb-5">
-                    <div class="flex-1 h-px bg-gray-200"></div><span class="px-3 text-[11px] font-bold text-gray-500">Or sign in with credentials</span><div class="flex-1 h-px bg-gray-200"></div>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-[13px] font-bold text-gray-900 mb-1.5 text-left">Email</label>
-                    <input type="email" id="login-email" placeholder="Email" class="w-full bg-white border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:border-purple-500 text-sm transition">
-                </div>
-                <div class="mb-2">
-                    <label class="block text-[13px] font-bold text-gray-900 mb-1.5 text-left">Password</label>
-                    <input type="password" id="login-pass" placeholder="Password" class="w-full bg-white border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:border-purple-500 text-sm transition">
-                </div>
-                <div class="text-right mb-5">
-                    <span onclick="toggleAuth('forgot')" class="text-[12px] text-[#7c3aed] font-bold cursor-pointer hover:underline">Forgot Password?</span>
-                </div>
+                <div class="flex items-center w-full mb-5"><div class="flex-1 h-px bg-gray-200"></div><span class="px-3 text-[11px] font-bold text-gray-500">Or sign in with credentials</span><div class="flex-1 h-px bg-gray-200"></div></div>
+                <div class="mb-4"><label class="block text-[13px] font-bold text-gray-900 mb-1.5 text-left">Email</label><input type="email" id="login-email" placeholder="Email" class="w-full bg-white border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:border-purple-500 text-sm transition"></div>
+                <div class="mb-2"><label class="block text-[13px] font-bold text-gray-900 mb-1.5 text-left">Password</label><input type="password" id="login-pass" placeholder="Password" class="w-full bg-white border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:border-purple-500 text-sm transition"></div>
+                <div class="text-right mb-5"><span onclick="toggleAuth('forgot')" class="text-[12px] text-[#7c3aed] font-bold cursor-pointer hover:underline">Forgot Password?</span></div>
                 <button onclick="handleLogin()" class="w-full bg-[#7c3aed] text-white py-3.5 rounded-lg font-bold text-sm shadow hover:bg-[#6d28d9] transition active:scale-95">Login</button>
                 <p class="text-center text-[12px] font-semibold text-gray-600 mt-6">New user to Zeno Bazar? <span onclick="toggleAuth('register')" class="text-[#7c3aed] cursor-pointer hover:underline">Register Now</span></p>
             </div>
-
             <!-- REGISTER FORM -->
             <div id="register-form" class="hidden animate-fade-in">
                 <h2 class="text-2xl font-bold text-gray-900 mb-6">Register</h2>
-                <div class="mb-4">
-                    <label class="block text-[13px] font-bold text-gray-900 mb-1.5 text-left">Name</label>
-                    <input type="text" id="reg-name" placeholder="Name" class="w-full bg-white border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:border-purple-500 text-sm transition">
-                </div>
-                <div class="mb-4">
-                    <label class="block text-[13px] font-bold text-gray-900 mb-1.5 text-left">Phone</label>
-                    <input type="number" id="reg-phone" placeholder="Phone" class="w-full bg-white border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:border-purple-500 text-sm transition">
-                </div>
-                <div class="mb-4">
-                    <label class="block text-[13px] font-bold text-gray-900 mb-1.5 text-left">Email</label>
-                    <input type="email" id="reg-email" placeholder="Email" class="w-full bg-white border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:border-purple-500 text-sm transition">
-                </div>
-                <div class="mb-4">
-                    <label class="block text-[13px] font-bold text-gray-900 mb-1.5 text-left">Password</label>
-                    <input type="password" id="reg-pass" placeholder="Password" class="w-full bg-white border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:border-purple-500 text-sm transition">
-                </div>
-                <div class="mb-6">
-                    <label class="block text-[13px] font-bold text-gray-900 mb-1.5 text-left">Confirm Password</label>
-                    <input type="password" id="reg-pass-confirm" placeholder="Confirm Password" class="w-full bg-white border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:border-purple-500 text-sm transition">
-                </div>
+                <div class="mb-4"><label class="block text-[13px] font-bold text-gray-900 mb-1.5 text-left">Name</label><input type="text" id="reg-name" placeholder="Name" class="w-full bg-white border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:border-purple-500 text-sm transition"></div>
+                <div class="mb-4"><label class="block text-[13px] font-bold text-gray-900 mb-1.5 text-left">Phone</label><input type="number" id="reg-phone" placeholder="Phone" class="w-full bg-white border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:border-purple-500 text-sm transition"></div>
+                <div class="mb-4"><label class="block text-[13px] font-bold text-gray-900 mb-1.5 text-left">Email</label><input type="email" id="reg-email" placeholder="Email" class="w-full bg-white border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:border-purple-500 text-sm transition"></div>
+                <div class="mb-4"><label class="block text-[13px] font-bold text-gray-900 mb-1.5 text-left">Password</label><input type="password" id="reg-pass" placeholder="Password" class="w-full bg-white border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:border-purple-500 text-sm transition"></div>
+                <div class="mb-6"><label class="block text-[13px] font-bold text-gray-900 mb-1.5 text-left">Confirm Password</label><input type="password" id="reg-pass-confirm" placeholder="Confirm Password" class="w-full bg-white border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:border-purple-500 text-sm transition"></div>
                 <button onclick="handleRegister()" class="w-full bg-[#7c3aed] text-white py-3.5 rounded-lg font-bold text-sm shadow hover:bg-[#6d28d9] transition active:scale-95">Register</button>
                 <p class="text-center text-[12px] font-semibold text-gray-600 mt-6">Already member? <span onclick="toggleAuth('login')" class="text-[#7c3aed] cursor-pointer hover:underline">Login Now</span></p>
             </div>
-
             <!-- FORGOT PASSWORD FORM -->
             <div id="forgot-form" class="hidden animate-fade-in">
                 <div class="flex flex-col items-center mb-6">
-                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 text-2xl mb-4">
-                        <i class="fas fa-unlock-alt"></i>
-                    </div>
-                    <h2 class="text-2xl font-bold text-gray-900 mb-1">Reset Password</h2>
-                    <p class="text-[12px] text-gray-500 text-center px-4">Enter your email and we'll send a reset link.</p>
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 text-2xl mb-4"><i class="fas fa-unlock-alt"></i></div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-1">Reset Password</h2><p class="text-[12px] text-gray-500 text-center px-4">Enter your email and we'll send a reset link.</p>
                 </div>
-                <div class="mb-6">
-                    <label class="block text-[13px] font-bold text-gray-900 mb-1.5 text-left">Email Address</label>
-                    <input type="email" id="forgot-email" placeholder="example@email.com" class="w-full bg-white border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:border-purple-500 text-sm transition">
-                </div>
+                <div class="mb-6"><label class="block text-[13px] font-bold text-gray-900 mb-1.5 text-left">Email Address</label><input type="email" id="forgot-email" placeholder="example@email.com" class="w-full bg-white border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:border-purple-500 text-sm transition"></div>
                 <button onclick="handleForgotPassword()" class="w-full bg-[#7c3aed] text-white py-3.5 rounded-lg font-bold text-sm shadow hover:bg-[#6d28d9] transition active:scale-95">Send Reset Link</button>
                 <p class="text-center text-[12px] font-semibold text-gray-600 mt-6">Remembered? <span onclick="toggleAuth('login')" class="text-[#7c3aed] cursor-pointer hover:underline">Back to Login</span></p>
             </div>
@@ -268,7 +189,6 @@
                     <div id="slider-dots" class="flex justify-center items-center gap-2"></div>
                 </div>
 
-                <!-- Desktop Responsive Grid -->
                 <div class="grid grid-cols-3 md:grid-cols-3 gap-3 md:gap-6 mb-5 px-2 md:px-4">
                     <a id="home-whatsapp" href="#" class="bg-white py-2 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center gap-1.5 active:scale-95 transition h-24 md:h-28 no-underline">
                         <div class="w-10 h-10 rounded-full flex items-center justify-center bg-green-50"><i class="fab fa-whatsapp text-3xl md:text-4xl text-[#25D366]"></i></div>
@@ -284,18 +204,11 @@
                     </a>
                 </div>
 
-                <div id="categories-container" class="mb-8">
-                    <div class="text-center py-10"><i class="fas fa-spinner fa-spin text-purple-500"></i> Loading Categories...</div>
-                </div>
+                <div id="categories-container" class="mb-8"><div class="text-center py-10"><i class="fas fa-spinner fa-spin text-purple-500"></i> Loading Categories...</div></div>
 
                 <div class="mt-10 mb-6 px-1">
-                    <div class="text-center mb-5">
-                        <h3 class="font-bold text-gray-900 text-[22px] mb-1">Latest Orders</h3>
-                        <p class="text-[13px] text-gray-500 font-medium">সর্বশেষ আপডেট <span id="latest-orders-time" class="text-purple-600 font-bold">এই মাত্র</span></p>
-                    </div>
-                    <div id="latest-orders-list" class="space-y-3 md:space-y-4 max-w-4xl mx-auto">
-                        <div class="text-center py-4"><i class="fas fa-spinner fa-spin text-purple-500"></i> Loading...</div>
-                    </div>
+                    <div class="text-center mb-5"><h3 class="font-bold text-gray-900 text-[22px] mb-1">Latest Orders</h3><p class="text-[13px] text-gray-500 font-medium">সর্বশেষ আপডেট <span id="latest-orders-time" class="text-purple-600 font-bold">এই মাত্র</span></p></div>
+                    <div id="latest-orders-list" class="space-y-3 md:space-y-4 max-w-4xl mx-auto"><div class="text-center py-4"><i class="fas fa-spinner fa-spin text-purple-500"></i> Loading...</div></div>
                 </div>
             </section>
 
@@ -305,87 +218,39 @@
                     <button onclick="window.history.back()" class="text-gray-600 hover:text-purple-500 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200"><i class="fas fa-arrow-left text-lg"></i></button>
                     <h2 class="text-lg font-bold text-gray-800" id="topup-game-title">Game Name</h2>
                 </div>
-
                 <div class="bg-white p-3 rounded-xl shadow-sm flex items-center gap-4 mb-4 border border-gray-100">
                     <img id="topup-game-img" src="" class="w-16 h-16 rounded-xl object-cover shadow-sm">
-                    <div>
-                        <h3 class="font-bold text-gray-800 text-base" id="topup-sub-title">FF UID TOPUP</h3>
-                        <p class="text-xs text-gray-400 font-medium">Game / Topup</p>
-                    </div>
+                    <div><h3 class="font-bold text-gray-800 text-base" id="topup-sub-title">FF UID TOPUP</h3><p class="text-xs text-gray-400 font-medium">Game / Topup</p></div>
                 </div>
-
                 <div class="bg-white p-4 rounded-xl shadow-sm mb-4 border border-gray-100">
-                    <div class="flex items-center gap-2 mb-4">
-                        <span class="bg-purple-600 text-white w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold shadow-md">1</span>
-                        <h3 class="font-bold text-gray-700 text-sm">Select Recharge</h3>
-                    </div>
+                    <div class="flex items-center gap-2 mb-4"><span class="bg-purple-600 text-white w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold shadow-md">1</span><h3 class="font-bold text-gray-700 text-sm">Select Recharge</h3></div>
                     <div id="product-loader" class="text-center py-10 hidden"><i class="fas fa-spinner fa-spin text-purple-500 text-2xl"></i></div>
-                    <!-- Responsive Grid -->
                     <div id="products-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3"></div>
                 </div>
-
                 <div id="quantity-container" class="bg-white p-4 rounded-xl shadow-sm mb-4 border border-gray-100 hidden">
                     <div class="flex justify-between items-center">
                         <h3 class="font-bold text-gray-700 text-base">Quantity</h3>
-                        <div class="flex items-center gap-4 border border-gray-200 rounded-full px-3 py-1.5 bg-gray-50">
-                            <button onclick="decreaseQty()" class="text-gray-600 hover:text-purple-600 focus:outline-none"><i class="fas fa-minus text-sm"></i></button>
-                            <span id="display-qty" class="font-bold text-gray-800 w-8 text-center text-lg">1</span>
-                            <button onclick="increaseQty()" class="text-gray-600 hover:text-purple-600 focus:outline-none"><i class="fas fa-plus text-sm"></i></button>
-                        </div>
+                        <div class="flex items-center gap-4 border border-gray-200 rounded-full px-3 py-1.5 bg-gray-50"><button onclick="decreaseQty()" class="text-gray-600 hover:text-purple-600 focus:outline-none"><i class="fas fa-minus text-sm"></i></button><span id="display-qty" class="font-bold text-gray-800 w-8 text-center text-lg">1</span><button onclick="increaseQty()" class="text-gray-600 hover:text-purple-600 focus:outline-none"><i class="fas fa-plus text-sm"></i></button></div>
                     </div>
                 </div>
-
                 <div id="account-info-container" class="bg-white p-4 rounded-xl shadow-sm mb-4 border border-gray-100">
-                    <div class="flex items-center gap-2 mb-3">
-                        <span class="bg-purple-600 text-white w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold shadow-md">2</span>
-                        <h3 class="font-bold text-gray-700 text-sm" id="game-input-label">Account Info</h3>
-                    </div>
+                    <div class="flex items-center gap-2 mb-3"><span class="bg-purple-600 text-white w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold shadow-md">2</span><h3 class="font-bold text-gray-700 text-sm" id="game-input-label">Account Info</h3></div>
                     <input type="text" id="game-player-id" placeholder="আপনার Uid দিন" class="w-full bg-gray-50 border border-gray-200 p-3 rounded-lg focus:outline-none focus:border-purple-500 font-bold text-gray-700 tracking-wider text-lg transition">
-                    <button id="btn-name-check" onclick="checkPlayerName()" class="hidden w-full bg-[#f3e8ff] border border-purple-200 text-purple-700 py-2.5 rounded-lg font-bold shadow-sm hover:bg-purple-100 transition active:scale-95 mt-3 text-sm flex items-center justify-center gap-2">
-                        <i class="fas fa-search"></i> নাম চেক করুন
-                    </button>
+                    <button id="btn-name-check" onclick="checkPlayerName()" class="hidden w-full bg-[#f3e8ff] border border-purple-200 text-purple-700 py-2.5 rounded-lg font-bold shadow-sm hover:bg-purple-100 transition active:scale-95 mt-3 text-sm flex items-center justify-center gap-2"><i class="fas fa-search"></i> নাম চেক করুন</button>
                 </div>
-
                 <div class="bg-white p-4 rounded-xl shadow-sm mb-4 border border-gray-100">
-                    <div class="flex items-center gap-2 mb-4">
-                        <span class="bg-purple-600 text-white w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold shadow-md">3</span>
-                        <h3 class="font-bold text-gray-700 text-sm">Select Option</h3>
-                    </div>
-
-                    <!-- Responsive Grid -->
+                    <div class="flex items-center gap-2 mb-4"><span class="bg-purple-600 text-white w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold shadow-md">3</span><h3 class="font-bold text-gray-700 text-sm">Select Option</h3></div>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-                        <div id="paytype-wallet" onclick="selectPaymentType('wallet')" class="pay-type-card selected bg-white">
-                            <div class="pay-type-ribbon"><i class="fas fa-check"></i></div>
-                            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEibpgTQmbBNjCIfCnF-WvhFZwHwsvEXaQM1ikhanABxQ_doGSBtzYpHRWABVH5wlHIiMxtHM3QhE8j0gTnBkYcIduhlyLjnQDKSY4cV6lxvYt0NSa8AMt9kk1GMmxS3YD9jYFuG03r5-7Ygc71_ZF64rpZcnaGoSe6iUBu0eP1YiH9VTEyft14SN_X9sMU/s320/20260419_154922.png" class="w-full h-20 object-cover">
-                            <div class="bg-gray-200 text-center py-1.5 text-xs font-bold text-gray-700 uppercase">Wallet Pay</div>
-                        </div>
-                        <div id="paytype-instant" onclick="selectPaymentType('instant')" class="pay-type-card bg-white">
-                            <div class="pay-type-ribbon hidden"><i class="fas fa-check"></i></div>
-                            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiW9vceeBSXgjaUSXgNiVZ0WVy8ZsvseCt9ew-S9WCrF5Rm5qXqvblFSSmO5d0bXxhybnsrwKxyJv-ztZOPknpUQheVzxCXDouHNIbUzTVsw6Pn6aDGxJ5kXGdtW6HBmhFjxvw98LMaa-DvOWh7ReN2gLPA5kIUso1kYNsrTE9oYSaxYuq-ArIHeLdaK0o/s320/1754413851_autopay.png" class="w-full h-20 object-contain p-2">
-                            <div class="bg-gray-200 text-center py-1.5 text-xs font-bold text-gray-700 uppercase">Instant Pay</div>
-                        </div>
+                        <div id="paytype-wallet" onclick="selectPaymentType('wallet')" class="pay-type-card selected bg-white"><div class="pay-type-ribbon"><i class="fas fa-check"></i></div><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEibpgTQmbBNjCIfCnF-WvhFZwHwsvEXaQM1ikhanABxQ_doGSBtzYpHRWABVH5wlHIiMxtHM3QhE8j0gTnBkYcIduhlyLjnQDKSY4cV6lxvYt0NSa8AMt9kk1GMmxS3YD9jYFuG03r5-7Ygc71_ZF64rpZcnaGoSe6iUBu0eP1YiH9VTEyft14SN_X9sMU/s320/20260419_154922.png" class="w-full h-20 object-cover"><div class="bg-gray-200 text-center py-1.5 text-xs font-bold text-gray-700 uppercase">Wallet Pay</div></div>
+                        <div id="paytype-instant" onclick="selectPaymentType('instant')" class="pay-type-card bg-white"><div class="pay-type-ribbon hidden"><i class="fas fa-check"></i></div><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiW9vceeBSXgjaUSXgNiVZ0WVy8ZsvseCt9ew-S9WCrF5Rm5qXqvblFSSmO5d0bXxhybnsrwKxyJv-ztZOPknpUQheVzxCXDouHNIbUzTVsw6Pn6aDGxJ5kXGdtW6HBmhFjxvw98LMaa-DvOWh7ReN2gLPA5kIUso1kYNsrTE9oYSaxYuq-ArIHeLdaK0o/s320/1754413851_autopay.png" class="w-full h-20 object-contain p-2"><div class="bg-gray-200 text-center py-1.5 text-xs font-bold text-gray-700 uppercase">Instant Pay</div></div>
                     </div>
-
                     <div class="space-y-2 mb-5">
-                        <div class="flex items-center gap-2 text-xs text-gray-500">
-                            <i class="fas fa-info-circle"></i> <span>আপনার ব্যালেন্স <span class="text-purple-600 font-bold">৳ <span id="current-wallet-bal">0</span></span></span>
-                        </div>
-                        <div class="flex items-center gap-2 text-xs text-gray-500">
-                            <i class="fas fa-info-circle"></i> <span>প্রয়োজন <span class="text-purple-600 font-bold">৳ <span id="needed-for-product">0</span></span></span>
-                        </div>
+                        <div class="flex items-center gap-2 text-xs text-gray-500"><i class="fas fa-info-circle"></i> <span>আপনার ব্যালেন্স <span class="text-purple-600 font-bold">৳ <span id="current-wallet-bal">0</span></span></span></div>
+                        <div class="flex items-center gap-2 text-xs text-gray-500"><i class="fas fa-info-circle"></i> <span>প্রয়োজন <span class="text-purple-600 font-bold">৳ <span id="needed-for-product">0</span></span></span></div>
                     </div>
-                    
-                    <div class="border-t border-gray-100 pt-4">
-                        <button id="btn-buy-now" onclick="processOrder()" class="w-full bg-purple-600 text-white py-3 rounded-lg font-bold shadow-lg hover:bg-purple-700 transition flex justify-center items-center gap-2 active:scale-95">
-                             Buy Now
-                        </button>
-                    </div>
+                    <div class="border-t border-gray-100 pt-4"><button id="btn-buy-now" onclick="processOrder()" class="w-full bg-purple-600 text-white py-3 rounded-lg font-bold shadow-lg hover:bg-purple-700 transition flex justify-center items-center gap-2 active:scale-95">Buy Now</button></div>
                 </div>
-
-                <div id="game-rules-box" class="bg-yellow-50 border border-yellow-200 p-4 rounded-xl shadow-sm mb-6 hidden">
-                    <div class="flex items-center gap-2 mb-2"><i class="fas fa-exclamation-triangle text-yellow-600"></i><h3 class="font-bold text-yellow-700 text-sm">Important Rules</h3></div>
-                    <p id="game-rules-text" class="text-xs text-yellow-800 leading-relaxed font-medium"></p>
-                </div>
+                <div id="game-rules-box" class="bg-yellow-50 border border-yellow-200 p-4 rounded-xl shadow-sm mb-6 hidden"><div class="flex items-center gap-2 mb-2"><i class="fas fa-exclamation-triangle text-yellow-600"></i><h3 class="font-bold text-yellow-700 text-sm">Important Rules</h3></div><p id="game-rules-text" class="text-xs text-yellow-800 leading-relaxed font-medium"></p></div>
             </section>
 
             <!-- ADD MONEY & DIRECT PAYMENT -->
@@ -394,62 +259,28 @@
                     <h2 class="font-bold text-xl text-gray-800 mb-4 px-2">Add Money</h2>
                     <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
                         <p class="text-gray-500 text-sm mb-4">Enter the amount you want to add.</p>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 font-bold mb-2">Amount (৳)</label>
-                            <input type="number" id="pg-amount-input" placeholder="e.g., 50" min="20" class="w-full bg-gray-50 border border-gray-200 p-3 rounded-lg font-bold text-lg focus:outline-none focus:border-purple-500">
-                            <p class="text-[12px] text-gray-400 mt-2 font-medium">সর্বনিম্ন ডিপোজিট ৳20।</p>
-                        </div>
+                        <div class="mb-4"><label class="block text-gray-700 font-bold mb-2">Amount (৳)</label><input type="number" id="pg-amount-input" placeholder="e.g., 50" min="20" class="w-full bg-gray-50 border border-gray-200 p-3 rounded-lg font-bold text-lg focus:outline-none focus:border-purple-500"><p class="text-[12px] text-gray-400 mt-2 font-medium">সর্বনিম্ন ডিপোজিট ৳20।</p></div>
                         <button onclick="pgGotoMethods()" class="w-full bg-purple-600 text-white py-3 rounded-lg font-bold shadow-lg hover:bg-purple-700 transition">Continue</button>
                     </div>
                 </div>
-
                 <div id="pg-view-methods" class="hidden">
-                    <div class="flex items-center gap-3 mb-4 p-1">
-                        <!-- URL System Back Button -->
-                        <button onclick="window.history.back()" class="text-gray-600 hover:text-purple-500 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200"><i class="fas fa-arrow-left text-lg"></i></button>
-                        <h2 class="text-lg font-bold text-gray-800">পেমেন্ট মেথড নির্বাচন করুন</h2>
-                    </div>
+                    <div class="flex items-center gap-3 mb-4 p-1"><button onclick="window.history.back()" class="text-gray-600 hover:text-purple-500 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200"><i class="fas fa-arrow-left text-lg"></i></button><h2 class="text-lg font-bold text-gray-800">পেমেন্ট মেথড নির্বাচন করুন</h2></div>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-3 px-1">
                         <div onclick="pgSelectMethod('bKash')" class="bg-white p-4 rounded-xl shadow-sm flex flex-col items-center justify-center cursor-pointer method-card border border-blue-50"><img src="https://pay.bmsmmpanel.xyz/assets/template/images/bkash.png" class="h-10 object-contain mb-2"></div>
                         <div onclick="pgSelectMethod('Nagad')" class="bg-white p-4 rounded-xl shadow-sm flex flex-col items-center justify-center cursor-pointer method-card border border-blue-50"><img src="https://pay.bmsmmpanel.xyz/assets/template/images/nagad.png" class="h-10 object-contain mb-2"></div>
                     </div>
                 </div>
-
                 <div id="pg-view-verify" class="hidden">
-                    <div class="flex items-center gap-3 mb-4 p-1">
-                        <!-- URL System Back Button -->
-                        <button onclick="window.history.back()" class="text-gray-600 hover:text-purple-500 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200"><i class="fas fa-arrow-left text-lg"></i></button>
-                        <h2 class="text-lg font-bold text-gray-800">পেমেন্ট নির্দেশনা</h2>
-                    </div>
+                    <div class="flex items-center gap-3 mb-4 p-1"><button onclick="window.history.back()" class="text-gray-600 hover:text-purple-500 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200"><i class="fas fa-arrow-left text-lg"></i></button><h2 class="text-lg font-bold text-gray-800">পেমেন্ট নির্দেশনা</h2></div>
                     <div id="pg-instruction-content" class="px-1 max-w-2xl mx-auto"></div>
                 </div>
             </section>
 
-            <!-- MY CODES SECTION -->
-            <section id="mycodes-sec" class="hidden animate-fade-in pb-24 pt-4 px-3">
-                <div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-                    <div class="p-3 border-b border-gray-200 flex justify-between items-center bg-white">
-                        <div class="flex items-center gap-2"><i class="fas fa-list-alt text-gray-800 text-lg"></i><span class="font-bold text-gray-800 text-base">My Codes</span></div>
-                        <button onclick="openRedeemModal()" class="bg-[#2582b5] hover:bg-blue-600 text-white px-3 py-1.5 rounded text-xs font-bold shadow-sm transition active:scale-95">Redeem Code</button>
-                    </div>
-                    <div id="mycodes-list" class="flex flex-col"></div>
-                </div>
-            </section>
-
-            <!-- ACCOUNT SECTION -->
+            <!-- OTHER SECTIONS -->
+            <section id="mycodes-sec" class="hidden animate-fade-in pb-24 pt-4 px-3"><div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden"><div class="p-3 border-b border-gray-200 flex justify-between items-center bg-white"><div class="flex items-center gap-2"><i class="fas fa-list-alt text-gray-800 text-lg"></i><span class="font-bold text-gray-800 text-base">My Codes</span></div><button onclick="openRedeemModal()" class="bg-[#2582b5] hover:bg-blue-600 text-white px-3 py-1.5 rounded text-xs font-bold shadow-sm transition active:scale-95">Redeem Code</button></div><div id="mycodes-list" class="flex flex-col"></div></div></section>
             <section id="account-sec" class="hidden animate-fade-in pb-20 max-w-2xl mx-auto">
-                <div class="bg-white p-6 rounded-xl shadow-sm mb-4 text-center border border-gray-100 mt-4">
-                    <div class="w-20 h-20 bg-purple-50 rounded-full mx-auto flex items-center justify-center text-purple-500 text-3xl mb-3 shadow-inner overflow-hidden">
-                        <i id="profile-icon" class="fas fa-user-circle text-5xl"></i>
-                        <img id="profile-image" src="" class="w-full h-full object-cover hidden">
-                    </div>
-                    <h2 id="profile-name" class="font-bold text-xl text-gray-800">User Name</h2>
-                    <p id="profile-email" class="text-xs text-gray-500 mb-6 font-mono">user@email.com</p>
-                    <div class="grid grid-cols-3 gap-3 md:gap-6">
-                        <div class="bg-purple-50 p-3 rounded-2xl border border-purple-100 flex flex-col items-center justify-center"><div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 mb-1"><i class="fas fa-wallet text-sm"></i></div><p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Balance</p><p class="text-sm font-extrabold text-purple-600">৳ <span id="profile-balance">0</span></p></div>
-                        <div class="bg-blue-50 p-3 rounded-2xl border border-blue-100 flex flex-col items-center justify-center"><div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mb-1"><i class="fas fa-shopping-bag text-sm"></i></div><p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Orders</p><p class="text-sm font-extrabold text-blue-600" id="profile-total-orders">0</p></div>
-                        <div class="bg-green-50 p-3 rounded-2xl border border-green-100 flex flex-col items-center justify-center"><div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 mb-1"><i class="fas fa-coins text-sm"></i></div><p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Spent</p><p class="text-sm font-extrabold text-green-600">৳ <span id="profile-total-spent">0</span></p></div>
-                    </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm mb-4 text-center border border-gray-100 mt-4"><div class="w-20 h-20 bg-purple-50 rounded-full mx-auto flex items-center justify-center text-purple-500 text-3xl mb-3 shadow-inner overflow-hidden"><i id="profile-icon" class="fas fa-user-circle text-5xl"></i><img id="profile-image" src="" class="w-full h-full object-cover hidden"></div><h2 id="profile-name" class="font-bold text-xl text-gray-800">User Name</h2><p id="profile-email" class="text-xs text-gray-500 mb-6 font-mono">user@email.com</p>
+                    <div class="grid grid-cols-3 gap-3 md:gap-6"><div class="bg-purple-50 p-3 rounded-2xl border border-purple-100 flex flex-col items-center justify-center"><div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 mb-1"><i class="fas fa-wallet text-sm"></i></div><p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Balance</p><p class="text-sm font-extrabold text-purple-600">৳ <span id="profile-balance">0</span></p></div><div class="bg-blue-50 p-3 rounded-2xl border border-blue-100 flex flex-col items-center justify-center"><div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mb-1"><i class="fas fa-shopping-bag text-sm"></i></div><p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Orders</p><p class="text-sm font-extrabold text-blue-600" id="profile-total-orders">0</p></div><div class="bg-green-50 p-3 rounded-2xl border border-green-100 flex flex-col items-center justify-center"><div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 mb-1"><i class="fas fa-coins text-sm"></i></div><p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Spent</p><p class="text-sm font-extrabold text-green-600">৳ <span id="profile-total-spent">0</span></p></div></div>
                 </div>
                 <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
                     <button onclick="showSec('history')" class="w-full flex items-center justify-between p-4 border-b border-gray-100 hover:bg-gray-50 transition"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-500"><i class="fas fa-history"></i></div><span class="text-sm font-semibold text-gray-700">My Orders</span></div><i class="fas fa-chevron-right text-gray-300 text-xs"></i></button>
@@ -459,50 +290,20 @@
                     <button onclick="handleLogout()" class="w-full flex items-center justify-between p-4 hover:bg-red-50 text-red-500 transition group"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center group-hover:bg-red-200 transition"><i class="fas fa-sign-out-alt"></i></div><span class="text-sm font-bold">Log Out</span></div></button>
                 </div>
             </section>
-
-            <!-- SETTINGS SECTION -->
-            <section id="settings-sec" class="hidden animate-fade-in pb-24 max-w-2xl mx-auto">
-                <div class="px-2 pt-6 mb-4 flex items-center gap-3"><button onclick="window.history.back()" class="text-gray-600 hover:text-purple-500 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 transition"><i class="fas fa-arrow-left text-lg"></i></button><h2 class="text-xl font-bold text-gray-800">Account Settings</h2></div>
-                <div class="px-2">
-                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 space-y-4">
-                        <div><label class="block text-[13px] font-bold text-gray-900 mb-1.5">Full Name</label><input type="text" id="set-name" class="w-full bg-gray-50 border border-gray-300 px-4 py-2.5 rounded-lg text-sm text-gray-800 focus:outline-none focus:border-purple-500"></div>
-                        <div><label class="block text-[13px] font-bold text-gray-900 mb-1.5">Phone Number</label><input type="number" id="set-phone" class="w-full bg-gray-50 border border-gray-300 px-4 py-2.5 rounded-lg text-sm text-gray-800 focus:outline-none focus:border-purple-500"></div>
-                        <div><label class="block text-[13px] font-bold text-gray-900 mb-1.5 text-gray-500">Email Address (Read Only)</label><input type="email" id="set-email" readonly class="w-full bg-gray-200 border border-gray-300 px-4 py-2.5 rounded-lg text-sm text-gray-500 cursor-not-allowed"></div>
-                        <div class="border-t border-gray-100 pt-4 mt-2"><label class="block text-[13px] font-bold text-gray-900 mb-1.5">New Password</label><input type="password" id="set-pass" placeholder="Leave blank to keep current password" class="w-full bg-white border border-gray-300 px-4 py-2.5 rounded-lg text-sm text-gray-800 focus:outline-none focus:border-purple-500"></div>
-                        <button onclick="saveSettings()" class="w-full bg-[#7c3aed] text-white py-3.5 rounded-lg font-bold text-sm shadow hover:bg-[#6d28d9] transition active:scale-95 mt-4">Save Changes</button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Responsive Grid applied to history and transaction items via CSS classes below -->
+            <section id="settings-sec" class="hidden animate-fade-in pb-24 max-w-2xl mx-auto"><div class="px-2 pt-6 mb-4 flex items-center gap-3"><button onclick="window.history.back()" class="text-gray-600 hover:text-purple-500 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 transition"><i class="fas fa-arrow-left text-lg"></i></button><h2 class="text-xl font-bold text-gray-800">Account Settings</h2></div><div class="px-2"><div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 space-y-4"><div><label class="block text-[13px] font-bold text-gray-900 mb-1.5">Full Name</label><input type="text" id="set-name" class="w-full bg-gray-50 border border-gray-300 px-4 py-2.5 rounded-lg text-sm text-gray-800 focus:outline-none focus:border-purple-500"></div><div><label class="block text-[13px] font-bold text-gray-900 mb-1.5">Phone Number</label><input type="number" id="set-phone" class="w-full bg-gray-50 border border-gray-300 px-4 py-2.5 rounded-lg text-sm text-gray-800 focus:outline-none focus:border-purple-500"></div><div><label class="block text-[13px] font-bold text-gray-900 mb-1.5 text-gray-500">Email Address (Read Only)</label><input type="email" id="set-email" readonly class="w-full bg-gray-200 border border-gray-300 px-4 py-2.5 rounded-lg text-sm text-gray-500 cursor-not-allowed"></div><div class="border-t border-gray-100 pt-4 mt-2"><label class="block text-[13px] font-bold text-gray-900 mb-1.5">New Password</label><input type="password" id="set-pass" placeholder="Leave blank to keep current password" class="w-full bg-white border border-gray-300 px-4 py-2.5 rounded-lg text-sm text-gray-800 focus:outline-none focus:border-purple-500"></div><button onclick="saveSettings()" class="w-full bg-[#7c3aed] text-white py-3.5 rounded-lg font-bold text-sm shadow hover:bg-[#6d28d9] transition active:scale-95 mt-4">Save Changes</button></div></div></section>
             <section id="history-sec" class="hidden animate-fade-in pb-24"><div id="history-list" class="px-2 mt-4 space-y-4 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-4 md:space-y-0"></div></section>
-            <section id="transactions-sec" class="hidden animate-fade-in pb-24">
-                <div class="px-4 pt-6 mb-4 flex items-center gap-3"><button onclick="window.history.back()" class="text-gray-600 hover:text-purple-500 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 transition"><i class="fas fa-arrow-left text-lg"></i></button><h2 class="text-xl font-bold text-gray-800">My Transactions</h2></div>
-                <div id="transactions-list" class="px-4 mt-2 space-y-4 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-4 md:space-y-0"></div>
-            </section>
+            <section id="transactions-sec" class="hidden animate-fade-in pb-24"><div class="px-4 pt-6 mb-4 flex items-center gap-3"><button onclick="window.history.back()" class="text-gray-600 hover:text-purple-500 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 transition"><i class="fas fa-arrow-left text-lg"></i></button><h2 class="text-xl font-bold text-gray-800">My Transactions</h2></div><div id="transactions-list" class="px-4 mt-2 space-y-4 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-4 md:space-y-0"></div></section>
         </main>
     </div>
 
     <!-- SHARED GLOBAL FOOTER -->
     <div id="shared-footer" class="w-full mt-auto relative z-0">
         <div id="footer-inner" class="bg-[#4c1d95] text-white pt-10 px-5 pb-10 shadow-[0_-10px_40px_rgba(0,0,0,0.2)] w-full">  
+            <!-- Footer Content -->
             <div class="md:grid md:grid-cols-3 md:gap-8 max-w-5xl mx-auto">
-                <div class="mb-6 md:mb-0">
-                    <h3 class="font-serif text-xl font-medium tracking-wide mb-3">STAY CONNECTED</h3>
-                    <p class="text-xs text-purple-100 font-light leading-relaxed mb-4 opacity-90">কোন সমস্যায় পড়লে হোয়াটসঅ্যাপ এ যোগাযোগ করবেন। তাহলে দ্রুত সমাধান পেয়ে যাবেন।</p>
-                    <div class="flex gap-4">
-                        <a id="ft-fb" href="#" class="w-10 h-10 border border-purple-300/30 rounded-lg flex items-center justify-center hover:bg-white hover:text-[#4c1d95] transition"><i class="fab fa-facebook-f"></i></a>
-                        <a id="ft-insta" href="#" class="w-10 h-10 border border-purple-300/30 rounded-lg flex items-center justify-center hover:bg-white hover:text-[#4c1d95] transition"><i class="fab fa-instagram"></i></a>
-                        <a id="ft-yt" href="#" class="w-10 h-10 border border-purple-300/30 rounded-lg flex items-center justify-center hover:bg-white hover:text-[#4c1d95] transition"><i class="fab fa-youtube"></i></a>
-                        <a href="mailto:{email}" class="w-10 h-10 border border-purple-300/30 rounded-lg flex items-center justify-center hover:bg-white hover:text-[#4c1d95] transition"><i class="far fa-envelope"></i></a>
-                    </div>
-                </div>
+                <div class="mb-6 md:mb-0"><h3 class="font-serif text-xl font-medium tracking-wide mb-3">STAY CONNECTED</h3><p class="text-xs text-purple-100 font-light leading-relaxed mb-4 opacity-90">কোন সমস্যায় পড়লে হোয়াটসঅ্যাপ এ যোগাযোগ করবেন। তাহলে দ্রুত সমাধান পেয়ে যাবেন।</p><div class="flex gap-4"><a id="ft-fb" href="#" class="w-10 h-10 border border-purple-300/30 rounded-lg flex items-center justify-center hover:bg-white hover:text-[#4c1d95] transition"><i class="fab fa-facebook-f"></i></a><a id="ft-insta" href="#" class="w-10 h-10 border border-purple-300/30 rounded-lg flex items-center justify-center hover:bg-white hover:text-[#4c1d95] transition"><i class="fab fa-instagram"></i></a><a id="ft-yt" href="#" class="w-10 h-10 border border-purple-300/30 rounded-lg flex items-center justify-center hover:bg-white hover:text-[#4c1d95] transition"><i class="fab fa-youtube"></i></a></div></div>
                 <div class="mb-6 md:mb-0"><h3 class="font-serif text-xl font-medium tracking-wide mb-3">OUR MOBILE APP</h3><a id="ft-app-link" href="#" target="_blank" class="inline-block border border-white/40 rounded-lg overflow-hidden w-36 hover:opacity-80 transition"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="App" class="w-full h-auto"></a></div>
-                <div class="mb-8 md:mb-0">
-                    <h3 class="font-serif text-xl font-medium tracking-wide mb-3">SUPPORT CENTER</h3>
-                    <a id="ft-whatsapp" href="#" class="block mb-3 group"><div class="border border-purple-300/30 rounded-lg p-2.5 flex items-center gap-3 group-hover:bg-white/10 transition"><div class="w-10 h-10 flex items-center justify-center"><i class="fab fa-whatsapp text-3xl"></i></div><div class="border-l border-purple-300/30 pl-3 h-full flex flex-col justify-center"><span class="text-[9px] text-purple-200 uppercase tracking-wider">Help line [9AM - 10PM]</span><span id="ft-wa-num" class="font-bold text-lg font-mono leading-none mt-0.5">+8801xxxxxxxxx</span></div></div></a>
-                    <a id="ft-telegram" href="#" class="block group"><div class="border border-purple-300/30 rounded-lg p-2.5 flex items-center gap-3 group-hover:bg-white/10 transition"><div class="w-10 h-10 flex items-center justify-center"><i class="fab fa-telegram-plane text-3xl"></i></div><div class="border-l border-purple-300/30 pl-3 h-full flex flex-col justify-center"><span class="text-[9px] text-purple-200 uppercase tracking-wider">Help line[9AM - 10PM]</span><span class="font-bold text-lg leading-none mt-0.5">Telegram Support</span></div></div></a>
-                </div>
+                <div class="mb-8 md:mb-0"><h3 class="font-serif text-xl font-medium tracking-wide mb-3">SUPPORT CENTER</h3><a id="ft-whatsapp" href="#" class="block mb-3 group"><div class="border border-purple-300/30 rounded-lg p-2.5 flex items-center gap-3 group-hover:bg-white/10 transition"><div class="w-10 h-10 flex items-center justify-center"><i class="fab fa-whatsapp text-3xl"></i></div><div class="border-l border-purple-300/30 pl-3 h-full flex flex-col justify-center"><span class="text-[9px] text-purple-200 uppercase tracking-wider">Help line [9AM - 10PM]</span><span id="ft-wa-num" class="font-bold text-lg font-mono leading-none mt-0.5">+8801xxxxxxxxx</span></div></div></a><a id="ft-telegram" href="#" class="block group"><div class="border border-purple-300/30 rounded-lg p-2.5 flex items-center gap-3 group-hover:bg-white/10 transition"><div class="w-10 h-10 flex items-center justify-center"><i class="fab fa-telegram-plane text-3xl"></i></div><div class="border-l border-purple-300/30 pl-3 h-full flex flex-col justify-center"><span class="text-[9px] text-purple-200 uppercase tracking-wider">Help line[9AM - 10PM]</span><span class="font-bold text-lg leading-none mt-0.5">Telegram Support</span></div></div></a></div>
             </div>
             <div class="text-center border-t border-purple-900/50 pt-4 mt-4 md:mt-8"><p class="text-[10px] text-purple-200 opacity-70 mb-1">© Copyright 2026 <span id="footer-site-name" class="font-bold">Zeno Bazar</span>. All Rights Reserved.</p><p class="text-xs font-medium text-purple-100 mb-0">Developed by <a id="dev-link-wa" href="#" target="_blank" class="text-yellow-400 font-bold hover:underline">👑 ABIR AHMED 👑</a></p></div>
         </div>
@@ -520,7 +321,22 @@
         </div>
     </div>
 
-    <!-- BOTTOM NAVIGATION (Centered securely on desktop) -->
+    <!-- PWA INSTALL BANNER (যোগ করা হয়েছে) -->
+    <div id="pwaInstallBanner" style="display: none; position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%); width: 92%; max-width: 450px; background-color: #7c3aed; color: white; padding: 12px 16px; text-align: center; z-index: 99999; box-shadow: 0 10px 25px rgba(124,58,237,0.4); border-radius: 12px; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.2);">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjHzGkVp1DWBuwnmPN0WUR_IJgPd9KBUuH9rEzYzLDUm-YMVHmDy44FwC-tAXA8teCPZF471-iBSjJCwl9d9G014QHmmWVB8fHsCuGArflFNsFPElpaamshtejBt_KYyKY49xW61_PffvceWu5RRNlKqijZNeFVxiIkqFNj_eEyI4hVCdTxLEn16B78DJE/s320/20260421_011113.png" style="width: 36px; height: 36px; border-radius: 8px; background: white; padding: 2px;">
+            <div style="text-align: left;">
+                <p style="font-size: 14px; font-weight: 700; margin: 0; line-height: 1;">Zeno Bazar</p>
+                <p style="font-size: 10px; opacity: 0.8; margin: 2px 0 0 0;">Install for better experience</p>
+            </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <button id="pwaInstallBtn" style="background-color: white; color: #7c3aed; border: none; padding: 8px 18px; font-weight: 800; border-radius: 8px; cursor: pointer; font-size: 13px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">Install</button>
+            <button id="pwaCloseBanner" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer; padding: 0; line-height: 1; opacity: 0.7;">&times;</button>
+        </div>
+    </div>
+
+    <!-- BOTTOM NAVIGATION -->
     <nav id="bottom-nav" class="hidden fixed bottom-0 w-full bg-white border-t border-gray-100 py-2 shadow-[0_-5px_20px_rgba(0,0,0,0.05)] z-40 left-0 right-0">
         <div class="flex justify-between items-center max-w-md md:max-w-2xl mx-auto px-6 w-full">
             <button onclick="showSec('home')" class="nav-item flex flex-col items-center text-gray-400 active-tab" id="nav-home"><i class="fas fa-home text-xl"></i><span class="text-[10px] mt-1 font-medium">Home</span></button>
@@ -556,78 +372,45 @@
     let pgDepositAmount = 0; let pgSelectedMethodName = ""; let pgAdminNumber = ""; let pgFlowType = 'add_money'; let directOrderDetails = null;
     let hasRouted = false;
 
-    // ========================================================
-    // URL ROUTING SYSTEM (ইউ আর এল সিস্টেম)
-    // ========================================================
+    // URL ROUTING SYSTEM
     function handleUrlRouting() {
         const params = new URLSearchParams(window.location.search);
-        
         if (currentUser) {
             let sec = params.get('sec');
-            if (params.has('auth') && !sec) {
-                showSec('home', false); return;
-            }
+            if (params.has('auth') && !sec) { showSec('home', false); return; }
             if(!sec) sec = 'home';
-            
             if (sec === 'topup') {
                 const gameId = params.get('game');
-                if (gameId && gamesData && gamesData[gameId]) {
-                    const g = gamesData[gameId];
-                    openTopUpPage(gameId, g.name, g.image, false);
-                } else { showSec('home', false); }
+                if (gameId && gamesData && gamesData[gameId]) openTopUpPage(gameId, gamesData[gameId].name, gamesData[gameId].image, false);
+                else showSec('home', false);
             } else if (sec === 'addmoney') {
                 showSec('addmoney', false);
                 const step = params.get('step');
-                if (step === 'methods') {
-                    if(pgDepositAmount < 20 && pgFlowType !== 'direct_order') {
-                        pgShowView('pg-view-amount', false);
-                    } else {
-                        pgShowView('pg-view-methods', false);
-                    }
-                } else if (step === 'verify') {
-                    if(!pgSelectedMethodName) {
-                        pgShowView('pg-view-amount', false);
-                    } else {
-                        pgShowView('pg-view-verify', false);
-                    }
-                } else {
-                    pgShowView('pg-view-amount', false);
-                }
-            } else if (document.getElementById(sec + '-sec')) {
-                showSec(sec, false);
-            } else { showSec('home', false); }
-            
+                if (step === 'methods') { if(pgDepositAmount < 20 && pgFlowType !== 'direct_order') pgShowView('pg-view-amount', false); else pgShowView('pg-view-methods', false); }
+                else if (step === 'verify') { if(!pgSelectedMethodName) pgShowView('pg-view-amount', false); else pgShowView('pg-view-verify', false); }
+                else pgShowView('pg-view-amount', false);
+            } else if (document.getElementById(sec + '-sec')) showSec(sec, false);
+            else showSec('home', false);
         } else {
             let authView = params.get('auth');
-            if (params.has('sec') && !authView) {
-                 toggleAuth('login', true); return;
-            }
-            if(!authView || !['login', 'register', 'forgot'].includes(authView)) {
-                authView = 'login';
-            }
+            if (params.has('sec') && !authView) { toggleAuth('login', true); return; }
+            if(!authView || !['login', 'register', 'forgot'].includes(authView)) authView = 'login';
             toggleAuth(authView, false);
         }
     }
-
     window.addEventListener('popstate', (e) => { handleUrlRouting(); });
 
-    // ========================================================
-    // CUSTOM DYNAMIC MODAL / UI FUNCTIONS
-    // ========================================================
-    
+    // CUSTOM MODAL / UI FUNCTIONS
     function showToast(message, type = 'success') {
         const container = document.getElementById('toast-container') || createToastContainer();
         const toast = document.createElement('div');
-        let icon = '<i class="fas fa-check-circle text-green-500 text-[26px]"></i>';
-        let barColor = '#22c55e';
+        let icon = '<i class="fas fa-check-circle text-green-500 text-[26px]"></i>'; let barColor = '#22c55e';
         if (type === 'error') { icon = '<i class="fas fa-exclamation-circle text-red-500 text-[26px]"></i>'; barColor = '#ef4444'; }
         else if (type === 'warning') { icon = '<i class="fas fa-exclamation-triangle text-yellow-500 text-[26px]"></i>'; barColor = '#f59e0b'; }
         else if (type === 'info') { icon = '<i class="fas fa-info-circle text-blue-500 text-[26px]"></i>'; barColor = '#3b82f6'; }
-
         toast.className = 'custom-toast';
         toast.innerHTML = `${icon}<div class="flex-1"><p class="text-[13px] font-bold text-gray-800 leading-snug">${message}</p></div><div class="progress-bar" style="background: ${barColor}"></div>`;
-        container.appendChild(toast);
-        setTimeout(() => toast.classList.add('show'), 10);
+        container.appendChild(toast); setTimeout(() => toast.classList.add('show'), 10);
         setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 400); }, 3000);
     }
     function createToastContainer() { const container = document.createElement('div'); container.id = 'toast-container'; document.body.appendChild(container); return container; }
@@ -638,100 +421,55 @@
         else if(type === 'error') iconHtml = '<div class="custom-swal-icon icon-error"><i class="fas fa-times"></i></div>';
         else if(type === 'warning') iconHtml = '<div class="custom-swal-icon icon-warning"><i class="fas fa-exclamation"></i></div>';
         else if(type === 'info') iconHtml = '<div class="custom-swal-icon icon-info"><i class="fas fa-info"></i></div>';
-
-        Swal.fire({
-            html: iconHtml + `<h2 class="swal2-title">${title}</h2><div class="swal2-html-container">${text}</div>`,
-            showConfirmButton: true, confirmButtonText: 'OK', confirmButtonColor: '#9333ea',
-            customClass: { popup: 'modern-popup' }
-        });
+        Swal.fire({ html: iconHtml + `<h2 class="swal2-title">${title}</h2><div class="swal2-html-container">${text}</div>`, showConfirmButton: true, confirmButtonText: 'OK', confirmButtonColor: '#9333ea', customClass: { popup: 'modern-popup' } });
     }
 
     function copyCodeSafe(btn) {
-        const text = btn.getAttribute('data-code');
-        if(!text) return showToast('No code found!', 'error');
-        const textArea = document.createElement("textarea");
-        textArea.value = text; textArea.style.position = "fixed"; textArea.style.left = "-9999px";
+        const text = btn.getAttribute('data-code'); if(!text) return showToast('No code found!', 'error');
+        const textArea = document.createElement("textarea"); textArea.value = text; textArea.style.position = "fixed"; textArea.style.left = "-9999px";
         document.body.appendChild(textArea); textArea.select();
-        try { document.execCommand("copy"); showToast('Copied to clipboard!', 'success'); } 
-        catch (err) { showToast('Failed to copy', 'error'); } 
-        finally { document.body.removeChild(textArea); }
+        try { document.execCommand("copy"); showToast('Copied to clipboard!', 'success'); } catch (err) { showToast('Failed to copy', 'error'); } finally { document.body.removeChild(textArea); }
     }
     function copyToClipboard(text) {
-        const textArea = document.createElement("textarea");
-        textArea.value = text; textArea.style.position = "fixed"; textArea.style.left = "-9999px";
+        const textArea = document.createElement("textarea"); textArea.value = text; textArea.style.position = "fixed"; textArea.style.left = "-9999px";
         document.body.appendChild(textArea); textArea.select();
-        try { document.execCommand("copy"); showToast('Copied!', 'success'); } 
-        catch (err) { showToast('Copy failed', 'error'); } 
-        finally { document.body.removeChild(textArea); }
+        try { document.execCommand("copy"); showToast('Copied!', 'success'); } catch (err) { showToast('Copy failed', 'error'); } finally { document.body.removeChild(textArea); }
     }
+    function showModernLoading() { Swal.fire({ html: '<div class="py-4"><i class="fas fa-circle-notch fa-spin text-purple-600 text-4xl mb-4"></i><h2 class="swal2-title">দয়া করে অপেক্ষা করুন...</h2></div>', showConfirmButton: false, allowOutsideClick: false, customClass: { popup: 'modern-popup' } }); }
 
-    function showModernLoading() {
-        Swal.fire({
-            html: '<div class="py-4"><i class="fas fa-circle-notch fa-spin text-purple-600 text-4xl mb-4"></i><h2 class="swal2-title">দয়া করে অপেক্ষা করুন...</h2></div>',
-            showConfirmButton: false, allowOutsideClick: false, customClass: { popup: 'modern-popup' }
-        });
-    }
-
-    // ========================================================
     // APP LOGIC
-    // ========================================================
-
     function closePromoModal() { document.getElementById('promo-modal').classList.add('hidden'); sessionStorage.setItem('promoShown', 'true'); }
     function showPromoModal() { if (isPromoEnabled && !sessionStorage.getItem('promoShown')) { document.getElementById('promo-modal').classList.remove('hidden'); } }
 
     let fabOpen = false;
     function toggleFab() {
-        fabOpen = !fabOpen;
-        const items = document.querySelectorAll('.fab-item'); const icon = document.getElementById('fab-icon'); const fabText = document.getElementById('fab-text');
-        if (fabOpen) {
-            items.forEach(item => { item.classList.remove('scale-0', 'opacity-0', 'translate-y-10'); item.classList.add('scale-100', 'opacity-100', 'translate-y-0'); });
-            icon.classList.remove('fa-phone-alt'); icon.classList.add('fa-times', 'rotate-90');
-            if(fabText) { fabText.classList.add('scale-x-0', 'opacity-0'); setTimeout(() => fabText.classList.add('hidden'), 200); }
-        } else {
-            items.forEach(item => { item.classList.add('scale-0', 'opacity-0', 'translate-y-10'); item.classList.remove('scale-100', 'opacity-100', 'translate-y-0'); });
-            icon.classList.remove('fa-times', 'rotate-90'); icon.classList.add('fa-phone-alt');
-            if(fabText) { fabText.classList.remove('hidden'); setTimeout(() => fabText.classList.remove('scale-x-0', 'opacity-0'), 10); }
-        }
+        fabOpen = !fabOpen; const items = document.querySelectorAll('.fab-item'); const icon = document.getElementById('fab-icon'); const fabText = document.getElementById('fab-text');
+        if (fabOpen) { items.forEach(item => { item.classList.remove('scale-0', 'opacity-0', 'translate-y-10'); item.classList.add('scale-100', 'opacity-100', 'translate-y-0'); }); icon.classList.remove('fa-phone-alt'); icon.classList.add('fa-times', 'rotate-90'); if(fabText) { fabText.classList.add('scale-x-0', 'opacity-0'); setTimeout(() => fabText.classList.add('hidden'), 200); } } 
+        else { items.forEach(item => { item.classList.add('scale-0', 'opacity-0', 'translate-y-10'); item.classList.remove('scale-100', 'opacity-100', 'translate-y-0'); }); icon.classList.remove('fa-times', 'rotate-90'); icon.classList.add('fa-phone-alt'); if(fabText) { fabText.classList.remove('hidden'); setTimeout(() => fabText.classList.remove('scale-x-0', 'opacity-0'), 10); } }
     }
 
     function loadGlobalSettings() {
         db.collection("settings").doc("general").onSnapshot((doc) => {
-            let logoUrl = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjHzGkVp1DWBuwnmPN0WUR_IJgPd9KBUuH9rEzYzLDUm-YMVHmDy44FwC-tAXA8teCPZF471-iBSjJCwl9d9G014QHmmWVB8fHsCuGArflFNsFPElpaamshtejBt_KYyKY49xW61_PffvceWu5RRNlKqijZNeFVxiIkqFNj_eEyI4hVCdTxLEn16B78DJE/s320/20260421_011113.png";
-            let siteName = "Zeno Bazar";
+            let logoUrl = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjHzGkVp1DWBuwnmPN0WUR_IJgPd9KBUuH9rEzYzLDUm-YMVHmDy44FwC-tAXA8teCPZF471-iBSjJCwl9d9G014QHmmWVB8fHsCuGArflFNsFPElpaamshtejBt_KYyKY49xW61_PffvceWu5RRNlKqijZNeFVxiIkqFNj_eEyI4hVCdTxLEn16B78DJE/s320/20260421_011113.png"; let siteName = "Zeno Bazar";
             if (doc.exists) {
-                const data = doc.data();
-                if(data.logoUrl) logoUrl = data.logoUrl; if(data.siteName) siteName = data.siteName;
-                isPromoEnabled = data.promoEnabled !== false; 
-                ffApiEnabled = data.ffApiEnabled !== false; ffApiUrl = data.ffApiUrl || ""; ffApiKey = data.ffApiKey || "";
-                
-                const promoImgEl = document.getElementById('promo-img'); const promoTextEl = document.getElementById('promo-text'); const promoLinkEl = document.getElementById('promo-link'); const promoBtnTextEl = document.getElementById('promo-btn-text');
-                if(promoImgEl) promoImgEl.src = data.promoImg || "https://i.postimg.cc/y8B65f2x/default-promo.jpg";
-                if(promoTextEl) promoTextEl.innerText = data.promoText || "সকল প্রকার অফার সম্পর্কে জানতে নিচে ক্লিক করে আমাদের Telegram channel এ জয়েন করুন।";
-                if(promoBtnTextEl) promoBtnTextEl.innerText = data.promoBtnText || "ক্লিক করুন";
-                if(promoLinkEl) promoLinkEl.href = data.promoLink || data.telegram || "#";
-
+                const data = doc.data(); if(data.logoUrl) logoUrl = data.logoUrl; if(data.siteName) siteName = data.siteName;
+                isPromoEnabled = data.promoEnabled !== false; ffApiEnabled = data.ffApiEnabled !== false; ffApiUrl = data.ffApiUrl || ""; ffApiKey = data.ffApiKey || "";
+                if(document.getElementById('promo-img')) document.getElementById('promo-img').src = data.promoImg || "https://i.postimg.cc/y8B65f2x/default-promo.jpg";
+                if(document.getElementById('promo-text')) document.getElementById('promo-text').innerText = data.promoText || "সকল প্রকার অফার সম্পর্কে জানতে নিচে ক্লিক করে আমাদের Telegram channel এ জয়েন করুন।";
+                if(document.getElementById('promo-btn-text')) document.getElementById('promo-btn-text').innerText = data.promoBtnText || "ক্লিক করুন";
+                if(document.getElementById('promo-link')) document.getElementById('promo-link').href = data.promoLink || data.telegram || "#";
                 if(data.notice) document.getElementById('notice-text').innerText = data.notice;
                 const waNum = data.whatsapp || "01700000000"; const tgLink = data.telegram || "#"; const appLink = data.appLink || "#";
-
-                document.getElementById('home-whatsapp').href = "https://wa.me/" + waNum;
-                document.getElementById('home-telegram').href = tgLink;
-                document.getElementById('dev-link-wa').href = "https://wa.me/" + waNum;
-                
-                const homeAppBtn = document.getElementById('home-app-dl');
-                if(homeAppBtn) { homeAppBtn.href = appLink; homeAppBtn.onclick = function(e) { if(appLink === "#") { e.preventDefault(); showModernAlert('Notice', 'App coming soon!', 'info'); } }; }
-
-                const ftAppBtn = document.getElementById('ft-app-link');
-                if(ftAppBtn) { ftAppBtn.href = appLink; if(appLink !== "#") { ftAppBtn.onclick = function(e) { e.preventDefault(); window.open(appLink, '_blank'); }; } }
-
-                document.getElementById('ft-whatsapp').href = "https://wa.me/" + waNum; document.getElementById('ft-wa-num').innerText = waNum;
-                document.getElementById('ft-telegram').href = tgLink;
+                document.getElementById('home-whatsapp').href = "https://wa.me/" + waNum; document.getElementById('home-telegram').href = tgLink; document.getElementById('dev-link-wa').href = "https://wa.me/" + waNum;
+                const homeAppBtn = document.getElementById('home-app-dl'); if(homeAppBtn) { homeAppBtn.href = appLink; homeAppBtn.onclick = function(e) { if(appLink === "#") { e.preventDefault(); showModernAlert('Notice', 'App coming soon!', 'info'); } }; }
+                const ftAppBtn = document.getElementById('ft-app-link'); if(ftAppBtn) { ftAppBtn.href = appLink; if(appLink !== "#") ftAppBtn.onclick = function(e) { e.preventDefault(); window.open(appLink, '_blank'); }; }
+                document.getElementById('ft-whatsapp').href = "https://wa.me/" + waNum; document.getElementById('ft-wa-num').innerText = waNum; document.getElementById('ft-telegram').href = tgLink;
                 if(data.facebook) document.getElementById('ft-fb').href = data.facebook; if(data.instagram) document.getElementById('ft-insta').href = data.instagram; if(data.youtube) document.getElementById('ft-yt').href = data.youtube;
-
-                const waFab = document.getElementById('fab-whatsapp'); if(waFab) waFab.href = "https://wa.me/" + waNum;
-                const tgFab = document.getElementById('fab-telegram'); if(tgFab) tgFab.href = tgLink;
+                if(document.getElementById('fab-whatsapp')) document.getElementById('fab-whatsapp').href = "https://wa.me/" + waNum;
+                if(document.getElementById('fab-telegram')) document.getElementById('fab-telegram').href = tgLink;
             }
-            const authLogo = document.getElementById('auth-logo-img'); if(authLogo) authLogo.src = logoUrl;
-            const footerName = document.getElementById('footer-site-name'); if(footerName) footerName.innerText = siteName;
+            if(document.getElementById('auth-logo-img')) document.getElementById('auth-logo-img').src = logoUrl;
+            if(document.getElementById('footer-site-name')) document.getElementById('footer-site-name').innerText = siteName;
             document.title = siteName;
         });
     }
@@ -742,17 +480,13 @@
         if(view === 'login') document.getElementById('login-form').classList.remove('hidden');
         else if (view === 'register') document.getElementById('register-form').classList.remove('hidden');
         else if (view === 'forgot') document.getElementById('forgot-form').classList.remove('hidden');
-
-        if(pushHistory) { window.history.pushState({auth: view}, '', "?auth=" + view); }
+        if(pushHistory) window.history.pushState({auth: view}, '', "?auth=" + view);
     }
 
     function handleForgotPassword() {
-        const emailInput = document.getElementById('forgot-email').value.trim();
-        if(!emailInput) return showToast('Please enter your email address!', 'warning');
+        const email = document.getElementById('forgot-email').value.trim(); if(!email) return showToast('Please enter your email address!', 'warning');
         showModernLoading();
-        auth.sendPasswordResetEmail(emailInput)
-        .then(() => { Swal.close(); showToast('Reset link sent to your email!', 'success'); document.getElementById('forgot-email').value = ''; toggleAuth('login'); })
-        .catch(err => { Swal.close(); showModernAlert('Error', err.message, 'error'); });
+        auth.sendPasswordResetEmail(email).then(() => { Swal.close(); showToast('Reset link sent to your email!', 'success'); document.getElementById('forgot-email').value = ''; toggleAuth('login'); }).catch(err => { Swal.close(); showModernAlert('Error', err.message, 'error'); });
     }
 
     function googleLogin() {
@@ -760,20 +494,8 @@
         auth.signInWithPopup(provider).then(result => {
             const user = result.user;
             return db.collection('users').doc(user.uid).get().then(doc => {
-                if(!doc.exists) { 
-                    return db.collection('users').doc(user.uid).set({ 
-                        name: user.displayName || 'User', 
-                        email: user.email, 
-                        phone: '', 
-                        photoURL: user.photoURL || '',
-                        balance: 0, 
-                        createdAt: new Date() 
-                    }); 
-                } else {
-                    if(user.photoURL) {
-                        db.collection('users').doc(user.uid).update({ photoURL: user.photoURL });
-                    }
-                }
+                if(!doc.exists) return db.collection('users').doc(user.uid).set({ name: user.displayName || 'User', email: user.email, phone: '', photoURL: user.photoURL || '', balance: 0, createdAt: new Date() });
+                else if(user.photoURL) db.collection('users').doc(user.uid).update({ photoURL: user.photoURL });
             });
         }).catch(err => { showModernAlert('Login Failed', err.message, 'error'); });
     }
@@ -783,41 +505,32 @@
         if(!name || !email || !pass || !phone || !passConfirm) return showToast('Please fill all fields', 'error');
         if(pass !== passConfirm) return showToast('Passwords do not match!', 'error');
         if(pass.length < 6) return showToast('Password must be at least 6 characters', 'error');
-
         showModernLoading();
-        auth.createUserWithEmailAndPassword(email, pass)
-            .then((cred) => db.collection('users').doc(cred.user.uid).set({ name: name, email: email, phone: phone, balance: 0, createdAt: new Date() }))
-            .then(() => { Swal.close(); showToast('Account Created Successfully!', 'success'); })
-            .catch((err) => { Swal.close(); showModernAlert('Error', err.message, 'error'); });
+        auth.createUserWithEmailAndPassword(email, pass).then((cred) => db.collection('users').doc(cred.user.uid).set({ name: name, email: email, phone: phone, balance: 0, createdAt: new Date() })).then(() => { Swal.close(); showToast('Account Created Successfully!', 'success'); }).catch((err) => { Swal.close(); showModernAlert('Error', err.message, 'error'); });
     }
 
     function handleLogin() {
         const email = document.getElementById('login-email').value.trim(); const pass = document.getElementById('login-pass').value;
         if(!email || !pass) return showToast('Please fill email and password', 'error');
-        showModernLoading();
-        auth.signInWithEmailAndPassword(email, pass).then(() => Swal.close()).catch((err) => { Swal.close(); showModernAlert('Login Failed', err.message, 'error'); });
+        showModernLoading(); auth.signInWithEmailAndPassword(email, pass).then(() => Swal.close()).catch((err) => { Swal.close(); showModernAlert('Login Failed', err.message, 'error'); });
     }
 
     function handleLogout() { auth.signOut().then(() => location.reload()); }
 
     auth.onAuthStateChanged((user) => {
-        setTimeout(() => {
-            const loader = document.getElementById('initial-loader');
-            if(loader) { loader.classList.add('opacity-0'); setTimeout(() => loader.classList.add('hidden'), 300); }
-        }, 500);
-
+        setTimeout(() => { const loader = document.getElementById('initial-loader'); if(loader) { loader.classList.add('opacity-0'); setTimeout(() => loader.classList.add('hidden'), 300); } }, 500);
         if (user) {
             currentUser = user;
             document.getElementById('auth-sec').classList.add('hidden');
             document.getElementById('app-top-nav').classList.remove('hidden'); document.getElementById('app-content').classList.remove('hidden'); document.getElementById('bottom-nav').classList.remove('hidden'); document.getElementById('fab-container').classList.remove('hidden');
-            const footerInner = document.getElementById('footer-inner'); if(footerInner) { footerInner.classList.remove('pb-10'); footerInner.classList.add('pb-24'); }
+            if(document.getElementById('footer-inner')) { document.getElementById('footer-inner').classList.remove('pb-10'); document.getElementById('footer-inner').classList.add('pb-24'); }
             loadUserData(user.uid); calculateUserStats(user.uid); loadAppContent(); setTimeout(showPromoModal, 1000);
         } else {
             currentUser = null;
             document.getElementById('auth-sec').classList.remove('hidden');
             document.getElementById('app-top-nav').classList.add('hidden'); document.getElementById('app-content').classList.add('hidden'); document.getElementById('bottom-nav').classList.add('hidden'); document.getElementById('fab-container').classList.add('hidden');
             document.getElementById('shared-footer').classList.remove('hidden');
-            const footerInner = document.getElementById('footer-inner'); if(footerInner) { footerInner.classList.remove('pb-24'); footerInner.classList.add('pb-10'); }
+            if(document.getElementById('footer-inner')) { document.getElementById('footer-inner').classList.remove('pb-24'); document.getElementById('footer-inner').classList.add('pb-10'); }
             handleUrlRouting();
         }
     });
@@ -828,69 +541,38 @@
                 const data = doc.data(); currentUserDataObj = data; userBalance = data.balance || 0;
                 document.getElementById('header-balance').innerText = userBalance; document.getElementById('current-wallet-bal').innerText = userBalance;
                 document.getElementById('profile-name').innerText = data.name || "User"; document.getElementById('profile-email').innerText = data.email; document.getElementById('profile-balance').innerText = userBalance;
-                
-                const profileImage = document.getElementById('profile-image');
-                const profileIcon = document.getElementById('profile-icon');
+                const profileImage = document.getElementById('profile-image'); const profileIcon = document.getElementById('profile-icon');
                 let photoUrl = data.photoURL || (currentUser ? currentUser.photoURL : null);
-
-                if (photoUrl && profileImage && profileIcon) {
-                    profileImage.src = photoUrl;
-                    profileImage.classList.remove('hidden');
-                    profileIcon.classList.add('hidden');
-                } else if (profileImage && profileIcon) {
-                    profileImage.classList.add('hidden');
-                    profileIcon.classList.remove('hidden');
-                }
+                if (photoUrl && profileImage && profileIcon) { profileImage.src = photoUrl; profileImage.classList.remove('hidden'); profileIcon.classList.add('hidden'); } 
+                else if (profileImage && profileIcon) { profileImage.classList.add('hidden'); profileIcon.classList.remove('hidden'); }
             }
         });
     }
 
-    function loadSettingsData() {
-        if(currentUserDataObj) {
-            document.getElementById('set-name').value = currentUserDataObj.name || ''; document.getElementById('set-phone').value = currentUserDataObj.phone || ''; document.getElementById('set-email').value = currentUserDataObj.email || ''; document.getElementById('set-pass').value = '';
-        }
-    }
+    function loadSettingsData() { if(currentUserDataObj) { document.getElementById('set-name').value = currentUserDataObj.name || ''; document.getElementById('set-phone').value = currentUserDataObj.phone || ''; document.getElementById('set-email').value = currentUserDataObj.email || ''; document.getElementById('set-pass').value = ''; } }
 
     function saveSettings() {
         const newName = document.getElementById('set-name').value.trim(); const newPhone = document.getElementById('set-phone').value.trim(); const newPass = document.getElementById('set-pass').value;
         if(!newName) return showToast('Full Name cannot be empty', 'error');
-
-        showModernLoading();
-        const updatePromises = [];
+        showModernLoading(); const updatePromises = [];
         updatePromises.push(db.collection('users').doc(currentUser.uid).update({ name: newName, phone: newPhone }));
-        if(newPass) {
-            if(newPass.length < 6) { Swal.close(); return showToast('Password must be at least 6 characters', 'error'); }
-            updatePromises.push(currentUser.updatePassword(newPass));
-        }
-
-        Promise.all(updatePromises).then(() => {
-            Swal.close(); showToast('Settings saved successfully!', 'success'); document.getElementById('set-pass').value = ''; 
-        }).catch(err => {
-            Swal.close();
-            if(err.code === 'auth/requires-recent-login') showModernAlert('Session Expired', 'Please log out and log in again to change password.', 'warning');
-            else showModernAlert('Error', err.message, 'error');
-        });
+        if(newPass) { if(newPass.length < 6) { Swal.close(); return showToast('Password must be at least 6 characters', 'error'); } updatePromises.push(currentUser.updatePassword(newPass)); }
+        Promise.all(updatePromises).then(() => { Swal.close(); showToast('Settings saved successfully!', 'success'); document.getElementById('set-pass').value = ''; }).catch(err => { Swal.close(); if(err.code === 'auth/requires-recent-login') showModernAlert('Session Expired', 'Please log out and log in again to change password.', 'warning'); else showModernAlert('Error', err.message, 'error'); });
     }
 
     function calculateUserStats(uid) {
         document.getElementById('profile-total-orders').innerText = "..."; document.getElementById('profile-total-spent').innerText = "...";
         db.collection('orders').where('userId', '==', uid).get().then((snapshot) => {
             let totalOrders = 0; let totalSpent = 0;
-            snapshot.forEach((doc) => {
-                const data = doc.data(); totalOrders++; 
-                const status = data.status ? data.status.toLowerCase() : '';
-                if (status === 'success' || status === 'complete' || status === 'completed') totalSpent += parseInt(data.price || 0);
-            });
+            snapshot.forEach((doc) => { const data = doc.data(); totalOrders++; const status = data.status ? data.status.toLowerCase() : ''; if (status === 'success' || status === 'complete' || status === 'completed') totalSpent += parseInt(data.price || 0); });
             document.getElementById('profile-total-orders').innerText = totalOrders; document.getElementById('profile-total-spent').innerText = totalSpent;
         }).catch(err => { document.getElementById('profile-total-orders').innerText = "0"; document.getElementById('profile-total-spent').innerText = "0"; });
     }
 
     function loadAppContent() {
         db.collection("services").onSnapshot((snapshot) => {
-            const container = document.getElementById('categories-container');
-            container.innerHTML = ""; gamesData = {}; 
+            const container = document.getElementById('categories-container'); container.innerHTML = ""; gamesData = {}; 
             if(snapshot.empty) return container.innerHTML = `<div class="text-center text-gray-400 py-10">No Products Found</div>`;
-            
             const categorizedServices = {}; const categoryEarliestTime = {};
             snapshot.forEach(doc => {
                 const item = doc.data(); gamesData[doc.id] = item; const cat = item.category || "All Products"; 
@@ -898,21 +580,13 @@
                 else { if ((item.createdAt || Date.now()) < categoryEarliestTime[cat]) categoryEarliestTime[cat] = item.createdAt || Date.now(); }
                 categorizedServices[cat].push({ id: doc.id, ...item });
             });
-
             const sortedCategories = Object.keys(categorizedServices).sort((a, b) => categoryEarliestTime[a] - categoryEarliestTime[b]);
             for (const categoryName of sortedCategories) {
                 const items = categorizedServices[categoryName]; items.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
                 let categoryHTML = `<div class="mb-4 mt-8 text-center"><h3 class="font-bold text-gray-900 text-[22px] tracking-wide relative inline-block uppercase">${categoryName}</h3></div><div class="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-3 md:gap-4 px-1 md:px-4 mb-4">`;
-                items.forEach(item => {
-                    categoryHTML += `
-                         <div onclick="openTopUpPage('${item.id}', '${item.name}', '${item.image}')" class="bg-white rounded-lg shadow-sm overflow-hidden cursor-pointer transform hover:-translate-y-1 transition-all duration-300 border border-gray-100 group flex flex-col">
-                            <div class="w-full aspect-square bg-gray-50 overflow-hidden relative flex-shrink-0"><img src="${item.image}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/200'"></div>
-                            <div class="p-2 text-center bg-white border-t border-gray-50 flex-1 flex items-center justify-center"><p class="text-[10px] font-bold text-gray-700 truncate w-full">${item.name}</p></div>
-                        </div>`;
-                });
+                items.forEach(item => { categoryHTML += `<div onclick="openTopUpPage('${item.id}', '${item.name}', '${item.image}')" class="bg-white rounded-lg shadow-sm overflow-hidden cursor-pointer transform hover:-translate-y-1 transition-all duration-300 border border-gray-100 group flex flex-col"><div class="w-full aspect-square bg-gray-50 overflow-hidden relative flex-shrink-0"><img src="${item.image}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/200'"></div><div class="p-2 text-center bg-white border-t border-gray-50 flex-1 flex items-center justify-center"><p class="text-[10px] font-bold text-gray-700 truncate w-full">${item.name}</p></div></div>`; });
                 categoryHTML += `</div>`; container.innerHTML += categoryHTML;
             }
-            
             if (!hasRouted) { handleUrlRouting(); hasRouted = true; }
         });
         loadBanners(); loadRecentOrdersGlobal(); 
@@ -924,35 +598,30 @@
         selectPaymentType('wallet');
         document.getElementById('topup-game-title').innerText = gameName; document.getElementById('topup-sub-title').innerText = gameName + " "; document.getElementById('topup-game-img').src = gameImg;
 
-        const gameData = gamesData[gameId];
-        const inputContainer = document.getElementById('account-info-container');
+        const gameData = gamesData[gameId]; const inputContainer = document.getElementById('account-info-container');
         if(gameData && gameData.requiresInput === false) inputContainer.classList.add('hidden');
         else { inputContainer.classList.remove('hidden'); document.getElementById('game-input-label').innerText = gameData.inputLabel || "Account Info"; document.getElementById('game-player-id').placeholder = gameData.inputPlaceholder || "আপনার Uid দিন"; }
 
-        const nameCheckBtn = document.getElementById('btn-name-check');
-        if (gameData && gameData.allowNameCheck === true) nameCheckBtn.classList.remove('hidden'); else nameCheckBtn.classList.add('hidden');
-        const qtyContainer = document.getElementById('quantity-container');
-        if(gameData && gameData.allowQuantity === true) qtyContainer.classList.remove('hidden'); else qtyContainer.classList.add('hidden');
-        const rulesBox = document.getElementById('game-rules-box'); const rulesText = document.getElementById('game-rules-text');
-        if(gameData && gameData.rules) { rulesText.innerText = gameData.rules; rulesBox.classList.remove('hidden'); } else rulesBox.classList.add('hidden');
+        if (gameData && gameData.allowNameCheck === true) document.getElementById('btn-name-check').classList.remove('hidden'); else document.getElementById('btn-name-check').classList.add('hidden');
+        if(gameData && gameData.allowQuantity === true) document.getElementById('quantity-container').classList.remove('hidden'); else document.getElementById('quantity-container').classList.add('hidden');
+        if(gameData && gameData.rules) { document.getElementById('game-rules-text').innerText = gameData.rules; document.getElementById('game-rules-box').classList.remove('hidden'); } else document.getElementById('game-rules-box').classList.add('hidden');
 
         showSec('topup', pushHistory, "game=" + gameId);
         
         const grid = document.getElementById('products-grid'); const loader = document.getElementById('product-loader');
         grid.innerHTML = ""; loader.classList.remove('hidden');
 
-        db.collection('services').doc(gameId).collection('products').orderBy('price', 'asc').get()
-            .then((snapshot) => {
-                loader.classList.add('hidden');
-                if(snapshot.empty) { grid.innerHTML = `<div class="col-span-2 md:col-span-4 text-center text-gray-400 py-4">No packages available</div>`; return; }
-                snapshot.forEach(doc => {
-                    const prod = doc.data(); let isOutOfStock = prod.outOfStock === true;
-                    const card = document.createElement('div'); card.className = "product-card " + (isOutOfStock ? "opacity-60 bg-gray-50 border-gray-200 cursor-not-allowed" : "");
-                    if (!isOutOfStock) card.onclick = () => selectProduct(card, prod.name, prod.price, doc.id);
-                    card.innerHTML = `<div class="flex items-center"><div class="product-bullet ${isOutOfStock ? 'bg-gray-300' : ''}"></div><div class="flex flex-col"><span class="text-xs font-bold ${isOutOfStock ? 'text-gray-400' : 'text-gray-600'}">${prod.name}</span>${isOutOfStock ? '<span class="text-[9px] text-red-500 font-bold tracking-wider mt-0.5">OUT OF STOCK</span>' : ''}</div></div><span class="${isOutOfStock ? 'text-gray-400' : 'text-purple-600'} font-bold text-sm">৳${prod.price}</span>`;
-                    grid.appendChild(card);
-                });
+        db.collection('services').doc(gameId).collection('products').orderBy('price', 'asc').get().then((snapshot) => {
+            loader.classList.add('hidden');
+            if(snapshot.empty) { grid.innerHTML = `<div class="col-span-2 md:col-span-4 text-center text-gray-400 py-4">No packages available</div>`; return; }
+            snapshot.forEach(doc => {
+                const prod = doc.data(); let isOutOfStock = prod.outOfStock === true;
+                const card = document.createElement('div'); card.className = "product-card " + (isOutOfStock ? "opacity-60 bg-gray-50 border-gray-200 cursor-not-allowed" : "");
+                if (!isOutOfStock) card.onclick = () => selectProduct(card, prod.name, prod.price, doc.id);
+                card.innerHTML = `<div class="flex items-center"><div class="product-bullet ${isOutOfStock ? 'bg-gray-300' : ''}"></div><div class="flex flex-col"><span class="text-xs font-bold ${isOutOfStock ? 'text-gray-400' : 'text-gray-600'}">${prod.name}</span>${isOutOfStock ? '<span class="text-[9px] text-red-500 font-bold tracking-wider mt-0.5">OUT OF STOCK</span>' : ''}</div></div><span class="${isOutOfStock ? 'text-gray-400' : 'text-purple-600'} font-bold text-sm">৳${prod.price}</span>`;
+                grid.appendChild(card);
             });
+        });
     }
 
     async function checkPlayerName() {
@@ -962,39 +631,19 @@
         if (!ffApiUrl) return showToast('API URL সেট করা নেই। অ্যাডমিন প্যানেল চেক করুন।', 'error');
 
         showModernLoading();
-
         try {
-            const url = ffApiUrl + playerId;
-            const fetchOptions = {}; if (ffApiKey) fetchOptions.headers = { 'Authorization': ffApiKey };
+            const url = ffApiUrl + playerId; const fetchOptions = {}; if (ffApiKey) fetchOptions.headers = { 'Authorization': ffApiKey };
             const response = await fetch(url, fetchOptions); const data = await response.json();
-
             if (data.name || data.nickname || data.accountName) {
                 const playerName = data.name || data.nickname || data.accountName;
-                Swal.fire({
-                    html: `<div class="custom-swal-icon icon-success"><i class="fas fa-check"></i></div><h2 class="swal2-title text-green-600">আইডি সঠিক!</h2>
-                           <div class="mt-4 text-center bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm">
-                              <p class="text-[13px] font-bold text-gray-500 mb-1 uppercase tracking-widest">গেমের নাম</p>
-                              <p class="font-bold text-xl text-purple-600 select-all">${playerName}</p>
-                           </div>`,
-                    confirmButtonColor: '#9333ea', confirmButtonText: 'ঠিক আছে', customClass: { popup: 'modern-popup' }
-                });
+                Swal.fire({ html: `<div class="custom-swal-icon icon-success"><i class="fas fa-check"></i></div><h2 class="swal2-title text-green-600">আইডি সঠিক!</h2><div class="mt-4 text-center bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm"><p class="text-[13px] font-bold text-gray-500 mb-1 uppercase tracking-widest">গেমের নাম</p><p class="font-bold text-xl text-purple-600 select-all">${playerName}</p></div>`, confirmButtonColor: '#9333ea', confirmButtonText: 'ঠিক আছে', customClass: { popup: 'modern-popup' } });
             } else throw new Error('Name Not Found');
         } catch (error) {
             try {
                  const fallbackResponse = await fetch(`https://free-ff-api-bd.vercel.app/info?uid=${playerId}`); const fallbackData = await fallbackResponse.json();
-                 if(fallbackData.name) {
-                     Swal.fire({
-                        html: `<div class="custom-swal-icon icon-success"><i class="fas fa-check"></i></div><h2 class="swal2-title text-green-600">আইডি সঠিক!</h2>
-                           <div class="mt-4 text-center bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm">
-                              <p class="text-[13px] font-bold text-gray-500 mb-1 uppercase tracking-widest">গেমের নাম</p>
-                              <p class="font-bold text-xl text-purple-600 select-all">${fallbackData.name}</p>
-                           </div>`,
-                        confirmButtonColor: '#9333ea', confirmButtonText: 'ঠিক আছে', customClass: { popup: 'modern-popup' }
-                    });
-                 } else throw new Error('Not found');
-            } catch(e) {
-                showModernAlert('আইডি পাওয়া যায়নি', 'সার্ভার সমস্যা অথবা ভুল গেম আইডি। দয়া করে সঠিক UID দিন।', 'error');
-            }
+                 if(fallbackData.name) Swal.fire({ html: `<div class="custom-swal-icon icon-success"><i class="fas fa-check"></i></div><h2 class="swal2-title text-green-600">আইডি সঠিক!</h2><div class="mt-4 text-center bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm"><p class="text-[13px] font-bold text-gray-500 mb-1 uppercase tracking-widest">গেমের নাম</p><p class="font-bold text-xl text-purple-600 select-all">${fallbackData.name}</p></div>`, confirmButtonColor: '#9333ea', confirmButtonText: 'ঠিক আছে', customClass: { popup: 'modern-popup' } });
+                 else throw new Error('Not found');
+            } catch(e) { showModernAlert('আইডি পাওয়া যায়নি', 'সার্ভার সমস্যা অথবা ভুল গেম আইডি। দয়া করে সঠিক UID দিন।', 'error'); }
         }
     }
 
@@ -1004,21 +653,15 @@
         updateTotalPrice(); document.getElementById('btn-buy-now').classList.remove('opacity-50', 'cursor-not-allowed');
     }
 
-    function updateTotalPrice() {
-        if(!selectedProduct) return;
-        const total = selectedProduct.price * selectedQuantity; document.getElementById('needed-for-product').innerText = total;
-    }
-
+    function updateTotalPrice() { if(!selectedProduct) return; const total = selectedProduct.price * selectedQuantity; document.getElementById('needed-for-product').innerText = total; }
     function increaseQty() { selectedQuantity++; document.getElementById('display-qty').innerText = selectedQuantity; updateTotalPrice(); }
     function decreaseQty() { if(selectedQuantity > 1) { selectedQuantity--; document.getElementById('display-qty').innerText = selectedQuantity; updateTotalPrice(); } }
 
     function selectPaymentType(type) {
         activePaymentType = type;
-        const walletCard = document.getElementById('paytype-wallet'); const instantCard = document.getElementById('paytype-instant');
-        walletCard.classList.remove('selected'); walletCard.querySelector('.pay-type-ribbon').classList.add('hidden');
-        instantCard.classList.remove('selected'); instantCard.querySelector('.pay-type-ribbon').classList.add('hidden');
-        const selectedEl = document.getElementById('paytype-' + type);
-        selectedEl.classList.add('selected'); selectedEl.querySelector('.pay-type-ribbon').classList.remove('hidden');
+        document.getElementById('paytype-wallet').classList.remove('selected'); document.getElementById('paytype-wallet').querySelector('.pay-type-ribbon').classList.add('hidden');
+        document.getElementById('paytype-instant').classList.remove('selected'); document.getElementById('paytype-instant').querySelector('.pay-type-ribbon').classList.add('hidden');
+        document.getElementById('paytype-' + type).classList.add('selected'); document.getElementById('paytype-' + type).querySelector('.pay-type-ribbon').classList.remove('hidden');
     }
 
     function processOrder() {
@@ -1032,30 +675,15 @@
 
         if (activePaymentType === 'wallet') {
             if(userBalance < totalPrice) return showModernAlert('Insufficient Balance', 'Please Add Money first or select Instant Pay.', 'error');
-
             Swal.fire({
-                html: `<div class="custom-swal-icon icon-info"><i class="fas fa-shopping-cart"></i></div>
-                       <h2 class="swal2-title">Confirm Purchase?</h2>
-                       <div class="mt-4 text-left bg-gray-50 p-4 rounded-xl border border-gray-200">
-                          <p class="text-sm text-gray-500 mb-2">Payment: <span class="font-bold text-gray-800">Wallet Pay</span></p>
-                          ${requiresInput ? `<p class="text-sm text-gray-500 mb-2">${currentInputLabel}: <span class="font-bold text-purple-600">${inputValue}</span></p>` : ''}
-                          <p class="text-sm text-gray-500 mb-2">Package: <span class="font-bold text-gray-800">${selectedProduct.name}${qtyLabel}</span></p>
-                          <hr class="my-2 border-gray-200">
-                          <p class="text-base text-gray-800 font-bold">Total: ৳${totalPrice}</p>
-                       </div>`,
+                html: `<div class="custom-swal-icon icon-info"><i class="fas fa-shopping-cart"></i></div><h2 class="swal2-title">Confirm Purchase?</h2><div class="mt-4 text-left bg-gray-50 p-4 rounded-xl border border-gray-200"><p class="text-sm text-gray-500 mb-2">Payment: <span class="font-bold text-gray-800">Wallet Pay</span></p>${requiresInput ? `<p class="text-sm text-gray-500 mb-2">${currentInputLabel}: <span class="font-bold text-purple-600">${inputValue}</span></p>` : ''}<p class="text-sm text-gray-500 mb-2">Package: <span class="font-bold text-gray-800">${selectedProduct.name}${qtyLabel}</span></p><hr class="my-2 border-gray-200"><p class="text-base text-gray-800 font-bold">Total: ৳${totalPrice}</p></div>`,
                 showCancelButton: true, confirmButtonColor: '#9333ea', confirmButtonText: 'Buy Now', cancelButtonText: 'Cancel', customClass: { popup: 'modern-popup' }
             }).then((result) => {
                 if (result.isConfirmed) {
                     showModernLoading();
                     const newBalance = userBalance - totalPrice;
                     db.collection('users').doc(currentUser.uid).update({ balance: newBalance })
-                    .then(() => db.collection('orders').add({
-                            userId: currentUser.uid, userName: currentUser.email, gameName: selectedGameName, gameId: selectedGameId,
-                            playerId: requiresInput ? inputValue : 'N/A', inputType: requiresInput ? currentInputLabel : 'None', 
-                            productName: selectedProduct.name, price: totalPrice, quantity: selectedQuantity, unitPrice: selectedProduct.price,
-                            paymentMethod: 'Wallet Balance', status: 'pending', date: new Date()
-                        })
-                    )
+                    .then(() => db.collection('orders').add({ userId: currentUser.uid, userName: currentUser.email, gameName: selectedGameName, gameId: selectedGameId, playerId: requiresInput ? inputValue : 'N/A', inputType: requiresInput ? currentInputLabel : 'None', productName: selectedProduct.name, price: totalPrice, quantity: selectedQuantity, unitPrice: selectedProduct.price, paymentMethod: 'Wallet Balance', status: 'pending', date: new Date() }))
                     .then(() => { Swal.close(); showToast('Order Placed Successfully!', 'success'); showSec('history'); })
                     .catch(err => { Swal.close(); showModernAlert('Error', err.message, 'error'); });
                 }
@@ -1063,22 +691,13 @@
         } 
         else if (activePaymentType === 'instant') {
             Swal.fire({
-                html: `<div class="custom-swal-icon icon-info"><i class="fas fa-bolt"></i></div>
-                       <h2 class="swal2-title">Proceed to Payment?</h2>
-                       <div class="mt-3 text-center">
-                          <p class="text-[15px] text-gray-600">You will be redirected to pay <span class="font-bold text-purple-600 text-lg">৳${totalPrice}</span> directly for this order.</p>
-                       </div>`,
+                html: `<div class="custom-swal-icon icon-info"><i class="fas fa-bolt"></i></div><h2 class="swal2-title">Proceed to Payment?</h2><div class="mt-3 text-center"><p class="text-[15px] text-gray-600">You will be redirected to pay <span class="font-bold text-purple-600 text-lg">৳${totalPrice}</span> directly for this order.</p></div>`,
                 showCancelButton: true, confirmButtonColor: '#9333ea', confirmButtonText: 'Proceed', cancelButtonText: 'Cancel', customClass: { popup: 'modern-popup' }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    directOrderDetails = {
-                        gameName: selectedGameName, gameId: selectedGameId, playerId: requiresInput ? inputValue : 'N/A',      
-                        inputType: requiresInput ? currentInputLabel : 'None', productName: selectedProduct.name, price: totalPrice,
-                        quantity: selectedQuantity, unitPrice: selectedProduct.price
-                    };
+                    directOrderDetails = { gameName: selectedGameName, gameId: selectedGameId, playerId: requiresInput ? inputValue : 'N/A', inputType: requiresInput ? currentInputLabel : 'None', productName: selectedProduct.name, price: totalPrice, quantity: selectedQuantity, unitPrice: selectedProduct.price };
                     pgFlowType = 'direct_order'; pgDepositAmount = totalPrice;
-                    showSec('addmoney', false); 
-                    pgShowView('pg-view-methods', true);
+                    showSec('addmoney', false); pgShowView('pg-view-methods', true);
                 }
             });
         }
@@ -1087,25 +706,13 @@
     function showSec(secId, pushHistory = true, extraParam = "") {
         document.querySelectorAll('main section').forEach(s => s.classList.add('hidden'));
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-tab'));
+        if(document.getElementById(secId + '-sec')) document.getElementById(secId + '-sec').classList.remove('hidden');
+        if(document.getElementById('nav-' + secId)) document.getElementById('nav-' + secId).classList.add('active-tab');
         
-        const secEl = document.getElementById(secId + '-sec'); if(secEl) secEl.classList.remove('hidden');
-        const navBtn = document.getElementById('nav-' + secId); if(navBtn) navBtn.classList.add('active-tab');
+        if(document.getElementById('shared-footer')) { if(secId === 'home' || secId === 'topup') document.getElementById('shared-footer').classList.remove('hidden'); else document.getElementById('shared-footer').classList.add('hidden'); }
+        if (document.getElementById('fab-container')) document.getElementById('fab-container').classList.remove('hidden');
         
-        const sharedFooter = document.getElementById('shared-footer');
-        if(sharedFooter) { if(secId === 'home' || secId === 'topup') sharedFooter.classList.remove('hidden'); else sharedFooter.classList.add('hidden'); }
-
-        const fabContainer = document.getElementById('fab-container'); if (fabContainer) fabContainer.classList.remove('hidden');
-        
-        if(secId === 'addmoney') { 
-            if(pgFlowType !== 'direct_order') { 
-                pgFlowType = 'add_money'; 
-                if(pushHistory) {
-                    pgShowView('pg-view-amount', false); 
-                    document.getElementById('pg-amount-input').value = ""; 
-                }
-            } 
-        } 
-        else { pgFlowType = 'add_money'; }
+        if(secId === 'addmoney') { if(pgFlowType !== 'direct_order') { pgFlowType = 'add_money'; if(pushHistory) { pgShowView('pg-view-amount', false); document.getElementById('pg-amount-input').value = ""; } } } else { pgFlowType = 'add_money'; }
 
         if(secId === 'history') loadHistory(); if(secId === 'mycodes') loadMyCodes(); if(secId === 'transactions') loadTransactions(); if(secId === 'settings') loadSettingsData();
 
@@ -1124,19 +731,12 @@
             list.innerHTML = ""; let codes =[];
             snapshot.forEach(doc => { const data = doc.data(); if(data.deliveredCode && data.deliveredCode.trim() !== '') { codes.push({ id: doc.id, ...data }); } });
             codes.sort((a, b) => { let dateA = a.date && a.date.toDate ? a.date.toDate() : new Date(a.date); let dateB = b.date && b.date.toDate ? b.date.toDate() : new Date(b.date); return dateB - dateA; });
-
             if(codes.length === 0) { list.innerHTML = `<div class="flex flex-col items-center justify-center py-10 text-gray-400"><i class="fas fa-box-open text-4xl mb-3 opacity-30"></i><p class="text-sm font-bold text-gray-500">No purchased codes found.</p></div>`; return; }
 
             codes.forEach(d => {
                 let formattedDate = "N/A";
-                if (d.date) {
-                    const dateObj = d.date.toDate ? d.date.toDate() : new Date(d.date);
-                    let day = String(dateObj.getDate()).padStart(2, '0'); let month = String(dateObj.getMonth() + 1).padStart(2, '0'); let year = dateObj.getFullYear();
-                    formattedDate = `${day}-${month}-${year}, ` + dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
-                }
-
-                let shortId = d.id ? d.id.substring(d.id.length - 6).toUpperCase() : "N/A";
-                let qtyText = d.quantity && d.quantity > 1 ? ` (x${d.quantity})` : '';
+                if (d.date) { const dateObj = d.date.toDate ? d.date.toDate() : new Date(d.date); formattedDate = `${String(dateObj.getDate()).padStart(2, '0')}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${dateObj.getFullYear()}, ` + dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }); }
+                let shortId = d.id ? d.id.substring(d.id.length - 6).toUpperCase() : "N/A"; let qtyText = d.quantity && d.quantity > 1 ? ` (x${d.quantity})` : '';
 
                 let rawCodes = d.deliveredCode; let codeArray =[];
                 if (typeof rawCodes === 'string') { codeArray = rawCodes.split(/[\n,]+/).map(c => c.trim()).filter(c => c !== ""); } else if (Array.isArray(rawCodes)) { codeArray = rawCodes; }
@@ -1144,32 +744,13 @@
                 let codesHTML = ''; let allCodesString = codeArray.join('\n'); 
 
                 if (codeArray.length > 1) {
-                    codesHTML += `
-                        <div class="flex justify-between items-center mb-2 mt-3 border-t border-gray-100 pt-3">
-                            <p class="font-bold text-sm text-gray-800">Your Codes (<span class="text-purple-600">${codeArray.length}</span>):</p>
-                            <button onclick="copyCodeSafe(this)" data-code="${allCodesString}" class="bg-purple-50 text-purple-600 border border-purple-200 px-2 py-1 rounded text-[11px] font-bold flex items-center gap-1 active:scale-95 transition"><i class="far fa-copy"></i> Copy All</button>
-                        </div>
-                        <div class="space-y-2 max-h-48 overflow-y-auto pr-1 custom-scrollbar">`;
-                    codeArray.forEach((code, index) => {
-                        codesHTML += `
-                            <div class="flex items-center justify-between bg-[#f8fafc] p-2 rounded border border-gray-200 gap-2">
-                                <div class="flex items-center gap-2 overflow-hidden"><span class="bg-gray-200 text-gray-600 text-[10px] font-bold px-1.5 py-0.5 rounded-sm">#${index + 1}</span><span class="text-[13px] font-mono text-gray-800 truncate select-all">${code}</span></div>
-                                <button onclick="copyCodeSafe(this)" data-code="${code}" class="flex items-center justify-center bg-white border border-gray-300 w-7 h-7 rounded text-gray-600 hover:bg-gray-100 active:scale-95 transition shadow-sm flex-shrink-0"><i class="far fa-copy text-[11px]"></i></button>
-                            </div>`;
-                    });
+                    codesHTML += `<div class="flex justify-between items-center mb-2 mt-3 border-t border-gray-100 pt-3"><p class="font-bold text-sm text-gray-800">Your Codes (<span class="text-purple-600">${codeArray.length}</span>):</p><button onclick="copyCodeSafe(this)" data-code="${allCodesString}" class="bg-purple-50 text-purple-600 border border-purple-200 px-2 py-1 rounded text-[11px] font-bold flex items-center gap-1 active:scale-95 transition"><i class="far fa-copy"></i> Copy All</button></div><div class="space-y-2 max-h-48 overflow-y-auto pr-1 custom-scrollbar">`;
+                    codeArray.forEach((code, index) => { codesHTML += `<div class="flex items-center justify-between bg-[#f8fafc] p-2 rounded border border-gray-200 gap-2"><div class="flex items-center gap-2 overflow-hidden"><span class="bg-gray-200 text-gray-600 text-[10px] font-bold px-1.5 py-0.5 rounded-sm">#${index + 1}</span><span class="text-[13px] font-mono text-gray-800 truncate select-all">${code}</span></div><button onclick="copyCodeSafe(this)" data-code="${code}" class="flex items-center justify-center bg-white border border-gray-300 w-7 h-7 rounded text-gray-600 hover:bg-gray-100 active:scale-95 transition shadow-sm flex-shrink-0"><i class="far fa-copy text-[11px]"></i></button></div>`; });
                     codesHTML += `</div>`;
                 } else {
                     let singleCode = codeArray[0] || d.deliveredCode;
-                    codesHTML += `
-                        <div class="mt-3 border-t border-gray-100 pt-3">
-                            <p class="font-bold mb-1.5 text-sm text-gray-800">Your Code:</p>
-                            <div class="flex items-center justify-between bg-[#f8fafc] p-2 rounded border border-gray-200 gap-2">
-                                <span class="text-[13px] font-mono text-gray-800 truncate select-all pl-1">${singleCode}</span>
-                                <button onclick="copyCodeSafe(this)" data-code="${singleCode}" class="flex items-center gap-1.5 bg-white border border-gray-300 px-3 py-1.5 rounded text-[11px] font-medium text-gray-600 hover:bg-gray-100 active:scale-95 transition shadow-sm flex-shrink-0"><i class="far fa-copy"></i> Copy</button>
-                            </div>
-                        </div>`;
+                    codesHTML += `<div class="mt-3 border-t border-gray-100 pt-3"><p class="font-bold mb-1.5 text-sm text-gray-800">Your Code:</p><div class="flex items-center justify-between bg-[#f8fafc] p-2 rounded border border-gray-200 gap-2"><span class="text-[13px] font-mono text-gray-800 truncate select-all pl-1">${singleCode}</span><button onclick="copyCodeSafe(this)" data-code="${singleCode}" class="flex items-center gap-1.5 bg-white border border-gray-300 px-3 py-1.5 rounded text-[11px] font-medium text-gray-600 hover:bg-gray-100 active:scale-95 transition shadow-sm flex-shrink-0"><i class="far fa-copy"></i> Copy</button></div></div>`;
                 }
-
                 list.innerHTML += `<div class="p-4 border-b border-gray-200 last:border-b-0 text-[13.5px] text-gray-800"><div class="space-y-2.5"><p><span class="font-bold">Serial NO:</span> ${shortId}</p><p><span class="font-bold">Date:</span> ${formattedDate}</p><p><span class="font-bold">Package:</span> ${qtyText}${d.productName}</p><p><span class="font-bold">Price:</span> ৳ ${d.price}.00</p><p><span class="font-bold">Status:</span> <span class="text-green-600 font-bold lowercase">complete</span></p></div>${codesHTML}</div>`;
             });
         }).catch(error => { list.innerHTML = `<div class="text-center text-red-500 py-4 text-xs font-mono">Error: ${error.message}</div>`; });
@@ -1188,23 +769,16 @@
 
             trans.forEach(d => {
                 let statusColor = "text-yellow-600"; let statusText = "Pending";
-                if (d.status === 'approved' || d.status === 'success') { statusColor = "text-green-600"; statusText = "Approved"; } 
-                else if (d.status === 'rejected' || d.status === 'cancel') { statusColor = "text-red-600"; statusText = "Rejected"; }
-
+                if (d.status === 'approved' || d.status === 'success') { statusColor = "text-green-600"; statusText = "Approved"; } else if (d.status === 'rejected' || d.status === 'cancel') { statusColor = "text-red-600"; statusText = "Rejected"; }
                 let formattedDate = "N/A";
-                if (d.date) {
-                    const dateObj = d.date.toDate ? d.date.toDate() : new Date(d.date);
-                    let day = String(dateObj.getDate()).padStart(2, '0'); let month = String(dateObj.getMonth() + 1).padStart(2, '0'); let year = dateObj.getFullYear();
-                    formattedDate = `${day}-${month}-${year}, ` + dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
-                }
+                if (d.date) { const dateObj = d.date.toDate ? d.date.toDate() : new Date(d.date); formattedDate = `${String(dateObj.getDate()).padStart(2, '0')}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${dateObj.getFullYear()}, ` + dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }); }
                 let shortId = d.trxId ? d.trxId.toUpperCase() : "N/A";
                 let methodImg = 'https://cdn-icons-png.flaticon.com/512/2830/2830284.png'; let methodName = d.method ? d.method : 'Bkash/Nagad';
-                if(d.method && d.method.toLowerCase().includes('bkash')) methodImg = 'https://pay.bmsmmpanel.xyz/assets/template/images/bkash.png';
-                else if(d.method && d.method.toLowerCase().includes('nagad')) methodImg = 'https://pay.bmsmmpanel.xyz/assets/template/images/nagad.png';
+                if(d.method && d.method.toLowerCase().includes('bkash')) methodImg = 'https://pay.bmsmmpanel.xyz/assets/template/images/bkash.png'; else if(d.method && d.method.toLowerCase().includes('nagad')) methodImg = 'https://pay.bmsmmpanel.xyz/assets/template/images/nagad.png';
 
                 list.innerHTML += `<div class="bg-white border border-gray-200 rounded-lg shadow-sm mb-4"><div class="p-3 border-b border-gray-200 flex items-center gap-2"><i class="fas fa-list-alt text-gray-800 text-lg"></i><span class="font-bold text-gray-800 text-base">My Transactions</span></div><div class="p-4 space-y-2.5 text-[15px] text-gray-800"><p><span class="font-bold">Trx ID:</span> ${shortId}</p><p><span class="font-bold">Date:</span> ${formattedDate}</p><p class="flex items-center gap-2"><span class="font-bold">Method:</span> <img src="${methodImg}" class="h-4 object-contain rounded-sm"> <span class="capitalize">${methodName}</span></p><p><span class="font-bold">Amount:</span> ৳ ${d.amount}.00</p><p><span class="font-bold">Status:</span> <span class="${statusColor} font-bold lowercase">${statusText}</span>( ${formattedDate} )</p></div></div>`;
             });
-          }).catch(err => { list.innerHTML = `<div class="text-center text-red-500 py-4 text-xs font-mono">Error: ${err.message}</div>`; });
+        }).catch(err => { list.innerHTML = `<div class="text-center text-red-500 py-4 text-xs font-mono">Error: ${err.message}</div>`; });
     }
 
     function loadHistory() {
@@ -1218,16 +792,9 @@
 
             orders.forEach(d => {
                 let statusColor = "text-yellow-600"; let statusText = d.status || "pending";
-                if (statusText === 'success' || statusText === 'complete') { statusColor = "text-green-600"; statusText = "complete"; } 
-                else if (statusText === 'cancel' || statusText === 'rejected' || statusText === 'refunded') { statusColor = "text-red-600"; statusText = "canceled"; }
-
+                if (statusText === 'success' || statusText === 'complete') { statusColor = "text-green-600"; statusText = "complete"; } else if (statusText === 'cancel' || statusText === 'rejected' || statusText === 'refunded') { statusColor = "text-red-600"; statusText = "canceled"; }
                 let formattedDate = "N/A";
-                if (d.date) {
-                    const dateObj = d.date.toDate ? d.date.toDate() : new Date(d.date);
-                    let day = String(dateObj.getDate()).padStart(2, '0'); let month = String(dateObj.getMonth() + 1).padStart(2, '0'); let year = dateObj.getFullYear();
-                    formattedDate = `${day}-${month}-${year}, ` + dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
-                }
-
+                if (d.date) { const dateObj = d.date.toDate ? d.date.toDate() : new Date(d.date); formattedDate = `${String(dateObj.getDate()).padStart(2, '0')}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${dateObj.getFullYear()}, ` + dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }); }
                 let shortId = d.id ? d.id.substring(d.id.length - 6).toUpperCase() : "N/A";
                 let inputLabelDisplay = d.inputType || "Player ID"; let qtyText = d.quantity && d.quantity > 1 ? ` (x${d.quantity})` : '';
                 let playerInfoHtml = d.playerId !== 'N/A' ? `<p><span class="font-bold">${inputLabelDisplay}:</span> ${d.playerId}</p>` : '';
@@ -1282,24 +849,11 @@
     }
 
     function pgShowView(viewId, pushHistory = false) {
-        document.getElementById('pg-view-amount').classList.add('hidden'); 
-        document.getElementById('pg-view-methods').classList.add('hidden'); 
-        document.getElementById('pg-view-verify').classList.add('hidden'); 
+        document.getElementById('pg-view-amount').classList.add('hidden'); document.getElementById('pg-view-methods').classList.add('hidden'); document.getElementById('pg-view-verify').classList.add('hidden'); 
         document.getElementById(viewId).classList.remove('hidden');
-        
-        const fabContainer = document.getElementById('fab-container');
-        if (fabContainer) { 
-            if (viewId === 'pg-view-methods' || viewId === 'pg-view-verify') { 
-                fabContainer.classList.add('hidden'); 
-            } else { 
-                fabContainer.classList.remove('hidden'); 
-            } 
-        }
-
+        if (document.getElementById('fab-container')) { if (viewId === 'pg-view-methods' || viewId === 'pg-view-verify') { document.getElementById('fab-container').classList.add('hidden'); } else { document.getElementById('fab-container').classList.remove('hidden'); } }
         if(pushHistory) {
-            let step = '';
-            if(viewId === 'pg-view-methods') step = '&step=methods';
-            else if(viewId === 'pg-view-verify') step = '&step=verify';
+            let step = ''; if(viewId === 'pg-view-methods') step = '&step=methods'; else if(viewId === 'pg-view-verify') step = '&step=verify';
             window.history.pushState({sec: 'addmoney', step: viewId}, '', "?sec=addmoney" + step);
         }
     }
@@ -1307,19 +861,14 @@
     function pgGotoMethods() {
         const amt = parseFloat(document.getElementById('pg-amount-input').value);
         if(isNaN(amt) || amt < 20) { showModernAlert('অবৈধ পরিমাণ', 'সর্বনিম্ন ডিপোজিট ৳20।', 'warning'); return; }
-        pgDepositAmount = amt; 
-        pgShowView('pg-view-methods', true);
+        pgDepositAmount = amt; pgShowView('pg-view-methods', true);
     }
 
     function pgSelectMethod(methodName) {
         pgSelectedMethodName = methodName; showModernLoading();
         db.collection("admin").doc("payment").get().then(doc => {
             Swal.close();
-            if(doc.exists && doc.data()[methodName.toLowerCase()]) { 
-                pgAdminNumber = doc.data()[methodName.toLowerCase()]; 
-                pgPopulateInstructionUI(); 
-                pgShowView('pg-view-verify', true); 
-            } 
+            if(doc.exists && doc.data()[methodName.toLowerCase()]) { pgAdminNumber = doc.data()[methodName.toLowerCase()]; pgPopulateInstructionUI(); pgShowView('pg-view-verify', true); } 
             else { showModernAlert('Error', 'এই মেথডটি বর্তমানে বন্ধ আছে।', 'error'); }
         }).catch(err => { Swal.close(); showModernAlert('Error', 'নেটওয়ার্ক সমস্যা।', 'error'); });
     }
@@ -1334,36 +883,11 @@
             instructionsList = `<li><span class="icon inline-block w-1.5 h-1.5 bg-white rounded-full mt-1.5 flex-shrink-0"></span> *167# ডায়াল করুন অথবা Nagad অ্যাপে যান।</li><hr class="brand-hr nagad-hr"><li><span class="icon inline-block w-1.5 h-1.5 bg-white rounded-full mt-1.5 flex-shrink-0"></span> <span class="text-yellow-highlight">"Send Money"</span> নির্বাচন করুন।</li><hr class="brand-hr nagad-hr"><li class="flex flex-wrap items-center gap-2"><span class="icon inline-block w-1.5 h-1.5 bg-white rounded-full flex-shrink-0"></span> প্রাপক নম্বর: <span class="text-yellow-highlight">${pgAdminNumber}</span> <button type="button" class="copy-btn" onclick="copyToClipboard('${pgAdminNumber}')"><i class="fas fa-copy"></i>Copy</button></li><hr class="brand-hr nagad-hr"><li><span class="icon inline-block w-1.5 h-1.5 bg-white rounded-full mt-1.5 flex-shrink-0"></span> টাকার পরিমাণ: <span class="text-yellow-highlight">৳${pgDepositAmount}</span></li><hr class="brand-hr nagad-hr"><li><span class="icon inline-block w-1.5 h-1.5 bg-white rounded-full mt-1.5 flex-shrink-0"></span> আপনার Nagad পিন দিয়ে নিশ্চিত করুন।</li><hr class="brand-hr nagad-hr"><li><span class="icon inline-block w-1.5 h-1.5 bg-white rounded-full mt-1.5 flex-shrink-0"></span> পেমেন্টের <span class="text-yellow-highlight">Transaction ID</span> টি নিচের বক্সে লিখুন এবং <span class="text-yellow-highlight">VERIFY</span> বাটনে ক্লিক করুন।</li>`;
         }
         
-        const username = currentUserDataObj ? currentUserDataObj.name : "User"; 
-        const uidText = currentUser ? currentUser.uid : "UID not found";
-        
+        const username = currentUserDataObj ? currentUserDataObj.name : "User"; const uidText = currentUser ? currentUser.uid : "UID not found";
         let photoUrl = (currentUserDataObj && currentUserDataObj.photoURL) || (currentUser && currentUser.photoURL);
-        let userImageHtml = photoUrl 
-            ? `<img src="${photoUrl}" class="w-10 h-10 rounded-full object-cover shadow-sm flex-shrink-0">`
-            : `<div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 flex-shrink-0"><i class="fas fa-user"></i></div>`;
+        let userImageHtml = photoUrl ? `<img src="${photoUrl}" class="w-10 h-10 rounded-full object-cover shadow-sm flex-shrink-0">` : `<div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 flex-shrink-0"><i class="fas fa-user"></i></div>`;
 
-        container.innerHTML = `
-        <div class="flex flex-col items-center gap-3">
-            <img src="${brandLogo}" class="h-12 mb-2 object-contain">
-            <div class="flex flex-col w-full gap-3">
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center gap-3 overflow-hidden">
-                    ${userImageHtml}
-                    <div class="overflow-hidden">
-                        <h4 class="font-bold text-gray-700 truncate text-sm">${username}</h4>
-                        <p class="text-[10px] text-gray-500 font-bold bg-gray-100 px-2 py-0.5 rounded mt-1 truncate">UID: ${uidText}</p>
-                    </div>
-                </div>
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 border-dashed text-center">
-                    <h3 class="text-2xl font-bold text-gray-700">৳ ${pgDepositAmount}</h3>
-                </div>
-            </div>
-        </div>
-        <div class="${themeColor} rounded-xl p-5 text-white mt-5 shadow-md">
-            <label class="block font-bold mb-2">ট্রানজেকশন আইডি দিন</label>
-            <input type="text" id="pg-trx-id" class="w-full p-3 rounded bg-white text-gray-800 font-bold focus:outline-none placeholder-gray-400 uppercase" placeholder="এখানে লিখুন">
-            <ul class="text-sm mt-4 space-y-3 font-medium leading-relaxed">${instructionsList}</ul>
-        </div>
-        <button onclick="pgSubmitDeposit()" class="${themeColor} w-full py-4 rounded-xl font-bold text-white text-lg mt-4 shadow-lg hover:brightness-110 transition">VERIFY PAYMENT</button>`;
+        container.innerHTML = `<div class="flex flex-col items-center gap-3"><img src="${brandLogo}" class="h-12 mb-2 object-contain"><div class="flex flex-col w-full gap-3"><div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center gap-3 overflow-hidden">${userImageHtml}<div class="overflow-hidden"><h4 class="font-bold text-gray-700 truncate text-sm">${username}</h4><p class="text-[10px] text-gray-500 font-bold bg-gray-100 px-2 py-0.5 rounded mt-1 truncate">UID: ${uidText}</p></div></div><div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 border-dashed text-center"><h3 class="text-2xl font-bold text-gray-700">৳ ${pgDepositAmount}</h3></div></div></div><div class="${themeColor} rounded-xl p-5 text-white mt-5 shadow-md"><label class="block font-bold mb-2">ট্রানজেকশন আইডি দিন</label><input type="text" id="pg-trx-id" class="w-full p-3 rounded bg-white text-gray-800 font-bold focus:outline-none placeholder-gray-400 uppercase" placeholder="এখানে লিখুন"><ul class="text-sm mt-4 space-y-3 font-medium leading-relaxed">${instructionsList}</ul></div><button onclick="pgSubmitDeposit()" class="${themeColor} w-full py-4 rounded-xl font-bold text-white text-lg mt-4 shadow-lg hover:brightness-110 transition">VERIFY PAYMENT</button>`;
     }
 
     function pgSubmitDeposit() {
@@ -1374,13 +898,58 @@
             db.collection('deposits').add({ userId: currentUser.uid, userEmail: currentUser.email, amount: parseInt(pgDepositAmount), trxId: trxId, method: pgSelectedMethodName, status: 'pending', date: new Date() })
             .then(() => { Swal.close(); showModernAlert('Request Submitted', 'Your fund request is sent. Please wait for admin approval.', 'success'); showSec('home'); })
             .catch(err => { Swal.close(); showModernAlert('Error', err.message, 'error'); });
-        } 
-        else if (pgFlowType === 'direct_order') {
+        } else if (pgFlowType === 'direct_order') {
             db.collection('orders').add({ userId: currentUser.uid, userName: currentUser.email, ...directOrderDetails, status: 'pending', date: new Date(), paymentMethod: pgSelectedMethodName + ' (Direct)', trxId: trxId, isDirectPayment: true })
             .then(() => { Swal.close(); showModernAlert('Order Submitted!', 'Payment info sent. Wait for admin approval.', 'success'); directOrderDetails = null; pgFlowType = 'add_money'; showSec('history'); })
             .catch(err => { Swal.close(); showModernAlert('Error', err.message, 'error'); });
         }
     }
+
+    // ========================================================
+    // PWA & INSTALL APP LOGIC (যোগ করা হয়েছে)
+    // ========================================================
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js').then(reg => {
+                console.log('Service worker registered.', reg);
+            }).catch(err => console.log('SW registration failed:', err));
+        });
+    }
+
+    let deferredPrompt;
+    const pwaBanner = document.getElementById('pwaInstallBanner');
+    const installBtn = document.getElementById('pwaInstallBtn');
+    const closeBtn = document.getElementById('pwaCloseBanner');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // ব্রাউজারের ডিফল্ট ব্যানার আটকে দেওয়া
+        e.preventDefault();
+        // ইভেন্ট সেভ করা
+        deferredPrompt = e;
+        // আমাদের কাস্টম ব্যানার দেখানো (Display Flex করা হয়েছে যাতে ডিজাইন ঠিক থাকে)
+        pwaBanner.style.display = 'flex';
+    });
+
+    installBtn.addEventListener('click', async () => {
+        if (deferredPrompt !== null) {
+            // ইন্সটল পপআপ আনা
+            deferredPrompt.prompt();
+            // ইউজারের উত্তরের জন্য অপেক্ষা করা
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                console.log('User accepted the install prompt');
+            }
+            deferredPrompt = null;
+            // ব্যানার গায়েব করা
+            pwaBanner.style.display = 'none';
+        }
+    });
+
+    // Close বাটনে ক্লিক করলে ব্যানার মুছে যাবে
+    closeBtn.addEventListener('click', () => {
+        pwaBanner.style.display = 'none';
+    });
+
 </script>
 </body>
 </html>
