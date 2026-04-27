@@ -1,7 +1,12 @@
 self.addEventListener('install', (e) => {
-    console.log('[Service Worker] Install');
+    self.skipWaiting();
+});
+
+self.addEventListener('activate', (e) => {
+    return self.clients.claim();
 });
 
 self.addEventListener('fetch', (e) => {
-    // এটি খালি রাখলেও PWA কাজ করবে
+    // PWA pass requirement
+    e.respondWith(fetch(e.request).catch(() => new Response("Offline")));
 });
