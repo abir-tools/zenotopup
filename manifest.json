@@ -1,20 +1,22 @@
 {
-  "name": "ZENO BAZAR ",
-  "short_name": "ZENO BAZAR ",
-  "start_url": "/",
+  "name": "Zeno Bazar",
+  "short_name": "Zeno Bazar",
+  "start_url": "/zenotopup/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "theme_color": "#7c3aed",
   "icons": [
     {
-      "src": "/icon-192x192.png",
+      "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjHzGkVp1DWBuwnmPN0WUR_IJgPd9KBUuH9rEzYzLDUm-YMVHmDy44FwC-tAXA8teCPZF471-iBSjJCwl9d9G014QHmmWVB8fHsCuGArflFNsFPElpaamshtejBt_KYyKY49xW61_PffvceWu5RRNlKqijZNeFVxiIkqFNj_eEyI4hVCdTxLEn16B78DJE/s320/20260421_011113.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "/icon-512x512.png",
+      "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjHzGkVp1DWBuwnmPN0WUR_IJgPd9KBUuH9rEzYzLDUm-YMVHmDy44FwC-tAXA8teCPZF471-iBSjJCwl9d9G014QHmmWVB8fHsCuGArflFNsFPElpaamshtejBt_KYyKY49xW61_PffvceWu5RRNlKqijZNeFVxiIkqFNj_eEyI4hVCdTxLEn16B78DJE/s320/20260421_011113.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
